@@ -16,10 +16,6 @@ A pixel-art endless runner where you play as a walking patch of sod, sprinting t
 - **Radio.** Pick any track from the game and watch your character vibe to it.
 - **Original soundtrack** with separate tracks for the lobby, runs, shop, boss fights, and more.
 
-## Running locally
-
-Open `index.html` in a browser. The music files need to be in an `audio/` folder next to it.
-
 ## Credits
 
 Made by Pollinated Development.
