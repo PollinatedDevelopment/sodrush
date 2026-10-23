@@ -1003,7 +1003,33 @@ addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.altKey||e.metaKey)retur
 ;(function(){try{
 const w=$('w'),M=new Audio();M.preload="none";M.src="audio/minions.mp3";M.loop=true;
 let ls={},lastP=0,gh={},peer,conn,conns={},host=0,rl='',rnd=0,roster={},me='',vote=1,rdy=0,shown=0,lastT=0,inRoom=0,chat=[],rooms=[],pend={},open=0,sc=0;
-const VER='sr1',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new Peer(id,{config:{iceServers:ICE}});p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
+const RELAY=(()=>{try{const q=new URLSearchParams(location.search).get('relay');if(q){localStorage.sodrelay=q;return q}if(window.SOD_RELAY)return (location.protocol=='https:'?'wss://':'ws://')+location.host+window.SOD_RELAY;return localStorage.sodrelay||''}catch(e){return ''}})();
+class RConn{constructor(p,peer,cid){this.p=p;this.peer=peer;this.cid=cid;this.open=false;this.closed=false;this.ev={}}
+on(n,f){(this.ev[n]=this.ev[n]||[]).push(f);return this}
+emit(n,a){(this.ev[n]||[]).forEach(f=>{try{f(a)}catch(e){console.warn(e)}})}
+send(d){if(this.open)this.p.raw({k:'d',cid:this.cid,d})}
+close(){if(this.closed)return;this.closed=true;this.open=false;if(this.p.conns[this.cid]===this){delete this.p.conns[this.cid];this.p.raw({k:'x',cid:this.cid})}this.emit('close')}}
+class RPeer{constructor(id){this.id=null;this.want=id||null;this.destroyed=false;this.ev={};this.conns={};this.ws=null;this.hb=0;this.dial()}
+on(n,f){(this.ev[n]=this.ev[n]||[]).push(f);return this}
+emit(n,a){(this.ev[n]||[]).forEach(f=>{try{f(a)}catch(e){console.warn(e)}})}
+raw(o){try{if(this.ws&&this.ws.readyState==1)this.ws.send(JSON.stringify(o))}catch(e){}}
+dial(){const ws=new WebSocket(RELAY);this.ws=ws;
+ws.onopen=()=>{this.raw({k:'reg',id:this.want});clearInterval(this.hb);this.hb=setInterval(()=>this.raw({k:'ping'}),20000)};
+ws.onmessage=ev=>{let m;try{m=JSON.parse(ev.data)}catch(e){return}if(ws===this.ws)this.recv(m)};
+ws.onclose=()=>{if(ws!==this.ws)return;this.ws=null;clearInterval(this.hb);this.dropAll();if(!this.destroyed)this.emit('disconnected')};
+ws.onerror=()=>{}}
+recv(m){
+if(m.k=='reg'){if(m.err){this.destroy();this.emit('error',{type:m.err,message:'ID TAKEN'});return}this.id=m.id;this.emit('open',m.id)}
+else if(m.k=='cok'){const c=this.conns[m.cid];if(c){c.open=true;c.emit('open')}}
+else if(m.k=='cn'){const c=new RConn(this,m.from,m.cid);c.open=true;this.conns[m.cid]=c;this.emit('connection',c)}
+else if(m.k=='d'){const c=this.conns[m.cid];if(c)c.emit('data',m.d)}
+else if(m.k=='x'){const c=this.conns[m.cid];if(c){delete this.conns[m.cid];c.open=false;c.closed=true;c.emit('close')}}
+else if(m.k=='err'){const c=this.conns[m.cid],msg='Could not connect to peer '+m.to;if(c){delete this.conns[m.cid];c.open=false;c.closed=true;c.emit('error',{type:m.type,message:msg});c.emit('close')}this.emit('error',{type:m.type,message:msg})}}
+connect(id){const cid=Math.random().toString(36).slice(2,10)+Date.now().toString(36);const c=new RConn(this,id,cid);this.conns[cid]=c;this.raw({k:'cn',to:id,cid});return c}
+reconnect(){if(this.destroyed||this.ws)return;this.want=this.id||this.want;this.dial()}
+dropAll(){const cs=Object.values(this.conns);this.conns={};cs.forEach(c=>{c.open=false;c.closed=true;c.emit('close')})}
+destroy(){if(this.destroyed)return;this.destroyed=true;clearInterval(this.hb);const ws=this.ws;this.ws=null;this.dropAll();try{ws&&ws.close()}catch(e){}}}
+const VER='sr1',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=RELAY?new RPeer(id):new Peer(id,{config:{iceServers:ICE}});p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
 CLN=r=>{const o={};for(const k in r){const p=r[k]||{};o[k]={n:String(p.n==null?'':p.n).slice(0,10),m:+p.m||0,a:+p.a||0,f:p.f==null?null:(+p.f||0),sk:Math.max(0,Math.min(SN.length-1,p.sk|0)),hat:Math.max(0,Math.min(HN.length-1,p.hat|0)),vote:Math.max(1,p.vote|0||1),rdy:p.rdy?1:0,mx:Math.max(1,p.mx|0||1)}}return o},
 CAP=4,NP=16,mx=()=>Math.min(S.lv,MAXL),esc=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
 let nm=(()=>{try{return localStorage.sodn}catch(e){}})()||'PLAYER'+(10+Math.random()*89|0);
@@ -1018,13 +1044,14 @@ const g=i=>w.querySelector('#'+i),stat=t=>{g('os').textContent=t;g('ols').textCo
 ['onm','oci','oci2'].forEach(i=>g(i).addEventListener('keydown',e=>e.stopPropagation()));
 document.addEventListener('keydown',e=>{if((om.style.display=='flex'||ol.style.display=='flex')&&e.target.tagName!='INPUT')e.stopPropagation()},true);
 const ob=document.createElement('button');ob.className='p btn';ob.textContent='ONLINE';ob.style.cssText='left:38.5%;bottom:3%;background:#7a4ae0;padding:1.4cqw 2.4cqw;font-size:1.3cqw';$('lob').appendChild(ob);
+ob.style.display='none';let mT='';addEventListener('keydown',e=>{if(ob.style.display!='none'||e.ctrlKey||e.altKey||e.metaKey||e.key.length!==1)return;if(document.activeElement&&document.activeElement.tagName=='INPUT')return;mT=(mT+e.key.toLowerCase()).slice(-5);if(mT=='multi')ob.style.display=''});
 ob.onclick=()=>{open=1;render();if(M.preload!='auto'){M.preload='auto';M.load()}if(!navigator.onLine)stat('YOU APPEAR TO BE OFFLINE')};g('ox').onclick=()=>{open=0;render()};
 const hud=document.createElement('div');hud.className='p';hud.style.cssText='right:2%;top:19%;font-size:1cqw;color:#ffb347;text-shadow:.2cqw .2cqw #000;display:none;text-align:right;pointer-events:none;z-index:4';w.appendChild(hud);
 const mk=[0,1,2,3].map((_,i)=>{const d=document.createElement('div');d.className='p';d.style.cssText='top:8.6cqw;width:.8cqw;height:2.2cqw;border:.2cqw solid #000;display:none;z-index:5;pointer-events:none;background:'+['#ff7a1a','#3affea','#ff3ab0','#ffd23a'][i];w.appendChild(d);return d});
 const snd=(c,o)=>{try{c&&c.open&&c.send(o)}catch(e){}},bc=(o,ex)=>{for(const k in conns)if(k!==ex)snd(conns[k],o)};
 const push=()=>{if(host){bc({t:'r',r:roster});render()}};
 const addChat=x=>{chat.push(x);if(chat.length>40)chat.shift();render()},say2=x=>{if(host){bc({t:'c',x});addChat(x)}};
-const LD=()=>new Promise(r=>{if(window.Peer)return r();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';s.onload=r;s.onerror=()=>stat('CANNOT LOAD NETWORK LIBRARY - CHECK INTERNET');document.head.appendChild(s)});
+const LD=()=>new Promise(r=>{if(RELAY||window.Peer)return r();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';s.onload=r;s.onerror=()=>stat('CANNOT LOAD NETWORK LIBRARY - CHECK INTERNET');document.head.appendChild(s)});
 const opened=(p,ms)=>new Promise(r=>{p.on('open',()=>r(1));setTimeout(()=>r(0),ms)});
 const pe=e=>{for(const id in pend)if(e.message&&e.message.endsWith(' '+id))pend[id](null)};
 function probe(p,id,ms){return new Promise(res=>{let d=0;const fin=v=>{if(d)return;d=1;clearTimeout(t);delete pend[id];res(v)};pend[id]=fin;const c=p.connect(id,{reliable:true}),t=setTimeout(()=>{try{c.close()}catch(e){}fin(null)},ms);c.on('open',()=>c.send({t:'probe'}));c.on('data',x=>{if(x&&x.t=='info')fin({c,info:x,id})});c.on('error',()=>fin(null));c.on('close',()=>fin(null))})}
