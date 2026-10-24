@@ -1488,7 +1488,7 @@ while(S.un.length<SN.length)S.un.push(0);while(S.uh.length<HN.length)S.uh.push(0
 // how costumes are earned
 const EVM=()=>new Date().getMonth();
 const evGet=m=>S.ev['m'+m]||(S.ev['m'+m]={ep:0,best:0,days:[]});
-const EVR=[[e=>e.ep>=20,e=>'EARN 20 EP ('+Math.min(e.ep,20)+'/20)'],[e=>e.best>=800,e=>'RUN 800M IN ONE ZONE RUN ('+Math.min(e.best,800)+'/800)'],[e=>e.days.length>=3,e=>'CLEAR THE ZONE ON 3 DIFFERENT DAYS ('+Math.min(e.days.length,3)+'/3)']];
+const EVR=[[e=>e.ep>=20,e=>'EARN 20 EP ('+Math.min(e.ep,20)+'/20)'],[e=>e.best>=800,e=>'RUN 800M IN ONE ZONE RUN ('+Math.min(e.best,800)+'/800)'],[e=>e.ep>=40,e=>'EARN 40 EP ('+Math.min(e.ep,40)+'/40)']];
 const EVHR=[e=>e.ep>=60,e=>'EARN 60 EP ('+Math.min(e.ep,60)+'/60)'];
 function evCheck(m){const e=evGet(m),got=[];EVS[m].c.forEach((c,k)=>{const s=EV0+m*3+k;if(!S.un[s]&&EVR[k][0](e)){S.un[s]=1;got.push(c[0])}});if(!S.uh[EVH0+m]&&EVHR[0](e)){S.uh[EVH0+m]=1;got.push(EVS[m].hn+' HAT')}if(got.length)sv();return got}
 function evHow(i,hats){const m=hats?i-EVH0:Math.floor((i-EV0)/3),E=EVS[m],e=evGet(m);return 'EVENT • '+E.h+' (ALL MONTH) • '+(hats?EVHR[1](e):EVR[(i-EV0)%3][1](e))}
