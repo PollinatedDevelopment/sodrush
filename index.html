@@ -549,16 +549,96 @@ function pipeLayer(upto,c){const T=3,sg=[];let acc=0;for(let i=0;i<MPT.length-1;
  sg.forEach(s=>{const l=Math.abs(s[2]-s[0])+Math.abs(s[3]-s[1]);if(l<30)return;const mx=(s[0]+s[2])>>1,my=(s[1]+s[3])>>1;if(s[1]==s[3]){R('#c0ccd8',mx-1,s[1]-T-1,3,2*T+3);R('#6a7a8c',mx+2,s[1]-T-1,1,2*T+3)}else{R('#c0ccd8',s[0]-T-1,my-1,2*T+3,3);R('#6a7a8c',s[0]-T-1,my+2,2*T+3,1)}})}
 function ptAt(p){let acc=0;for(let i=0;i<MPT.length-1;i++){if(p<=acc+PLEN[i]){const f=(p-acc)/PLEN[i];return[MPT[i][0]+(MPT[i+1][0]-MPT[i][0])*f,MPT[i][1]+(MPT[i+1][1]-MPT[i][1])*f]}acc+=PLEN[i]}return MPT[MPT.length-1]}
 function apOf(n,ow){if(!ow||n>S.lv)return 0;if(n<S.lv)return 3;const g=goalOf(n);return(S.lp>=g*.5?1:0)+(S.lp>=g*.75?1:0)}
-function padDraw(x,y,st,sl){if(sl){q.globalAlpha=.55+.25*Math.sin(t/8);blob('#ff9a1e',x,y+2,13,6);q.globalAlpha=1}
+function padDraw(x,y,st,sl){if(mPage>=13)return padNeon(x,y,st,sl);const wc=LOC[mPage].c;if(sl){q.globalAlpha=.55+.25*Math.sin(t/8);blob('#ff9a1e',x,y+2,13,6);q.globalAlpha=1}if(st==2){q.globalAlpha=.25+.2*Math.sin(t/10);blob('#ff4aa0',x,y+2,16,7);q.globalAlpha=1}blob('#000',x,y+4,11,4);blob(st?wshd(wc,.6):wshd(wc,.35),x,y+3,10,4);blob(st==0?wshd(wc,.8):st==1?wshd(wc,1.6):'#fff3c0',x,y+1,9,3);blob(st==0?wshd(wc,1):'#fff',x,y,5,1);return;if(sl){q.globalAlpha=.55+.25*Math.sin(t/8);blob('#ff9a1e',x,y+2,13,6);q.globalAlpha=1}
  if(st==2){q.globalAlpha=.25+.2*Math.sin(t/10);blob('#ff4aa0',x,y+2,16,7);q.globalAlpha=1}
  blob('#06101e',x,y+4,11,4);blob(st?'#2a5a82':'#22384e',x,y+3,10,4);blob(st==0?'#46607a':st==1?'#bfe4f4':'#fff3c0',x,y+1,9,3);blob(st==0?'#5a7690':'#fff',x,y,5,1)}
 function seedsRow(x,y,n){for(let i=0;i<3;i++){const sx=x-9+i*8;if(i<n){R('#6a4a08',sx,y,5,5);R('#ffd23a',sx+1,y,3,4);R('#fff',sx+1,y+1,1,1)}else{R('#0a1626',sx,y,5,5);R('#1e3550',sx+1,y+1,3,3)}}}
+const DBL=['#0a0420','#5a1fa0','#b06aff'],DPK=['#003a40','#00c8b8','#aaffee'];
+function padNeon(x,y,st,sl){if(sl){q.globalAlpha=.6+.25*Math.sin(t/8);blob('#ffd23a',x,y+2,13,6);q.globalAlpha=1}
+ if(st==2){q.globalAlpha=.3+.2*Math.sin(t/10);blob('#ff3ab0',x,y+2,17,7);q.globalAlpha=1}
+ else if(st==1){q.globalAlpha=.25;blob('#3affea',x,y+2,14,6);q.globalAlpha=1}
+ blob('#08021a',x,y+4,11,4);blob(st?'#6a1fb0':'#2a1450',x,y+3,10,4);blob(st==0?'#4a3a7a':st==1?'#7affee':'#ffd0f8',x,y+1,9,3);blob(st==0?'#6a5a9a':'#fff',x,y,5,1)}
+const whx=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)],whs=a=>'#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+const wmix=(a,b,p)=>{const x=whx(a),y=whx(b);return whs(x.map((v,i)=>v+(y[i]-v)*p))},wshd=(c,f)=>f<1?wmix(c,'#000000',1-f):wmix(c,'#ffffff',f-1);
+function whills(col,base,amp,sp,seed,w){for(let x=0;x<256;x+=2){const y=base-Math.round((Math.sin((x+t*sp)/w+seed)*.5+Math.sin((x+t*sp)/(w*.45)+seed*2)*.3+.8)*amp);R(col,x,y,2,144-y)}}
+function worldBg(){const i=mPage,L=LOC[i],s0=L.sky[0],s1=L.sky[1],g=L.gr,d=L.gd,T=t;
+ for(let y=0;y<144;y+=4)R(wmix(s0,s1,y/144),0,y,256,4);
+ const cloud=(x,y,r,c,a)=>{q.globalAlpha=a;blob(c,x,y,r,r*.42);blob(c,x-r*.6,y+2,r*.6,r*.3);blob(c,x+r*.6,y+2,r*.7,r*.3);q.globalAlpha=1};
+ const drift=(k,sp,m)=>((k*83+T*sp)%(256+2*m))-m;
+ const ground=(h)=>{R(g,0,144-h,256,h);R(d,0,144-h+5,256,h);for(let x=0;x<256;x+=6)R(wshd(g,1.25),x,144-h,3,1)};
+ if(i==0){cloud(drift(0,.08,40),30,22,'#fff',.85);cloud(drift(1,.06,40),46,16,'#fff',.7);cloud(drift(2,.1,40),24,18,'#fff',.8);
+  q.globalAlpha=.6;blob('#fff6a0',214,28,10,10);q.globalAlpha=1;blob('#ffe45a',214,28,6,6);
+  whills(wshd(L.hill,.85),118,16,0,1,38);whills(L.hill,126,12,0,4,26);
+  R('#a83a2a',142,84,18,13);R('#7a2418',141,81,20,4);R('#7a2418',143,78,16,3);R('#f4e8d0',149,89,4,8);R('#f4e8d0',145,85,3,2);R('#f4e8d0',155,85,3,2);
+  ground(14);for(let x=0;x<256;x+=5)R('#7a5a2a',x,116,1,5);R('#7a5a2a',0,117,256,1);R('#7a5a2a',0,120,256,1)}
+ else if(i==1){for(let k=0;k<5;k++){q.globalAlpha=.28;blob('#cfe8d8',drift(k,.15+k*.03,60),50+k*14,50,7);q.globalAlpha=1}
+  whills(wshd(L.hill,.7),112,22,0,2,30);
+  for(let k=0;k<22;k++){const x=k*12+4,h=14+(k*7)%12;R('#1f4a32',x,124-h,1,h);R('#2f5a3a',x+1,124-h-3,2,3)}
+  ground(16);for(let k=0;k<6;k++){const x=(k*47+20)%250;blob('#5a9a4a',x,126+(k%2)*6,9,2)}
+  for(let k=0;k<22;k++){const x=(hr(k*3)*256+Math.sin(T/40+k)*8+256)%256,y=30+hr(k*7)*80+Math.sin(T/30+k*2)*5;q.globalAlpha=.5+.5*Math.sin(T/10+k);R('#e8ff7a',x|0,y|0,2,2);q.globalAlpha=.2;blob('#e8ff7a',x,y,5,5);q.globalAlpha=1}}
+ else if(i==2){q.globalAlpha=.55;blob('#ffe08a',70,52,24,24);q.globalAlpha=1;blob('#fff2c0',70,52,15,15);
+  const mesa=(x,w,h,c)=>{R(c,x,120-h,w,h);R(wshd(c,.8),x+w-5,120-h,5,h);R(wshd(c,1.3),x,120-h,w,2)};
+  mesa(10,46,52,wshd(L.hill,.7));mesa(176,60,64,wshd(L.hill,.6));mesa(120,28,36,wshd(L.hill,.8));mesa(226,30,44,wshd(L.hill,.75));
+  ground(16);for(let k=0;k<4;k++){const x=40+k*62;R('#2f7a3a',x,100,3,20);R('#2f7a3a',x-4,106,4,2);R('#2f7a3a',x-4,102,2,6);R('#2f7a3a',x+3,104,5,2);R('#2f7a3a',x+6,100,2,6)}
+  for(let k=0;k<14;k++){const x=(k*37+T*(.5+hr(k)*.6))%256,y=100+hr(k*3)*20;q.globalAlpha=.4;R('#f6d49a',x|0,y|0,3,1);q.globalAlpha=1}}
+ else if(i==3){for(let k=0;k<3;k++){q.globalAlpha=.16+.06*Math.sin(T/40+k);for(let x=0;x<256;x+=3){const y=22+k*8+Math.sin(x/28+T/50+k)*7;R(k==1?'#7affc8':'#8ae8ff',x,y|0,3,22)}q.globalAlpha=1}
+  whills('#b8d0ea',110,30,0,3,34);whills('#dceaf8',120,20,0,6,22);
+  for(let k=0;k<5;k++){const x=18+k*58,h=26+(k*13)%16;for(let r=0;r<h;r+=2){R('#e8f6ff',x-(h-r)/3|0,118-r,((h-r)*2/3)|0,2)}R('#fff',x-1,118-h,2,4)}
+  ground(14);for(let k=0;k<40;k++){const x=(hr(k)*256+Math.sin(T/25+k)*5+T*.2*(.5+hr(k+1)))%256,y=(hr(k*5)*144+T*(.3+hr(k+2)*.5))%144;q.globalAlpha=.8;R('#fff',x|0,y|0,1+(k%2),1+(k%2));q.globalAlpha=1}}
+ else if(i==4){q.globalAlpha=.3;blob('#ff5a1a',128,150,170,60);q.globalAlpha=1;
+  whills('#1a0a0c',100,34,0,2,36);for(let k=0;k<4;k++){const x=22+k*68;R('#241014',x,70+(k%2)*10,10,50);R('#3a1a1e',x,70+(k%2)*10,10,2);q.globalAlpha=.4;blob('#6a4a4a',x+5+Math.sin(T/20+k)*4,60+(k%2)*10,8,5);q.globalAlpha=1}
+  R('#2a0e08',0,118,256,26);for(let x=0;x<256;x+=3){const y=124+Math.sin(x/9+T/14)*2;R('#ff6a1a',x,y|0,3,20);R('#ffc03a',x,(y+2)|0,3,2)}
+  for(let k=0;k<26;k++){const x=(hr(k)*256+Math.sin(T/15+k)*6)%256,y=144-((T*(.4+hr(k+3)*.8)+hr(k*2)*144)%130);q.globalAlpha=.8;R(k%3?'#ff8a2a':'#ffd23a',x|0,y|0,1,2);q.globalAlpha=1}}
+ else if(i==5){whills('#ffb0d8',112,18,0,1,30);
+  for(let k=0;k<6;k++){const x=20+k*44,y=70+(k%3)*14;R('#fff',x,y,2,42);blob(['#ff4a9a','#5acfff','#ffd23a'][k%3],x+1,y,9,9);blob('#fff',x+1,y,5,5);blob(['#ff4a9a','#5acfff','#ffd23a'][k%3],x+1,y,2,2)}
+  ground(14);for(let k=0;k<18;k++){const x=(k*41+10)%252,y=122+(k*7)%18;R(['#ff4a9a','#5acfff','#ffd23a','#fff'][k%4],x,y,3,1)}
+  for(let k=0;k<20;k++){const x=(hr(k)*256+T*.15)%256,y=(hr(k*3)*100+T*(.2+hr(k)*.3))%110+16;R(['#ff4a9a','#5acfff','#ffd23a','#fff'][k%4],x|0,y|0,2,1)}}
+ else if(i==6){for(let L2=0;L2<2;L2++){const col=L2?'#241048':'#17082e',w=L2?16:11;for(let k=0;k<20;k++){const n=k+L2*30,bx=k*w,h=(L2?30:46)+Math.floor(hr(n*2.3)*(L2?40:60)),by=144-h;R(col,bx,by,w-1,h);for(let wy=by+4;wy<138;wy+=5)for(let wx=bx+2;wx<bx+w-3;wx+=4){const r=hr(n*7+wx*.2+wy*.4);if(r>.6)R(r>.85?'#ff3ab0':r>.72?'#3affea':'#ffd23a',wx,wy,2,2)}}}
+  q.globalAlpha=.5+.3*Math.sin(T/9);R('#3affea',30,60,22,3);R('#ff3ab0',170,48,26,3);q.globalAlpha=1;
+  for(let k=0;k<50;k++){const x=(hr(k)*260+T*.4)%256,y=(hr(k*3)*144+T*(3+hr(k)*2))%144;q.globalAlpha=.35;R('#9ab8ff',x|0,y|0,1,4);q.globalAlpha=1}
+  R('#0a0420',0,134,256,10);R('#3affea',0,134,256,1)}
+ else if(i==7){for(let k=0;k<6;k++){q.globalAlpha=.1;const x=20+k*44+Math.sin(T/60+k)*8;R('#bfe8ff',x|0,0,10,110);q.globalAlpha=1}
+  for(let k=0;k<4;k++){const x=drift(k,.3+k*.1,20);q.globalAlpha=.4;R('#0a2a50',x|0,40+k*18,12,3);R('#0a2a50',(x+10)|0,38+k*18,4,7);q.globalAlpha=1}
+  ground(14);for(let k=0;k<9;k++){const x=14+k*29,c=['#ff6a8a','#ff9a4a','#ffd0e0'][k%3],h=10+(k*5)%12;R(c,x,130-h,2,h);R(c,x-4,130-h+3,2,6);R(c,x+4,130-h+1,2,8);blob(c,x+1,130-h,4,3)}
+  for(let k=0;k<26;k++){const x=(hr(k)*256+Math.sin(T/20+k)*5)%256,y=144-((T*(.3+hr(k+2)*.5)+hr(k*2)*144)%140);q.globalAlpha=.6;blob('#d8f4ff',x,y,1+k%2,1+k%2);q.globalAlpha=1}}
+ else if(i==8){q.globalAlpha=.5;blob('#ffe0a0',200,34,18,18);q.globalAlpha=1;blob('#fff2d0',200,34,11,11);
+  whills('#0e0620',112,22,0,2,34);
+  for(let k=0;k<5;k++){const x=22+k*52,h=36+(k*9)%18;R('#0a0418',x,118-h,3,h);R('#0a0418',x-8,118-h+10,9,2);R('#0a0418',x+3,118-h+16,9,2);R('#0a0418',x-5,118-h+4,2,7);R('#0a0418',x+9,118-h+10,2,6)}
+  ground(14);for(let k=0;k<7;k++){const x=16+k*38;R('#6a5a7a',x,118,7,9);R('#6a5a7a',x+1,116,5,2);R('#2a1c3a',x+3,119,1,5)}
+  for(let k=0;k<4;k++){const x=drift(k,.25,20),y=48+k*16+Math.sin(T/20+k)*5;q.globalAlpha=.55;blob('#e8f0ff',x,y,6,7);R('#e8f0ff',x-6,y,12,6);R('#120628',x-3,y-1,2,2);R('#120628',x+2,y-1,2,2);q.globalAlpha=1}
+  for(let k=0;k<12;k++){const x=(hr(k)*256+Math.sin(T/30+k)*10+256)%256,y=30+hr(k*7)*90+Math.sin(T/20+k)*4;q.globalAlpha=.4+.4*Math.sin(T/12+k);R('#9aff7a',x|0,y|0,2,2);q.globalAlpha=1}}
+ else if(i==9){for(let k=0;k<7;k++)cloud(drift(k,.05+k*.015,40),34+k*12,16+k*3,k%2?'#fff':'#ffe8f0',.7);
+  const tw=(x,h)=>{R('#fff',x,118-h,16,h);R('#c8c0ec',x+11,118-h,5,h);R('#e8a85a',x-2,118-h-5,20,5);R('#e8a85a',x+3,118-h-12,10,7);R('#ffd23a',x+7,118-h-18,2,6);for(let y=118-h+5;y<112;y+=9)R('#8ab0f0',x+6,y,4,5)};
+  tw(26,40);tw(112,52);tw(206,34);
+  for(let k=0;k<5;k++)cloud(k*64+20,124+(k%2)*5,26,'#fff',.95);R('#fff',0,132,256,12)}
+ else if(i==10){for(let k=0;k<7;k++){const x=k*40+6,h=70+(k*17)%30;R('#0a2a1a',x,144-h,9,h);R('#14502e',x+9,144-h,3,h);for(let y=144-h+8;y<130;y+=14)R('#3a2a18',x+1,y,7,2)}
+  whills('#14502e',118,22,0,5,28);
+  for(let k=0;k<10;k++){const x=k*28+6,h=16+(k*11)%34;R('#2a7a30',x,16,1,h);blob('#3aaa3a',x,16+h,3,3);}
+  ground(14);for(let k=0;k<14;k++){const x=k*19+3;R('#2a7a30',x,128,2,10);R('#3aaa3a',x-3,126,8,3)}
+  for(let k=0;k<16;k++){const x=(hr(k)*256+Math.sin(T/25+k)*8+256)%256,y=30+hr(k*7)*90+Math.sin(T/17+k)*5;q.globalAlpha=.4+.5*Math.sin(T/11+k*2);R('#f6ff8a',x|0,y|0,2,2);q.globalAlpha=1}}
+ else if(i==11){for(let k=0;k<70;k++){q.globalAlpha=.4+.6*Math.abs(Math.sin(T/40+k));R('#fff',(hr(k)*256)|0,(hr(k*5)*110)|0,1,1);q.globalAlpha=1}
+  blob('#3a6ac8',208,34,16,16);q.globalAlpha=.8;blob('#4aaa5a',204,32,7,5);blob('#4aaa5a',212,38,5,4);q.globalAlpha=1;blob('#fff',200,28,5,2);
+  whills('#3a3a4a',124,16,0,1,40);R('#a8a8b8',0,126,256,18);for(let k=0;k<7;k++){const x=k*40+12;blob('#8a8a9a',x,132+(k%2)*5,10,3);blob('#6e6e7e',x,133+(k%2)*5,6,2)}
+  R('#cfd4dc',30,106,30,20);blob('#cfd4dc',45,106,15,12);R('#6a96c8',34,110,22,2);R('#2a3a5a',42,114,6,12);R('#ffd23a',44,92,1,10);q.globalAlpha=.5+.4*Math.sin(T/12);R('#ff4a4a',43,90,3,3);q.globalAlpha=1}
+ else{for(let k=0;k<60;k++){const x=(hr(k)*256+Math.sin(T/50+k)*4)%256,y=(hr(k*3)*144+T*(.1+hr(k)*.3))%144;q.globalAlpha=.3+.5*Math.abs(Math.sin(T/20+k));R(k%3?'#ff4ad8':'#b070ff',x|0,y|0,1+(k%2),1+(k%2));q.globalAlpha=1}
+  for(let k=0;k<5;k++){q.globalAlpha=.25-.04*k;blob('#d62ad0',128,70,100-k*16+Math.sin(T/20)*4,30-k*5);q.globalAlpha=1}
+  q.globalAlpha=.8;blob('#05000e',128,70,30,12);blob('#ff4ad8',128,70,6+Math.sin(T/15)*1.5,10);blob('#fff',128,70,2,6);q.globalAlpha=1;
+  whills('#1a0836',128,16,.3,3,40);R('#14052a',0,128,256,16);for(let x=0;x<256;x+=8)R('#4a1a80',x,128,4,1)}}
+function distBg(){const Lc=LOC[mPage],di=mPage-13;
+ for(let y=0;y<144;y+=4){const p=y/144;R(p<.55?'#10032a':p<.8?'#1c0640':'#2a0a56',0,y,256,4)}
+ q.globalAlpha=.35;blob(Lc.c,128,64,120,50);q.globalAlpha=.5;blob('#ff3ab0',128+((di*37)%60-30),22,22,22);q.globalAlpha=.8;blob('#ffd0f8',128+((di*37)%60-30),22,16,16);q.globalAlpha=1;
+ for(let y=14;y<34;y+=3)R('#10032a',0,y,256,1);
+ for(let L=0;L<2;L++){const sp=L?.35:.12,col=L?'#1d0a44':'#150636',w=L?18:12;for(let k=-1;k<16;k++){const n=k+Math.floor(t*sp/w),bx=Math.round(k*w-(t*sp)%w),h=(L?34:50)+Math.floor(hr(n*3.1+di+L*9)*(L?44:56)),by=144-h;
+   R(col,bx,by,w-1,h);if(!L)R('#2a0f5a',bx,by,w-1,1);
+   for(let wy=by+4;wy<144-6;wy+=6)for(let wx=bx+2;wx<bx+w-3;wx+=4){const r=hr(n*7.3+wx*.17+wy*.31+L*4);if(r>.55){const fl=Math.sin(t/30+r*40)>.92;R(fl?'#fff':r>.85?'#ff3ab0':r>.7?'#3affea':'#ffd23a',wx,wy,2,2)}}
+   if(L&&hr(n*1.9+di)>.6){const c=hr(n+di)>.5?'#3affea':'#ff3ab0';q.globalAlpha=.7+.3*Math.sin(t/12+k);R(c,bx+2,by-3,w-5,2);q.globalAlpha=1}}}
+ for(let y=0;y<144;y+=2){q.globalAlpha=.1;R('#000',0,y,256,1);q.globalAlpha=1}}
 const mvx=$('mpv').getContext('2d');mvx.imageSmoothingEnabled=false;
 function drawMap(){const i=mPage,Lc=LOC[i],ow=owned(i),base=i*PER,f=ow?Math.min(16,S.lv-base):0;
- R('#071424',0,0,256,144);for(let x=0;x<256;x+=16)R('#0c2038',x,0,1,144);for(let y=0;y<144;y+=16)R('#0c2038',0,y,256,1);for(let x=0;x<256;x+=16)for(let y=0;y<144;y+=16)R('#163a64',x,y,1,1);
+ if(mPage>=13)distBg();else worldBg();
  q.globalAlpha=.14;blob(Lc.c,128,76,130,66);q.globalAlpha=.1;blob(Lc.c,128,76,90,44);q.globalAlpha=1;
  for(let k=0;k<14;k++){const a=((t*.15+k*37)%256),b=(k*53)%144;q.globalAlpha=.3+.3*Math.sin(t/20+k);R('#6ab4ff',a|0,b,1,1);q.globalAlpha=1}
- pipeLayer(PTOT,BLU);if(f>0){const up=f>=16?PTOT:NDIST[f-1];pipeLayer(up,PNK);for(let k=0;k*48<up;k++){const p=(t*.7+k*48)%Math.max(48,up);if(p<up){const[px,py]=ptAt(p);R('#fff',px-1|0,py-1|0,2,2)}}}
+ const dI=mPage>=13,wc=Lc.c;pipeLayer(PTOT,dI?DBL:[wshd(wc,.3),wshd(wc,.75),wshd(wc,1.45)]);if(f>0){const up=f>=16?PTOT:NDIST[f-1];pipeLayer(up,dI?DPK:PNK);for(let k=0;k*48<up;k++){const p=(t*.7+k*48)%Math.max(48,up);if(p<up){const[px,py]=ptAt(p);R('#fff',px-1|0,py-1|0,2,2)}}}
  for(let k=0;k<15;k++){const n=base+k+1,[x,y]=nodeXY(k),st=!ow||n>S.lv?0:n<S.lv?1:2;padDraw(x,y,st,n==mSel);seedsRow(x,y+9,apOf(n,ow));if(k==PER-1)bossPad(x,y,st)}
  const tg=nodeXY((mSel-1)%PER);if(hop.tx!=tg[0]||hop.ty!=tg[1]||hop.page!=mPage){const same=hop.page==mPage;hop.fx=same?hop.cx:tg[0];hop.fy=same?hop.cy:tg[1];hop.tx=tg[0];hop.ty=tg[1];hop.t0=t;hop.page=mPage}
  const p=Math.min(1,(t-hop.t0)/20),e=p*p*(3-2*p);hop.cx=hop.fx+(hop.tx-hop.fx)*e;hop.cy=hop.fy+(hop.ty-hop.fy)*e;
@@ -580,6 +660,21 @@ function mapUI(){const i=mPage,Lc=LOC[i],ow=owned(i),base=i*PER;
 function msay(m){const e=$('mpm');e.textContent=m;e.style.opacity=1;e.classList.remove('tpop');void e.offsetWidth;e.classList.add('tpop');clearTimeout(msay.t);msay.t=setTimeout(()=>e.style.opacity=0,2200)}
 function goPage(p){if(p<0||p>=NL)return;mPage=p;const b=p*PER;mSel=Math.max(b+1,Math.min(b+PER,Math.min(S.lv,MAXL)));mapUI()}
 function openMap(){mPage=locOf(Math.min(sel,MAXL));mSel=Math.min(sel,MAXL);hop.page=-1;mapUI();sh('mp',1)}
+// ---- level select tabs: WORLDS (1-13) and DISTRICTS (I-X, unlocked once the Forbidden Core falls) ----
+const coreDone=()=>!!S.core||S.lv>195,DIS0=13;
+{const st=document.createElement('style');st.textContent=`#mtab{display:none;flex-direction:column;gap:.35cqw;flex:0 0 auto}#mtab button{font-family:inherit;font-size:.8cqw;padding:.55cqw 1cqw;border:.25cqw solid #3a5a82;background:#0a1a30;color:#8ab4e8;cursor:pointer;box-shadow:.2cqw .2cqw 0 #0008}#mtab button.on{background:#ffd23a;border-color:#fff;color:#3a2a00}#mtab.d button{border-color:#6a1fb0;background:#14082a;color:#c9a0ff}#mtab.d button.on{background:#ff3ab0;border-color:#3affea;color:#fff;box-shadow:0 0 1.2cqw #ff3ab0}
+#mph.dist{background:linear-gradient(#1a0634f8,#2a0a4ad8)!important}#mph.dist #mpt .a{color:#3affea;text-shadow:.25cqw .25cqw #ff3ab0}#mph.dist #mpt .b{color:#ffb8f0}
+#mp:not(.dist) .sg{border-color:var(--ac,#1b2a38)}#mp:not(.dist) #mpb{border-color:var(--ac,#1b2a38)}
+#mp.dist .sg{background:#14082a;color:#3affea;border-color:#ff3ab0;box-shadow:0 0 1cqw #ff3ab088,.25cqw .25cqw 0 #0008}#mp.dist .nd.cur .sg{background:#ff3ab0;color:#fff}#mp.dist .nd.sel .sg{border-color:#ffd23a;box-shadow:0 0 0 .3cqw #ffd23a,0 0 1.4cqw #ffd23a}#mp.dist .nd.lock .sg{background:#1a1030;color:#5a4a80;border-color:#3a2a5a;box-shadow:none}#mp.dist .nd.boss .sg{background:#ff3a5a;color:#fff;border-color:#ffd23a}
+#mp.dist #mpb{background:#14082a;color:#d8b8ff;border-color:#ff3ab0;box-shadow:0 0 1.6cqw #ff3ab066,.4cqw .4cqw 0 #0008}#mp.dist #mpbt{color:#3affea;text-shadow:.2cqw .2cqw 0 #ff3ab0}#mp.dist #mpbs{color:#d8b8ff}#mp.dist #mpgo{background:#ff3ab0;color:#fff}`;document.head.appendChild(st);
+const mt=document.createElement('div');mt.id='mtab';mt.innerHTML='<button id=mtw>WORLDS</button><button id=mtd>DISTRICTS</button>';$('mph').insertBefore(mt,$('mpl'));
+const _gp=goPage;
+goPage=function(p){if(p<0||p>=NL)return;if(p>=DIS0&&!coreDone())return;if((p>=DIS0)!==(mPage>=DIS0))return;_gp(p)};
+const jump=p=>{if(p>=DIS0&&!coreDone())return;const b=p*PER;mPage=p;mSel=Math.max(b+1,Math.min(b+PER,Math.min(S.lv,MAXL)));mapUI()};
+$('mtw').onclick=()=>{if(mPage>=DIS0)jump(Math.min(12,locOf(Math.min(S.lv,MAXL))))};
+$('mtd').onclick=()=>{if(mPage<DIS0)jump(Math.max(DIS0,Math.min(NL-1,locOf(Math.min(S.lv,MAXL)))))};
+const _mu=mapUI;
+mapUI=function(){if(mPage>=DIS0&&!coreDone())mPage=12;_mu();const dis=mPage>=DIS0,has=coreDone();mt.style.display=has?'flex':'none';mt.className=dis?'d':'';$('mp').style.setProperty('--ac',LOC[mPage].c);$('mph').classList.toggle('dist',dis);$('mp').classList.toggle('dist',dis);$('mtw').className=dis?'':'on';$('mtd').className=dis?'on':'';$('mpl').style.opacity=(dis?mPage>DIS0:mPage>0)?1:.3;$('mpr').style.opacity=(dis?mPage<NL-1:mPage<DIS0-1)?1:.3}}
 function closeAllOv(){OVS.forEach(o=>{const e=$(o);clearTimeout(e._t);e.style.display='none';e.classList.remove('uiin','uiout','mapin','mapout')});const l=$('lob');l.style.opacity=1;l.style.pointerEvents='auto';$('gear').style.visibility='visible'}
 $('mpl').onclick=()=>goPage(mPage-1);$('mpr').onclick=()=>goPage(mPage+1);
 $('mpgo').onclick=()=>{if($('mpgo').dataset.ok!='1')return;const n=mSel,i=locOf(n);
@@ -1428,7 +1523,7 @@ function drawShp(){const c=spv.getContext('2d');c.imageSmoothingEnabled=false;co
 // radio: pick a game track and watch your outfit vibe to it
 const RD=new Audio(),STN=[['LOBBY','lobby'],['RUN','run'],['SHOP','shop'],['BOSS 1','boss1'],['BOSS 2','boss2'],['MINIONS','minions'],['PORTAL','portal'],['DRESSING','dressing'],['KING','king']];RD.loop=true;RD.preload='auto';
 let rI=0,rOn=0,an=null,fd=null;
-const rd=document.createElement('div');rd.innerHTML='<div id=rdo class="p card ov" style="width:42cqw;padding:2cqw;text-align:center"><div style="font-size:2.2cqw;color:#7a4ae0;margin-bottom:1cqw">RADIO</div><canvas id=radc class=cv width=96 height=54></canvas><div style="display:flex;align-items:center;gap:.8cqw;margin:1cqw 0"><button class=btn id=rpv style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw">&lt;</button><div id=rst style="flex:1;font-size:1.3cqw"></div><button class=btn id=rnx style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw">&gt;</button></div><button class=btn id=rpl style="background:#7a4ae0">PLAY RADIO</button><button class=btn id=rbk style="background:#556">BACK</button></div>';
+const rd=document.createElement('div');rd.innerHTML='<div id=rdo class="p card ov" style="width:42cqw;padding:2cqw;text-align:center;box-sizing:border-box"><div style="font-size:2.2cqw;color:#7a4ae0;margin-bottom:1cqw">RADIO</div><canvas id=radc class=cv width=96 height=54 style="box-sizing:border-box;margin:0 auto"></canvas><div style="display:flex;align-items:center;justify-content:center;gap:.8cqw;margin:1cqw 0;width:100%;box-sizing:border-box"><button class=btn id=rpv style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw;flex:0 0 auto;min-width:0;width:auto">&lt;</button><div id=rst style="flex:1;min-width:0;text-align:center;font-size:1.3cqw"></div><button class=btn id=rnx style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw;flex:0 0 auto;min-width:0;width:auto">&gt;</button></div><button class=btn id=rpl style="background:#7a4ae0">PLAY RADIO</button><button class=btn id=rbk style="background:#556">BACK</button></div>';
 $('w').appendChild(rd.firstChild);OVS.push('rdo');
 const ro=document.createElement('button');ro.className='btn';ro.id='ropen';ro.style.background='#7a4ae0';ro.textContent='RADIO';$('rt').before(ro);
 const rLab=()=>{$('rst').textContent=STN[rI][0];$('rpl').textContent=rOn?'STOP RADIO':'PLAY RADIO'};
@@ -1641,7 +1736,7 @@ let dcSeen=0,dcI=0,dcC=0,dcT0=0,dcFade=0,SCN=null;
 const dcEl=document.createElement('div');dcEl.style.cssText='display:none;position:absolute;inset:0;z-index:999990;cursor:pointer;user-select:none;font-family:"Press Start 2P",monospace;color:#fff';
 dcEl.innerHTML='<div style="position:absolute;left:4%;right:4%;bottom:7%;display:flex;gap:2cqw;align-items:flex-end"><div style="flex:0 0 14cqw;text-align:center"><img id=dcP alt="" style="width:12cqw;height:12cqw;object-fit:contain;image-rendering:pixelated"><div id=dcN style="font-size:1cqw;margin-top:1cqw"></div></div><div id=dcB style="flex:1;border:.4cqw solid;background:#140830f2;padding:1.8cqw 2.2cqw;box-shadow:.5cqw .5cqw 0 #0008"><div id=dcT style="font-size:1.2cqw;line-height:1.9;min-height:6cqw"></div><div id=dcH style="font-size:.9cqw;color:#ffd23a;text-align:right;margin-top:1cqw">TAP OR SPACE</div></div></div><button id=dcS class=btn style="position:absolute;right:2%;top:2%;margin:0;background:#556;font-size:1cqw;padding:.8cqw 1.2cqw">SKIP</button>';
 $('w').appendChild(dcEl);
-const dcDue=()=>S.loc!==13&&DC[S.loc]&&sel===15*S.loc+1&&dcSeen!==sel&&!tut&&!chal&&!evA&&goal<1e8&&!(window.__room&&window.__room());
+const dcDue=()=>S.loc!==13&&DC[S.loc]&&sel===15*S.loc+1&&dcSeen!==sel&&!chal&&!evA&&goal<1e8&&!(window.__room&&window.__room());
 const mkLoc=l=>({ti:l<13?'WORLD '+(l+1):l==22?'FINAL DISTRICT':'DISTRICT '+RN[l-12],su:DC[l][0],fin:l==22,L:DC[l][2].map(x=>typeof x=='string'?['d',x]:x)});
 function dcSfx(w){if(mute)return;if(w=='sod')tone(520,780,.18,'triangle',.1);else if(w=='king'||w=='core')[0,120].forEach(d=>setTimeout(()=>tone(150-d/4,70,.3,'sawtooth',.09),d));else tone(440,520,.1,'square',.05)}
 function dcLine(){const w=SCN.L[dcI][0],pc=LOC[S.loc].pc;let n,c,im;
@@ -1676,7 +1771,7 @@ bg(f,i){fr++;off+=.3;drawGame(1);sod(46,G-36,2,0,{r:0});
  q.globalAlpha=Math.min(.5,.06*i+.04*Math.sin(f/9));blob('#ffd0f8',170,42,12+i*3,12+i*3);q.globalAlpha=1;
  if(i>=3){q.globalAlpha=Math.min(.3,(i-2)*.07);R('#ffd0f8',0,0,256,144);q.globalAlpha=1}
  for(let k=0;k<14;k++){const h=hr(k*1.7);q.globalAlpha=.7;R('#ffd0f8',((h*256+Math.sin(f/20+k)*6)%256)|0,(144-((f*(.3+h*.5)+hr(k+3)*144)%144))|0,1,2);q.globalAlpha=1}},
-end(){endP=[];lobby();mPage=13;mSel=Math.min(15*13+1,MAXL);hop.page=-1;mapUI();sh('mp',1)}};
+end(){endP=[];S.core=1;sv();lobby();mPage=13;mSel=Math.min(15*13+1,MAXL);hop.page=-1;mapUI();sh('mp',1);msay('THE CORE: A NEW DISTRICTS TAB IS OPEN. RUN, LITTLE SOD!');clearTimeout(msay.t);msay.t=setTimeout(()=>$('mpm').style.opacity=0,6000)}};
 {const _se=startEnding;startEnding=function(){_se();dcRun(SC_CORE)}}
 // Neon King defeated
 const SC_KING={cin:1,ti:'',su:'',fade:1,dur:90,card:'THE NEON KING IS DEFEATED!',L:[
@@ -2444,7 +2539,7 @@ let jb=-99;
 {const _j=jump;jump=function(){const c=jc;const r=_j.apply(this,arguments);if(st=='run'&&jc===c&&!rm_())jb=mf;return r}}
 {const _u=upd;upd=function(){_u.apply(this,arguments);if(st!=='run'){jb=-99;return}if(jb>=0&&mf-jb<=6&&jc===0&&py>=G-18&&!tut&&!rm_()){jb=-99;jump()}}}
 // update log
-const UV='2026.10.27',UVL='2026.10.28e',LOGS=[{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME','DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
+const UV='2026.10.27',UVL='2026.10.29a',LOGS=[{"h":"DISTRICTS TAB AND WORLD MAPS","l":["NEW DISTRICTS TAB ON THE LEVEL SELECT: DISTRICTS I-X NOW LIVE IN THEIR OWN TAB, UNLOCKED WHEN THE FORBIDDEN CORE IS DEFEATED","THE WORLDS TAB HOLDS WORLDS 1-13, AND THE ARROWS STAY INSIDE EACH TAB","AFTER THE FORBIDDEN CORE CUTSCENE YOU GO STRAIGHT TO DISTRICT I, AND THE CORE TELLS YOU ABOUT THE NEW TAB","THE 'THANKS FOR PLAYING' SCREEN IS GONE FROM THE FORBIDDEN CORE ENDING","DISTRICT MAPS HAVE A NEON CITY LOOK: SKYLINE, MOON, GLOWING PADS AND NEON LEVEL NUMBERS","EVERY WORLD MAP NOW LOOKS LIKE ITS WORLD: FARM, MARSH, CANYON, TUNDRA, EMBERWORKS, CANDY COVE, NEON METROPOLIS, LAGOON, HOLLOW, CLOUDS, JUNGLE, MOON BASE AND THE FORBIDDEN DIMENSION","WORLD MAP PIPES, PADS AND LEVEL BOXES USE EACH WORLD'S COLORS","DR MULCH'S FARM CUTSCENE NOW PLAYS BEFORE THE TUTORIAL","FIX: CUTSCENES NO LONGER CRASH WITH 'CANNOT READ PROPERTIES OF UNDEFINED' AT THE LAST LINE","FIX: THE KING TRACK CAN NOW BE PICKED ON THE RADIO"]},{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME','DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
 {"h":"EARLIER: PERKS, EVENTS AND PROFILE","l":["MID-RUN PERKS EVERY 750M, WITH A 3 SECOND COUNTDOWN AFTER PAUSE OR PICKING","CALM PERK STAYS SLOWER, MAGNET STACKS","SEED COMBOS AND SEED STORMS","MODIFIERS: TURBO, MOON, IRONMAN","ENDLESS MODE WITH CHANGING AREAS","PROFILE: RANK, XP, STATS, TOP RUNS, ACHIEVEMENTS","RANK-UP REWARDS (SEEDS, TOKENS, HAT PICKS) AND A RANK-UP CELEBRATION","EVENT RUNS USE THE MINIONS TRACK, PLUS EP MILESTONE REWARDS","PORTAL MUSIC LOADS RELIABLY","LIVE EVENT CARD IN THE LOBBY"]}];
 const up=document.createElement('div');up.id='upl';up.className='p card ov';up.style.cssText='width:64cqw;max-height:92%;overflow-y:auto;padding:1.6cqw 2cqw;text-align:left';$('w').appendChild(up);OVS.push('upl');
 const upb=document.createElement('button');upb.className='p btn';upb.id='upb';upb.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(upb);
@@ -2497,12 +2592,11 @@ addEventListener('keydown',e=>{if(!rkWait)return;e.preventDefault();e.stopImmedi
  if(!/^[a-z0-9]$/.test(k)||RKRES.includes(k)){say('PICK A LETTER OR NUMBER (NOT P, M, F, R OR A HOTKEY)');return}
  S[rkWait]=k;sv();rkWait=null;rkRender();say('SET TO '+k.toUpperCase())},true);
 // ===== more features: daily challenge, bigger text, colorblind seeds =====
-const st4=document.createElement('style');st4.textContent='.bigt .ov{zoom:1.2}.bigt #navbar button{zoom:1.2}.bigt #stg{max-height:70%!important}';document.head.appendChild(st4);
-document.documentElement.classList.toggle('bigt',!!S.bt);
+S.bt=0;
 const vrow=document.createElement('div');vrow.style.cssText='display:flex;flex-wrap:wrap;gap:.8cqw;justify-content:center';
 const vmk=(f)=>{const b=document.createElement('button');b.className='btn';b.style.cssText='min-width:0;width:auto;margin:.4cqw 0;padding:.8cqw 1cqw;font-size:1cqw;background:#3a6f8a';b.onclick=()=>{f();sv();vLab()};vrow.appendChild(b);return b};
-const vbt=vmk(()=>{S.bt=S.bt?0:1;document.documentElement.classList.toggle('bigt',!!S.bt)}),vcb=vmk(()=>{S.cb=S.cb?0:1});
-const vLab=()=>{vbt.textContent='BIG TEXT: '+(S.bt?'ON':'OFF');vcb.textContent='COLORBLIND SEEDS: '+(S.cb?'ON':'OFF')};vLab();
+const vcb=vmk(()=>{S.cb=S.cb?0:1});
+const vLab=()=>{vcb.textContent='COLORBLIND SEEDS: '+(S.cb?'ON':'OFF')};vLab();
 $('rt').before(vrow);
 // lobby hotkeys: S shop, L levels, D dressing room, V events, N missions
 {const keys={s:'mud',l:'mapb',d:'drb',v:'evb',n:'mib',u:'upb',k:'skb'},names={s:'SHOP',l:'LEVELS',d:'DRESSING ROOM',v:'EVENTS',n:'MISSIONS',u:'UPDATE LOG',k:'SKILLS'};
