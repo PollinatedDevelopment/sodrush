@@ -763,7 +763,7 @@ function bossCounter(){const b=bossS;b.inc++;const sx=54,sy=py+6,tx=b.x+16,ty=G-
 function bossHit(){const b=bossS;b.hp--;b.inc--;b.hurt=18;b.shake=10;noise(.2,320,.7,80);tone(220,70,.25,'square',.16);cv.classList.remove('shk');void cv.offsetWidth;cv.classList.add('shk');
  bossFx(b.x+24,G-44,16,[b.B.col,'#ffffff','#ffd23a'],2.4);if(b.i==22&&b.hp>0&&(b.hp==Math.ceil(b.max*2/3)||b.hp==Math.ceil(b.max/3))){b.flash=12;b.shake=24;bossFx(b.x+44,G-54,40,['#ff3a3a','#ffd23a','#ffffff'],3.6,36);noise(.5,200,.8,40)}
  if(b.hp<=0){b.hp=0;b.ph='dead';b.tm=0;bossP=[];b.tele=0}}
-function bossEnd(){const b=bossS,bonus=Math.round((80+40*b.i)*(1+seedBonus()+LB(S.loc)));gsf+=bonus;gs=Math.floor(gsf);popGs();bossS=null;bossP=[];bossShots=[];spn=70*sp;clearLv();if(b.i==12)startEnding()}
+function bossEnd(){const b=bossS,bonus=Math.round((80+40*b.i)*(1+seedBonus()+LB(S.loc)));gsf+=bonus;gs=Math.floor(gsf);popGs();bossS=null;bossP=[];bossShots=[];spn=70*sp;clearLv();if(b.i==12)startEnding();if(b.i==22)startKingEnd()}
 function bossRevive(){const b=bossS;if(!b||b.ph=='in'||b.ph=='dead')return;b.ph='rest';b.rest=60;b.tele=0;bossShots=bossShots.filter(s=>s.l>0)}
 function bossStep(){const b=bossS;if(!b)return;
  if(b.hurt>0)b.hurt--;if(b.shake>0)b.shake--;if(b.flash>0)b.flash--;b.hpd+=(b.hp-b.hpd)*.12;
@@ -849,7 +849,6 @@ function endStep(dt){endT+=dt;fr+=dt*.5;const T=endT;
   for(let i=0;i<50;i++){q.globalAlpha=.3+.7*Math.abs(Math.sin(t/30+i*1.7));R('#ffd0f8',(hr(i*3.1)*256)|0,(hr(i*7.7)*144)|0,1,1)}q.globalAlpha=1;
   const k=Math.min(1,(T-470)/40);q.globalAlpha=k;
   endText('THE END',128,70+Math.round((1-k)*10),24,ECOL[((T/10)|0)%ECOL.length]);
-  if(T>540)endText('THANKS FOR PLAYING!',128,92,7,'#ffffff');
   const hop=Math.abs(Math.sin(T/13));sod(120,G-18-hop*10,1,hop>.05?1:0,{r:Math.sin(T/9)*.12});
   if(T>620&&((T/30)|0)%2==0)endText('TAP TO CONTINUE',128,134,5,'#ffd23a');
   q.globalAlpha=1;
@@ -1438,7 +1437,7 @@ function rGo(on){if(on&&!rOn){fadeOut(L);fadeOut(DRE)}rOn=on;window.radOn=on;
   const c=AC();if(c&&!an){try{const m=c.createMediaElementSource(RD);an=c.createAnalyser();an.fftSize=64;m.connect(an);an.connect(c.destination);fd=new Uint8Array(an.frequencyBinCount)}catch(e){an=null}}}
  else{RD.pause();if(st=='lobby')mus()}rLab()}
 ro.onclick=()=>{rLab();sh('rdo',1)};$('rbk').onclick=()=>{sh('rdo',0);sh('stg',1)};
-$('rpv').onclick=()=>{rI=(rI+7)%8;rLab();if(rOn)rGo(1)};$('rnx').onclick=()=>{rI=(rI+1)%8;rLab();if(rOn)rGo(1)};$('rpl').onclick=()=>{rGo(rOn?0:1)};
+$('rpv').onclick=()=>{rI=(rI+STN.length-1)%STN.length;rLab();if(rOn)rGo(1)};$('rnx').onclick=()=>{rI=(rI+1)%STN.length;rLab();if(rOn)rGo(1)};$('rpl').onclick=()=>{rGo(rOn?0:1)};
 function drawRad(){const c=$('radc').getContext('2d');c.imageSmoothingEnabled=false;let bass=0;
  if(rOn&&an){an.getByteFrequencyData(fd);bass=Math.min(1,(fd[0]+fd[1]+fd[2])/600)}else if(rOn)bass=Math.max(0,sn(t/6))*.7;
  c.fillStyle='hsl('+((t*2)%360)+',55%,'+(13+bass*14)+'%)';c.fillRect(0,0,96,54);c.fillStyle='#10151c';c.fillRect(0,46,96,8);
@@ -1552,7 +1551,7 @@ ENV.push(DIST_ENV({"sky": ["#050508", "#15121e", "#2a1f30"], "acc": ["#ffb000", 
 ENV.push(DIST_ENV({"sky": ["#020010", "#1a0040", "#4a00a0"], "acc": ["#ff3ab0", "#3affea", "#ffd23a"], "far": "#14082a", "near": "#14082a", "h0": 90, "hv": 60, "h1": 110, "hv2": 40, "gs": "#14082a", "sun": true, "sunX": 190}));
 for(let k=14;k<=22;k++)OB[k]=OB[k%12];
 for(let k=0;k<9;k++)BOSSES.push(Object.assign({},BOSSES[k]));
-BOSSES.push({n:'NEON KING',hp:16,col:'#ff3ab0',lo:['ball','#ff3ab0','#ffd0f0'],hi:['beam','#3affea','#e0ffff'],draw:bNeonKing});
+BOSSES.push({n:'NEON KING',hp:40,col:'#ff3ab0',lo:['ball','#ff3ab0','#ffd0f0'],hi:['beam','#3affea','#e0ffff'],draw:bNeonKing});
 COSTL.push(19000,21000,23000,25000,27000,29000,31000,33000,35000);
 // ===== DISTRICT UPGRADE: scenery, obstacles, cutscenes, final boss =====
 const XT={
@@ -1605,6 +1604,8 @@ const DOB=(a,b,c,k)=>[
  (X,Y)=>{Y+=Math.round(Math.sin(fr/6));R('#0c0618',X+1,Y+1,11,15);R(a,X+2,Y+2,9,13);R(b,X+2,Y+2,9,3);R('#fff',X+3,Y+6,7,4);R(c,X+5,Y+7,3,2);R('#0c0618',X+2,Y+14,3,2);R('#0c0618',X+8,Y+14,3,2)},
  (X,Y,o)=>{R('#0c0618',X,Y+8,28,11);R(a,X+1,Y+9,26,9);R(b,X+4,Y+3,16,6);R(c,X+7,Y+4,8,3);R(c,X+25,Y+11,3,3);whl(X+6,Y+20,o.wheel||0,'#2a1c44');whl(X+22,Y+20,o.wheel||0,'#2a1c44')}];
 {const P2={14:['#4a4a7a','#c8d8ff','#ff3ab0'],15:['#0e6a5a','#7affd6','#ff8ad8'],16:['#a04a14','#ffb13b','#fff0a0'],17:['#1a1a3a','#00ff9c','#ff00aa'],18:['#1a4a8a','#6ad8ff','#ffd06a'],19:['#6a0070','#ff2a6a','#ffd23a'],20:['#7a5aa8','#ffc8f0','#c8a8ff'],21:['#2a1f30','#ffb000','#40ffb0'],22:['#2a0a4a','#ff3ab0','#ffd23a']};for(const k in P2)OB[k]=DOB(P2[k][0],P2[k][1],P2[k][2],+k)}
+// District I-IX bosses: 2x health rising to 3x (originals untouched)
+[10,11,14,14,18,18,22,23,27].forEach((h,k)=>{BOSSES[13+k].hp=h});
 // Neon King: rage aura in his last phase
 {const _k=bNeonKing;BOSSES[22].draw=function(a){if(a.hp<.34&&a.ph!='dead'){const g=BG0;q.globalAlpha=.3+.15*Math.sin(a.t/3);blob('#ff1a3a',44,g-54,52,52);q.globalAlpha=1;for(let i=0;i<5;i++)R('#ffd23a',(hr(i+(a.t/4|0))*84)|0,(hr(i*3+(a.t/4|0))*100)|0,1,5)}return _k(a)}}
 // ---- first-level cutscene for each district ----
@@ -1619,23 +1620,84 @@ const DC={
 20:['VAPOR HEIGHTS','VAPOR ORACLE',['THE HEIGHTS FLOAT ABOVE THE CITY, WHERE THE AIR IS THIN AND THE FUTURE IS PINK.','I HAVE SEEN HOW THIS ENDS. EITHER THE KING FALLS TO A SOD, OR THE SOD FALLS TO THE KING.','I WILL NOT SAY WHICH. RUN.']],
 21:['DATA SLUMS','ARCHIVIST',['THE SLUMS STORE EVERY SEED THE KING EVER TOOK. THE RACKS GO ON FOREVER.','SOME OF THESE SEEDS CAME FROM YOUR OWN FIELD, SOD.','TAKE THEM BACK. ONE DISTRICT LEFT, THEN THE TOWER.']],
 22:['NEON TOWER','THE NEON KING',['SO THE LITTLE SOD CLIMBED ALL THE WAY UP. HOW CHARMING.','NINE DISTRICTS I RULED, AND YOU RAN THROUGH EVERY ONE OF THEM.','BUT THIS IS MY TOWER. THE AIR IS MINE, THE LIGHTNING IS MINE, AND SO IS EVERY SEED YOU CARRY.','REACH THE END OF THIS DISTRICT, SOD. I WILL BE WAITING. COME AND KNEEL.']]};
-let dcSeen=0,dcI=0,dcC=0,dcT0=0,dcD=null;
+// ---- cutscene engine: location intros + cinematic endings ----
+Object.assign(DC,{
+0:["DR. MULCH'S FARM",'SCARECROW',['HOWDY, SOD! WELCOME TO THE FARM. THE CROWS HAVE BEEN WATCHING YOU ALL MORNING.',['sod','I JUST WANT TO RUN. HOW HARD CAN A FARM BE?'],'DR. MULCH BURIED A LOT OF SEEDS OUT HERE, AND NOT ALL OF THEM ARE QUIET. KEEP MOVING.']],
+1:['MOSSLIGHT MARSH','MARSH FROG',['RIBBIT. THE MARSH GLOWS AT NIGHT. DO NOT FOLLOW THE LIGHTS TOO CLOSELY.',['sod','WHAT HAPPENS IF I DO?'],'THEN YOU MEET THE BOG KING. HE IS NOT A FROG PERSON.']],
+2:['COPPER CANYON','CANYON SHERIFF',['THIS CANYON HAS ONE RULE: KEEP RUNNING. THE GOLEM DOES NOT LIKE VISITORS.',['sod','I CAN OUTRUN A ROCK.'],'THAT IS WHAT THE LAST SOD SAID. WATCH THE WAGONS.']],
+3:['CRYSTAL TUNDRA','FROST HERMIT',['COLD ENOUGH FOR YOU? THE CRYSTALS HERE SING WHEN SOMETHING WARM RUNS BY.',['sod','AM I WARM?'],'YOU ARE THE WARMEST THING FOR MILES. THE YETI HAS NOTICED.']],
+4:['EMBERWORKS CRATER','FORGE MASTER',['THE EMBERWORKS NEVER COOL. EVERY SPARK HERE BECOMES SOMETHING DANGEROUS.',['sod','I WAS BORN IN DIRT. HOW BAD CAN FIRE BE?'],'THE WYRM SLEEPS BELOW. TRY NOT TO WAKE HIM. ...TOO LATE, I THINK.']],
+5:['CANDY COVE','GUMDROP',['WELCOME TO CANDY COVE! EVERYTHING IS SWEET, ESPECIALLY THE TRAPS.',['sod','TRAPS?'],'THE GINGERBRUTE HAS A SWEET TOOTH FOR SOD. RUN!']],
+6:['NEON METROPOLIS','NEON DJ',['THE CITY NEVER SLEEPS AND NEITHER DO THE MECHS. DROP THE BEAT!',['sod','I CAN RUN TO THAT.'],'GOOD. THE NEON MECH MOVES TO THE SAME RHYTHM.']],
+7:['CORAL LAGOON','REEF CRAB',['CLICK CLACK! THE LAGOON IS BEAUTIFUL AND THE KRAKEN IS HUNGRY.',['sod','I TASTE LIKE GRASS.'],'THAT IS WHAT WORRIES ME. STAY ON THE SAND.']],
+8:['HAUNTED HOLLOW','FRIENDLY GHOST',['BOO! SORRY, HABIT. THE HOLLOW IS HAUNTED, BUT MOST OF US ARE NICE.',['sod','AND THE ONES WHO AREN\'T?'],'THE PUMPKIN KING. HE IS ALWAYS A LITTLE TOO JOLLY.']],
+9:['CLOUD KINGDOM','CLOUD HERALD',['HEAR YE! THE CLOUD KINGDOM WELCOMES ALL WHO CAN STAY ABOVE THE STORM.',['sod','I AM NOT AFRAID OF THUNDER.'],'THE STORM KING WILL CHANGE YOUR MIND.']],
+10:['JUNGLE RUINS','RUIN EXPLORER',['THESE RUINS ARE OLDER THAN THE FARM. THE TEMPLE APE GUARDS A SECRET INSIDE.',['sod','WHAT SECRET?'],'THE ONE THAT KEEPS EVERYONE OUT. WATCH THE VINES.']],
+11:['MOON BASE','MOON COMMANDER',['MOON BASE TO SOD: GRAVITY IS LOW BUT THE DANGER IS HIGH. THE MOTHERSHIP IS WATCHING.',['sod','HOW DID I EVEN GET HERE?'],'NOBODY KNOWS. MAYBE THAT IS THE POINT.']],
+12:['FORBIDDEN DIMENSION','THE CORE',[['core','YOU CAME ALL THE WAY HERE... AS IF A SOD COULD BREAK THE VOID.'],['sod','I AM NOT HERE TO BREAK IT. I AM HERE TO GET THROUGH IT.'],['core','THEN COME. THE FORBIDDEN DIMENSION KEEPS EVERYTHING IT TAKES.']]]});
+const KING_ROWS=["y..y.yy.y..y","yyyyyyyyyyyy",".kkkkkkkkkk.","kppppppppppk","kpvvvvvvvvpk","kpvwvvvvwvpk","kpvvvvvvvvpk","kppppppppppk","kpkpppppkppk",".kpmmmmmmpk.","..kkkkkkkk..","............"];
+const PT={sod:['SOD','#63e36d',()=>thumb(S.sk,S.hat)],core:['THE FORBIDDEN CORE','#ff46d8',()=>stPx(CINE_ROWS,CINE_VOID)],king:['THE NEON KING','#ff3ab0',()=>stPx(KING_ROWS,{y:'#ffd23a',k:'#14082a',p:'#4a1478',v:'#3affea',w:'#fff',m:'#ff3ab0'})]};
+let dcSeen=0,dcI=0,dcC=0,dcT0=0,dcFade=0,SCN=null;
 const dcEl=document.createElement('div');dcEl.style.cssText='display:none;position:absolute;inset:0;z-index:999990;cursor:pointer;user-select:none;font-family:"Press Start 2P",monospace;color:#fff';
-dcEl.innerHTML='<div style="position:absolute;left:4%;right:4%;bottom:7%;display:flex;gap:2cqw;align-items:flex-end"><div style="flex:0 0 14cqw;text-align:center"><img id=dcP alt="" style="width:12cqw;height:12cqw;image-rendering:pixelated"><div id=dcN style="font-size:1cqw;margin-top:1cqw"></div></div><div id=dcB style="flex:1;border:.4cqw solid;background:#140830f2;padding:1.8cqw 2.2cqw;box-shadow:.5cqw .5cqw 0 #0008"><div id=dcT style="font-size:1.2cqw;line-height:1.9;min-height:6cqw"></div><div id=dcH style="font-size:.9cqw;color:#ffd23a;text-align:right;margin-top:1cqw">TAP OR SPACE</div></div></div><button id=dcS class=btn style="position:absolute;right:2%;top:2%;margin:0;background:#556;font-size:1cqw;padding:.8cqw 1.2cqw">SKIP</button>';
+dcEl.innerHTML='<div style="position:absolute;left:4%;right:4%;bottom:7%;display:flex;gap:2cqw;align-items:flex-end"><div style="flex:0 0 14cqw;text-align:center"><img id=dcP alt="" style="width:12cqw;height:12cqw;object-fit:contain;image-rendering:pixelated"><div id=dcN style="font-size:1cqw;margin-top:1cqw"></div></div><div id=dcB style="flex:1;border:.4cqw solid;background:#140830f2;padding:1.8cqw 2.2cqw;box-shadow:.5cqw .5cqw 0 #0008"><div id=dcT style="font-size:1.2cqw;line-height:1.9;min-height:6cqw"></div><div id=dcH style="font-size:.9cqw;color:#ffd23a;text-align:right;margin-top:1cqw">TAP OR SPACE</div></div></div><button id=dcS class=btn style="position:absolute;right:2%;top:2%;margin:0;background:#556;font-size:1cqw;padding:.8cqw 1.2cqw">SKIP</button>';
 $('w').appendChild(dcEl);
-const dcDue=()=>S.loc>=14&&S.loc<=22&&sel===196+15*(S.loc-13)&&dcSeen!==sel&&!tut&&!chal&&!evA&&goal<1e8&&!(window.__room&&window.__room());
-function dcLine(){const pc=LOC[S.loc].pc;$('dcT').textContent='';dcC=0;$('dcP').src=stPx(CINE_ROWS,{o:'#14082a',c:pc[0],C:pc[1],w:'#fff',G:pc[2]});$('dcN').textContent=dcD[1];$('dcN').style.color=pc[0];$('dcB').style.borderColor=pc[0]}
-function dcStart(){dcD=DC[S.loc];dcSeen=sel;dcI=0;dcT0=t;st='dcine';$('hud').style.display='none';dcEl.style.display='block';dcLine()}
-function dcEnd(){if(st!=='dcine')return;dcEl.style.display='none';$('hud').style.display='flex';st='run';acc=0;runStartedAt=performance.now()}
-function dcAdv(){const L=dcD[2][dcI];if(dcC<L.length){dcC=L.length;return}if(++dcI>=dcD[2].length)dcEnd();else dcLine()}
-function drawDCine(){const f=t-dcT0,L=dcD[2][dcI],fin=S.loc===22;off+=1.3;fr++;drawGame();
- dcC=Math.min(L.length,dcC+.75);$('dcT').textContent=L.slice(0,dcC|0);$('dcH').style.opacity=dcC>=L.length?1:0;
- const bh=Math.round(14*Math.min(1,f/30));R('#000',0,0,256,bh);R('#000',0,144-bh,256,bh);
- if(fin){q.globalAlpha=.1+.07*Math.sin(f/8);R('#ff1a3a',0,0,256,144);q.globalAlpha=1}
- if(f<170){q.save();q.textAlign='center';q.globalAlpha=Math.max(0,Math.min(1,f/20,(170-f)/20));bossText(fin?'FINAL DISTRICT':'DISTRICT '+RN[S.loc-12],128,56,fin?9:8,fin?'#ff4a4a':'#ffd23a');bossText(dcD[0],128,72,7,'#fff');q.restore()}}
+const dcDue=()=>S.loc!==13&&DC[S.loc]&&sel===15*S.loc+1&&dcSeen!==sel&&!tut&&!chal&&!evA&&goal<1e8&&!(window.__room&&window.__room());
+const mkLoc=l=>({ti:l<13?'WORLD '+(l+1):l==22?'FINAL DISTRICT':'DISTRICT '+RN[l-12],su:DC[l][0],fin:l==22,L:DC[l][2].map(x=>typeof x=='string'?['d',x]:x)});
+function dcSfx(w){if(mute)return;if(w=='sod')tone(520,780,.18,'triangle',.1);else if(w=='king'||w=='core')[0,120].forEach(d=>setTimeout(()=>tone(150-d/4,70,.3,'sawtooth',.09),d));else tone(440,520,.1,'square',.05)}
+function dcLine(){const w=SCN.L[dcI][0],pc=LOC[S.loc].pc;let n,c,im;
+ if(w=='d'){n=DC[S.loc][1];c=pc[0];im=stPx(CINE_ROWS,{o:'#14082a',c:pc[0],C:pc[1],w:'#fff',G:pc[2]})}else{const P=PT[w];n=P[0];c=P[1];im=P[2]()}
+ dcC=0;$('dcT').textContent='';$('dcP').src=im;$('dcN').textContent=n;$('dcN').style.color=c;$('dcB').style.borderColor=c;dcSfx(w)}
+function dcRun(sc){SCN=sc;dcI=0;dcT0=t;dcFade=0;st='dcine';$('hud').style.display='none';$('tp').style.display='none';dcEl.style.display='block';dcEl.style.opacity=1;dcLine()}
+function dcStart(){dcSeen=sel;dcRun(mkLoc(S.loc))}
+function dcEnd(){if(st!=='dcine')return;dcEl.style.display='none';if(SCN.end)SCN.end();else{$('hud').style.display='flex';st='run';acc=0;runStartedAt=performance.now()}}
+function dcAdv(){if(dcFade)return;const L=SCN.L[dcI][1];if(dcC<L.length){dcC=L.length;return}if(dcI+1>=SCN.L.length){if(SCN.fade)dcFade=t;else dcEnd()}else{dcI++;dcLine()}}
+function drawDCine(){const f=t-dcT0,L=(SCN.L[Math.min(dcI,SCN.L.length-1)]||['d',''])[1];
+ if(SCN.bg)SCN.bg(f,dcI);else{off+=1.3;fr++;drawGame()}
+ if(!dcFade){dcC=Math.min(L.length,dcC+.75);$('dcT').textContent=L.slice(0,dcC|0);$('dcH').style.opacity=dcC>=L.length?1:0}
+ const bh=Math.round((SCN.cin?20:14)*Math.min(1,f/30));R('#000',0,0,256,bh);R('#000',0,144-bh,256,bh);
+ if(SCN.fin){q.globalAlpha=.1+.07*Math.sin(f/8);R('#ff1a3a',0,0,256,144);q.globalAlpha=1}
+ if(SCN.ti&&f<170){q.save();q.textAlign='center';q.globalAlpha=Math.max(0,Math.min(1,f/20,(170-f)/20));bossText(SCN.ti,128,56,SCN.fin?9:8,SCN.fin?'#ff4a4a':'#ffd23a');bossText(SCN.su,128,72,7,'#fff');q.restore();q.globalAlpha=1}
+ if(dcFade){const D=SCN.dur||60,p=Math.min(1,(t-dcFade)/D);dcEl.style.opacity=1-p;q.globalAlpha=p;R('#000',0,0,256,144);q.globalAlpha=1;
+  if(SCN.card&&p>.5){q.save();q.textAlign='center';q.globalAlpha=Math.min(1,(p-.5)*3);bossText(SCN.card,128,76,7,'#ffd23a');q.restore();q.globalAlpha=1}
+  if(t-dcFade>=D+(SCN.card?110:0))dcEnd()}}
 dcEl.addEventListener('pointerdown',e=>{e.stopPropagation();if(e.target.id==='dcS')dcEnd();else dcAdv()});
 addEventListener('keydown',e=>{if(st!=='dcine')return;e.preventDefault();e.stopImmediatePropagation();if(e.key==='Escape')dcEnd();else if(e.key===' '||e.key==='Enter'||e.key==='ArrowUp')dcAdv()},true);
 {const _p=play;play=function(){if(st==='lobby')dcSeen=0;return _p.apply(this,arguments)}}
+// Forbidden Core: the sod speaks to the core
+const SC_CORE={cin:1,ti:'',su:'',fade:1,dur:70,L:[
+['sod','IT IS OVER, CORE. YOU DO NOT HAVE TO HOLD THE VOID ANYMORE.'],
+['core','...YOU DID NOT DESTROY ME. YOU WOKE ME. I WAS ONLY EVER THE HOLE WHERE THE SEEDS WERE BURIED.'],
+['sod','THEN REST. THE SEEDS ARE SAFE NOW. I WILL CARRY THEM HOME.'],
+['core','THANK YOU, LITTLE SOD. BUT THERE\'S A NEW THREAT...'],
+['core','NEON TOWERS ARE RISING BEYOND THE VOID. A KING WHO WANTS EVERY SEED FOR HIMSELF.'],
+['sod','THEN I WILL RUN THERE TOO.'],
+['core','GO. RUN FAST. I WILL LIGHT THE WAY.']],
+bg(f,i){fr++;off+=.3;drawGame(1);sod(46,G-36,2,0,{r:0});
+ q.globalAlpha=Math.min(.5,.06*i+.04*Math.sin(f/9));blob('#ffd0f8',170,42,12+i*3,12+i*3);q.globalAlpha=1;
+ if(i>=3){q.globalAlpha=Math.min(.3,(i-2)*.07);R('#ffd0f8',0,0,256,144);q.globalAlpha=1}
+ for(let k=0;k<14;k++){const h=hr(k*1.7);q.globalAlpha=.7;R('#ffd0f8',((h*256+Math.sin(f/20+k)*6)%256)|0,(144-((f*(.3+h*.5)+hr(k+3)*144)%144))|0,1,2);q.globalAlpha=1}},
+end(){endP=[];lobby();mPage=13;mSel=Math.min(15*13+1,MAXL);hop.page=-1;mapUI();sh('mp',1)}};
+{const _se=startEnding;startEnding=function(){_se();dcRun(SC_CORE)}}
+// Neon King defeated
+const SC_KING={cin:1,ti:'',su:'',fade:1,dur:90,card:'THE NEON KING IS DEFEATED!',L:[
+['king','NO... IMPOSSIBLE. A PATCH OF SOD... IN MY TOWER?'],
+['sod','YOUR SEEDS WERE NEVER YOURS. THEY BELONG TO THE WHOLE FIELD.'],
+['king','I BUILT THESE DISTRICTS TO KEEP THE DARK OUT. TO KEEP YOU BURIED. I WAS AFRAID, LITTLE SOD.'],
+['sod','AFRAID OF WHAT?'],
+['king','THAT SOMETHING WOULD GROW HERE THAT I COULD NOT CONTROL.'],
+['sod','THEN LET IT GROW. GET UP. THE CITY NEEDS A KING WHO PLANTS, NOT ONE WHO TAKES.'],
+['king','...TAKE THE SEEDS. TAKE THE TOWER. PLANT SOMETHING BRIGHT.'],
+['sod','I WILL.']],
+bg(f,i){fr++;off+=.15;q.save();q.translate(Math.round(Math.sin(f/70)*2+(i==0&&f<40?Math.sin(f)*2:0)),0);drawGame(1);
+ bossQ.clearRect(0,0,BWD,BHT);const q0=q;q=bossQ;try{BOSSES[22].draw({t,tele:0,hp:.05,ph:'rest'})}finally{q=q0}
+ q.drawImage(bossCv,150+(i<3?Math.round(Math.sin(f/3)):0),G-BG0+Math.round(Math.min(1,i/3)*10));
+ sod(44,G-36,2,0,{r:0});q.restore();
+ for(let k=0;k<12;k++){const h=hr(k*2.3);q.globalAlpha=.8;R(k%2?'#ffd23a':'#ff3ab0',(150+h*80+Math.sin(f/9+k)*4)|0,(G-10-((f*(.4+h*.6)+hr(k+9)*110)%110))|0,2,2);q.globalAlpha=1}
+ if(i>=5){q.globalAlpha=Math.min(.4,(i-4)*.15);R('#ffcf8a',0,0,256,144);q.globalAlpha=1}
+ if(i==0&&f<20){q.globalAlpha=1-f/20;R('#fff',0,0,256,144);q.globalAlpha=1}},
+end(){endExit()}};
+function startKingEnd(){S.seeds=gs;gsPaid=gs;S.best=Math.max(S.best,Math.floor(dist/10));sv();A.pause();BM1.pause();BM2.pause();KM.pause();dcRun(SC_KING)}
+
 
 
 // BONUS CINEMATIC: plays every time level 196 loads
@@ -2382,7 +2444,7 @@ let jb=-99;
 {const _j=jump;jump=function(){const c=jc;const r=_j.apply(this,arguments);if(st=='run'&&jc===c&&!rm_())jb=mf;return r}}
 {const _u=upd;upd=function(){_u.apply(this,arguments);if(st!=='run'){jb=-99;return}if(jb>=0&&mf-jb<=6&&jc===0&&py>=G-18&&!tut&&!rm_()){jb=-99;jump()}}}
 // update log
-const UV='2026.10.27',UVL='2026.10.28e',LOGS=[{"h":"MORE STORY, MORE FUN!","l":["FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 16 HP, 3 PHASES AND HIS OWN THEME","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
+const UV='2026.10.27',UVL='2026.10.28e',LOGS=[{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME','DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
 {"h":"EARLIER: PERKS, EVENTS AND PROFILE","l":["MID-RUN PERKS EVERY 750M, WITH A 3 SECOND COUNTDOWN AFTER PAUSE OR PICKING","CALM PERK STAYS SLOWER, MAGNET STACKS","SEED COMBOS AND SEED STORMS","MODIFIERS: TURBO, MOON, IRONMAN","ENDLESS MODE WITH CHANGING AREAS","PROFILE: RANK, XP, STATS, TOP RUNS, ACHIEVEMENTS","RANK-UP REWARDS (SEEDS, TOKENS, HAT PICKS) AND A RANK-UP CELEBRATION","EVENT RUNS USE THE MINIONS TRACK, PLUS EP MILESTONE REWARDS","PORTAL MUSIC LOADS RELIABLY","LIVE EVENT CARD IN THE LOBBY"]}];
 const up=document.createElement('div');up.id='upl';up.className='p card ov';up.style.cssText='width:64cqw;max-height:92%;overflow-y:auto;padding:1.6cqw 2cqw;text-align:left';$('w').appendChild(up);OVS.push('upl');
 const upb=document.createElement('button');upb.className='p btn';upb.id='upb';upb.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(upb);
