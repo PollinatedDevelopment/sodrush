@@ -965,7 +965,7 @@ function endStep(dt){endT+=dt;fr+=dt*.5;const T=endT;
   const k=Math.min(1,(T-470)/40);q.globalAlpha=k;
   endText('THE END',128,70+Math.round((1-k)*10),24,ECOL[((T/10)|0)%ECOL.length]);
   const hop=Math.abs(Math.sin(T/13));sod(120,G-18-hop*10,1,hop>.05?1:0,{r:Math.sin(T/9)*.12});
-  if(T>620&&((T/30)|0)%2==0)endText('TAP TO CONTINUE',128,134,5,'#ffd23a');
+  if(T>620&&((T/30)|0)%2==0)endText((window.__device&&window.__device.touch?'TAP TO CONTINUE':'PRESS SPACE'),128,134,5,'#ffd23a');
   q.globalAlpha=1;
   if(T%6<dt*1.01)endP.push({x:Math.random()*256,y:-4,vx:(Math.random()-.5)*.6,vy:.6+Math.random()*.8,g:0,l:260,c:ECOL[(Math.random()*ECOL.length)|0],s:2});
   for(const p of endP)R(p.c,p.x|0,p.y|0,p.s,p.s)}
@@ -2129,7 +2129,7 @@ upd=function(){
  const mgl=Math.max(rs.mag||0,rs.mut==4?2:0);if(mgl){const r=50+20*(mgl-1),r2=r*r;for(const s of sd){if(s.g)continue;const dx=46-s.x,dy=py+8-s.y;if(dx*dx+dy*dy<r2){s.x+=dx*.22;s.y+=dy*.22}}}
  if(!bossS&&mf>=rs.st){rs.st=mf+900;storm()}
  if(endOn){const sg=Math.floor(dist/4000);if(sg!==rs.sg){rs.sg=sg;const l=[...Array(NL).keys()].filter(i=>owned(i)&&i!==S.loc);if(sg>0&&l.length){S.loc=l[Math.random()*l.length|0];flash('ENTERING '+LOC[S.loc].n,'#7ee8ff')}}}
- if(!chal&&!evA&&!bossS&&dist/10>=rs.pk)draft();
+ if(!chal&&!evA&&!bossS&&S.lv>=16&&dist/10>=rs.pk)draft();
 };
 
 // run setup / modes
@@ -2201,7 +2201,7 @@ const esc2=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
 pb.onclick=rkE.onclick=()=>{prfUI();sh('prf',1)};
 
 // modifier picker inside the READY TO RUN panel
-const pm=document.createElement('div');pm.style.cssText='margin:.8cqw 0;font-size:1cqw;text-align:left';$('pr').insertBefore(pm,$('prg'));
+const pm=document.createElement('div');pm.id='pmods';pm.style.cssText='margin:.8cqw 0;font-size:1cqw;text-align:left';$('pr').insertBefore(pm,$('prg'));
 {const row=document.createElement('div');row.style.cssText='display:flex;justify-content:center;gap:2cqw';$('pr').appendChild(row);row.append($('prg'),$('prx'))}
 function mUI2(){pm.innerHTML=(endAsk?'<div style="font-size:1.4cqw;color:#e8742a;text-align:center;margin-bottom:.8cqw">ENDLESS MODE</div>':'')+'<div style="font-size:1.1cqw;color:#c4155a;margin-bottom:.6cqw">MODIFIERS: EXTRA SEEDS, PICK ONE</div><div style="display:flex;gap:.8cqw">'+MU.map((m,i)=>'<button class=btn data-m='+i+' style="flex:1;margin:0;min-width:0;width:auto;flex-direction:column;font-size:.95cqw;padding:.8cqw .4cqw;background:'+(X2.mut===i?'#3aa335':'#556')+'">'+m[0]+' +'+Math.round(m[2]*100)+'%<span style="font-size:.7cqw;margin-top:.4cqw">'+m[1]+'</span></button>').join('')+'</div>'}
 pm.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.m;X2.mut=X2.mut===i?-1:i;s2();mUI2()};
@@ -2646,7 +2646,7 @@ let jb=-99;
 {const _j=jump;jump=function(){const c=jc;const r=_j.apply(this,arguments);if(st=='run'&&jc===c&&!rm_())jb=mf;return r}}
 {const _u=upd;upd=function(){_u.apply(this,arguments);if(st!=='run'){jb=-99;return}if(jb>=0&&mf-jb<=6&&jc===0&&py>=G-18&&!tut&&!rm_()){jb=-99;jump()}}}
 // update log
-const UV='2026.10.27',UVL='2026.10.32',LOGS=[{"h":"PROFILE","l":["YOU CAN NOW EDIT YOUR NAME ANY TIME ON YOUR PROFILE","NEW CUTSCENE VIEWER IN SETTINGS: REPLAY ANY CUTSCENE YOU HAVE ALREADY SEEN"]},{"h":"UNIQUE OUTFITS + FINAL BOSS","l":["EVERY OUTFIT NOW HAS ITS OWN DESIGN, NOT JUST A NEW COLOR: MASKS, SCARVES, GOGGLES, HORNS, WINGS, PATTERNS AND MORE (CLASSIC, SANDY AND MOSSY STAY THE SAME)","ALL EVENT OUTFITS ARE UNIQUE TOO","NEW OUTFIT: FINAL BOSS. CLASSIC SOD, WAR-TORN AND READY FOR THE LAST BATTLE: SINGED HAIR, TORN HEADBAND, STERN BROWS, STEEL ARMOR AND A BANDOLIER","FINAL BOSS UNLOCKS WHEN YOU CLEAR LEVEL 334","THE FIRST TIME YOU PLAY LEVEL 345 THE FINAL BOSS OUTFIT IS PUT ON YOU (YOU CAN SWITCH AFTER)"]},{"h":"DISTRICTS TAB AND WORLD MAPS","l":["NEW DISTRICTS TAB ON THE LEVEL SELECT: DISTRICTS I-X NOW LIVE IN THEIR OWN TAB, UNLOCKED WHEN THE FORBIDDEN CORE IS DEFEATED","THE WORLDS TAB HOLDS WORLDS 1-13, AND THE ARROWS STAY INSIDE EACH TAB","AFTER THE FORBIDDEN CORE CUTSCENE YOU GO STRAIGHT TO DISTRICT I, AND THE CORE TELLS YOU ABOUT THE NEW TAB","THE 'THANKS FOR PLAYING' SCREEN IS GONE FROM THE FORBIDDEN CORE ENDING","DISTRICT MAPS HAVE A NEON CITY LOOK: SKYLINE, MOON, GLOWING PADS AND NEON LEVEL NUMBERS","EVERY WORLD MAP NOW LOOKS LIKE ITS WORLD: FARM, MARSH, CANYON, TUNDRA, EMBERWORKS, CANDY COVE, NEON METROPOLIS, LAGOON, HOLLOW, CLOUDS, JUNGLE, MOON BASE AND THE FORBIDDEN DIMENSION","WORLD MAP PIPES, PADS AND LEVEL BOXES USE EACH WORLD'S COLORS","DR MULCH'S FARM CUTSCENE NOW PLAYS BEFORE THE TUTORIAL","FIX: CUTSCENES NO LONGER CRASH WITH 'CANNOT READ PROPERTIES OF UNDEFINED' AT THE LAST LINE","FIX: THE KING TRACK CAN NOW BE PICKED ON THE RADIO"]},{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME','DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
+const UV='2026.10.27',UVL='2026.10.34',LOGS=[{"h":"LATEST","l":["NEW FEATURES UNLOCK AS YOU PROGRESS, WITH A GUIDE TO SHOW YOU AROUND","MOBILE: MOVE THE D-PAD TO THE LEFT OR RIGHT IN SETTINGS","THE GAME NOW FILLS THE WHOLE SCREEN ON WIDE PHONES AND MONITORS","CONTROL TEXT AND SETTINGS ADAPT TO YOUR DEVICE"]},{"h":"NEW","l":["DISTRICTS HAVE THEIR OWN RUNNING MUSIC","CUTSCENES NOW HAVE MUSIC","SETTINGS: NEW FORCED COSTUMES SETTING","SKILLS COST MUCH MORE AND THEIR STRONGER LEVELS NEED STORY PROGRESS. SEEDS FROM OLD PURCHASES ARE REFUNDED","FIXED PAUSING DURING THE SOD PICKER"]},{"h":"PROFILE","l":["YOU CAN NOW EDIT YOUR NAME ANY TIME ON YOUR PROFILE","NEW CUTSCENE VIEWER IN SETTINGS: REPLAY ANY CUTSCENE YOU HAVE ALREADY SEEN"]},{"h":"UNIQUE OUTFITS + FINAL BOSS","l":["EVERY OUTFIT NOW HAS ITS OWN DESIGN, NOT JUST A NEW COLOR: MASKS, SCARVES, GOGGLES, HORNS, WINGS, PATTERNS AND MORE (CLASSIC, SANDY AND MOSSY STAY THE SAME)","ALL EVENT OUTFITS ARE UNIQUE TOO","NEW OUTFIT: FINAL BOSS. CLASSIC SOD, WAR-TORN AND READY FOR THE LAST BATTLE: SINGED HAIR, TORN HEADBAND, STERN BROWS, STEEL ARMOR AND A BANDOLIER","FINAL BOSS UNLOCKS WHEN YOU CLEAR LEVEL 334","THE FIRST TIME YOU PLAY LEVEL 345 THE FINAL BOSS OUTFIT IS PUT ON YOU (YOU CAN SWITCH AFTER)"]},{"h":"DISTRICTS TAB AND WORLD MAPS","l":["NEW DISTRICTS TAB ON THE LEVEL SELECT: DISTRICTS I-X NOW LIVE IN THEIR OWN TAB, UNLOCKED WHEN THE FORBIDDEN CORE IS DEFEATED","THE WORLDS TAB HOLDS WORLDS 1-13, AND THE ARROWS STAY INSIDE EACH TAB","AFTER THE FORBIDDEN CORE CUTSCENE YOU GO STRAIGHT TO DISTRICT I, AND THE CORE TELLS YOU ABOUT THE NEW TAB","THE 'THANKS FOR PLAYING' SCREEN IS GONE FROM THE FORBIDDEN CORE ENDING","DISTRICT MAPS HAVE A NEON CITY LOOK: SKYLINE, MOON, GLOWING PADS AND NEON LEVEL NUMBERS","EVERY WORLD MAP NOW LOOKS LIKE ITS WORLD: FARM, MARSH, CANYON, TUNDRA, EMBERWORKS, CANDY COVE, NEON METROPOLIS, LAGOON, HOLLOW, CLOUDS, JUNGLE, MOON BASE AND THE FORBIDDEN DIMENSION","WORLD MAP PIPES, PADS AND LEVEL BOXES USE EACH WORLD'S COLORS","DR MULCH'S FARM CUTSCENE NOW PLAYS BEFORE THE TUTORIAL","FIX: CUTSCENES NO LONGER CRASH WITH 'CANNOT READ PROPERTIES OF UNDEFINED' AT THE LAST LINE","FIX: THE KING TRACK CAN NOW BE PICKED ON THE RADIO"]},{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME','DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
 {"h":"EARLIER: PERKS, EVENTS AND PROFILE","l":["MID-RUN PERKS EVERY 750M, WITH A 3 SECOND COUNTDOWN AFTER PAUSE OR PICKING","CALM PERK STAYS SLOWER, MAGNET STACKS","SEED COMBOS AND SEED STORMS","MODIFIERS: TURBO, MOON, IRONMAN","ENDLESS MODE WITH CHANGING AREAS","PROFILE: RANK, XP, STATS, TOP RUNS, ACHIEVEMENTS","RANK-UP REWARDS (SEEDS, TOKENS, HAT PICKS) AND A RANK-UP CELEBRATION","EVENT RUNS USE THE MINIONS TRACK, PLUS EP MILESTONE REWARDS","PORTAL MUSIC LOADS RELIABLY","LIVE EVENT CARD IN THE LOBBY"]}];
 const up=document.createElement('div');up.id='upl';up.className='p card ov';up.style.cssText='width:64cqw;max-height:92%;overflow-y:auto;padding:1.6cqw 2cqw;text-align:left';$('w').appendChild(up);OVS.push('upl');
 const upb=document.createElement('button');upb.className='p btn';upb.id='upb';upb.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(upb);
@@ -2664,19 +2664,19 @@ upb.onclick=()=>{up.innerHTML='<div style="font-size:2cqw;color:#7a4ae0;text-ali
 const st3=document.createElement('style');st3.textContent='.rmo *,.rmo *::before,.rmo *::after{animation-duration:.01s!important;animation-iteration-count:1!important;transition-duration:.01s!important}';document.head.appendChild(st3);
 let skArm=false;
 const SK=[
- {n:'STRONG LEGS',d:'HIGHER JUMPS',c:[120,240,400],f:l=>'+'+(6*l)+'% JUMP HEIGHT'},
- {n:'KEEN EYES',d:'EASIER TO GRAB SEEDS',c:[120,240,400],f:l=>'+'+(2*l)+'PX PICKUP RANGE'},
- {n:'THRIFTY SOD',d:'CHEAPER REVIVES',c:[150,300,500],f:l=>'-'+(10*l)+'% REVIVE COST'},
- {n:'LUCKY SOD',d:'SEEDS ARE WORTH MORE',c:[200,400,650],f:l=>'+'+(5*l)+'% SEED VALUE'},
- {n:'SECOND WIND',d:'LONGER INVINCIBILITY AFTER A REVIVE',c:[250,450,700],f:l=>'+'+(0.5*l).toFixed(1)+' SECONDS'}];
+ {n:'STRONG LEGS',d:'HIGHER JUMPS',c:[300,1500,6000],r:[10,90,196],f:l=>'+'+(6*l)+'% JUMP HEIGHT'},
+ {n:'KEEN EYES',d:'EASIER TO GRAB SEEDS',c:[300,1500,6000],r:[20,120,226],f:l=>'+'+(2*l)+'PX PICKUP RANGE'},
+ {n:'THRIFTY SOD',d:'CHEAPER REVIVES',c:[400,2000,8000],r:[35,150,256],f:l=>'-'+(10*l)+'% REVIVE COST'},
+ {n:'LUCKY SOD',d:'SEEDS ARE WORTH MORE',c:[500,2500,10000],r:[50,180,286],f:l=>'+'+(5*l)+'% SEED VALUE'},
+ {n:'SECOND WIND',d:'LONGER INVINCIBILITY AFTER A REVIVE',c:[600,3000,12000],r:[65,210,331],f:l=>'+'+(0.5*l).toFixed(1)+' SECONDS'}];
 const SKPL={o:'#1b2a38',y:'#ffd23a'};const skPx=rows=>{let r='';rows.forEach((row,y)=>[...row].forEach((c,x)=>{if(SKPL[c])r+='<rect x="'+x+'" y="'+y+'" width="1" height="1" fill="'+SKPL[c]+'"/>'}));return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" shape-rendering="crispEdges">'+r+'</svg>')};
 const SKICO=['.....ooo..','....oyyo..','...oyyo...','..oyyyoo..','..oyyyyo..','...oyyyo..','....oyyo..','....oyo...','...oyo....','...oo.....'];
 const skb=document.createElement('button');skb.className='p btn nav';skb.id='skb';skb.innerHTML='<img src="'+skPx(SKICO)+'" alt="" style="height:2.6cqw;width:2.6cqw;margin:0;flex:0 0 auto"><span>SKILLS</span>';
 skb.style.cssText='position:relative;flex:1 1 0;min-width:0;height:8.4cqw;margin:0;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5cqw;padding:.8cqw .4cqw;font-size:.95cqw;line-height:1.2;text-align:center;white-space:normal;overflow:hidden;border:.4cqw solid #1b2a38;background:#7a4ae0;box-shadow:inset 0 .3cqw 0 #fff4,.4cqw .4cqw 0 #0007';
 $('mib').after(skb);
 const skO=document.createElement('div');skO.id='skO';skO.className='p card ov';skO.style.cssText='width:58cqw;max-height:92%;overflow-y:auto;padding:1.6cqw 2cqw;text-align:left';$('w').appendChild(skO);OVS.push('skO');
-const skRender=()=>{const spent=SK.reduce((a,k,i)=>a+k.c.slice(0,skill(i)).reduce((x,y)=>x+y,0),0),ref=Math.floor(spent*.8);skO.innerHTML='<div style="font-size:2cqw;color:#7a4ae0;text-align:center;display:flex;align-items:center;justify-content:center;gap:1cqw"><img src="'+skPx(SKICO)+'" alt="" style="height:2.8cqw;width:2.8cqw;image-rendering:pixelated">SOD SKILLS</div><div style="font-size:1cqw;text-align:center;margin:.8cqw 0 1.2cqw;color:#c4155a">PERMANENT. BUY WITH SEEDS. YOU HAVE '+S.seeds+'</div>'+SK.map((k,i)=>{const l=skill(i),mx=l>=k.c.length,cost=mx?0:k.c[l];return '<div style="display:flex;align-items:center;gap:1.2cqw;margin:1cqw 0;padding:1cqw;border:.3cqw solid #25415a;background:#fff"><div style="flex:1"><div style="font-size:1.2cqw;color:#25415a">'+k.n+'</div><div style="font-size:.9cqw;line-height:1.7;color:#4a6a80">'+k.d+'<br>'+(l?k.f(l):'NOT BOUGHT YET')+'</div><div style="font-size:.9cqw;margin-top:.4cqw;color:#e8742a">LEVEL '+l+' / '+k.c.length+'</div></div><button class=btn data-sk="'+i+'"'+(!mx&&S.seeds<cost?' disabled':'')+' style="margin:0;background:'+(mx?'#556':'#3aa335')+';min-width:0;width:auto">'+(mx?'MAX':'BUY '+cost)+'</button></div>'}).join('')+'<div style="display:flex;gap:1.2cqw;justify-content:center;margin-top:1.2cqw"><button class=btn id=skr style="background:'+(skArm?'#c4155a':'#7a4ae0')+';margin:0;min-width:0;width:auto"'+(spent?'':' disabled')+'>'+(skArm?'CONFIRM: REFUND '+ref+' SEEDS':'RESET SKILLS (REFUND '+ref+')')+'</button><button class=btn id=skx style="background:#556;margin:0;min-width:0;width:auto">CLOSE</button></div>';
- skO.querySelectorAll('[data-sk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.sk,l=skill(i),k=SK[i];if(l>=k.c.length||S.seeds<k.c[l])return;S.seeds-=k.c[l];S.skl=S.skl||[];S.skl[i]=l+1;sv();ui();say(k.n+' LEVEL '+(l+1)+'!');skRender()});
+const skRender=()=>{const spent=SK.reduce((a,k,i)=>a+k.c.slice(0,skill(i)).reduce((x,y)=>x+y,0),0),ref=Math.floor(spent*.8);skO.innerHTML='<div style="font-size:2cqw;color:#7a4ae0;text-align:center;display:flex;align-items:center;justify-content:center;gap:1cqw"><img src="'+skPx(SKICO)+'" alt="" style="height:2.8cqw;width:2.8cqw;image-rendering:pixelated">SOD SKILLS</div><div style="font-size:1cqw;text-align:center;margin:.8cqw 0 1.2cqw;color:#c4155a">PERMANENT. BUY WITH SEEDS. STRONGER LEVELS NEED STORY PROGRESS. YOU HAVE '+S.seeds+'</div>'+SK.map((k,i)=>{const l=skill(i),mx=l>=k.c.length,cost=mx?0:k.c[l],lk=!mx&&S.lv<(k.r[l]||0);return '<div style="display:flex;align-items:center;gap:1.2cqw;margin:1cqw 0;padding:1cqw;border:.3cqw solid #25415a;background:#fff"><div style="flex:1"><div style="font-size:1.2cqw;color:#25415a">'+k.n+'</div><div style="font-size:.9cqw;line-height:1.7;color:#4a6a80">'+k.d+'<br>'+(l?k.f(l):'NOT BOUGHT YET')+'</div><div style="font-size:.9cqw;margin-top:.4cqw;color:#e8742a">LEVEL '+l+' / '+k.c.length+'</div></div><button class=btn data-sk="'+i+'"'+(!mx&&(S.seeds<cost||lk)?' disabled':'')+' style="margin:0;background:'+(mx?'#556':'#3aa335')+';min-width:0;width:auto">'+(mx?'MAX':lk?'REACH LEVEL '+k.r[l]:'BUY '+cost)+'</button></div>'}).join('')+'<div style="display:flex;gap:1.2cqw;justify-content:center;margin-top:1.2cqw"><button class=btn id=skr style="background:'+(skArm?'#c4155a':'#7a4ae0')+';margin:0;min-width:0;width:auto"'+(spent?'':' disabled')+'>'+(skArm?'CONFIRM: REFUND '+ref+' SEEDS':'RESET SKILLS (REFUND '+ref+')')+'</button><button class=btn id=skx style="background:#556;margin:0;min-width:0;width:auto">CLOSE</button></div>';
+ skO.querySelectorAll('[data-sk]').forEach(b=>b.onclick=()=>{const i=+b.dataset.sk,l=skill(i),k=SK[i];if(l>=k.c.length||S.seeds<k.c[l]||S.lv<(k.r[l]||0))return;S.seeds-=k.c[l];S.skl=S.skl||[];S.skl[i]=l+1;sv();ui();say(k.n+' LEVEL '+(l+1)+'!');skRender()});
  $('skx').onclick=()=>sh('skO',0);$('skr').onclick=()=>{const spent=SK.reduce((a,k,i)=>a+k.c.slice(0,skill(i)).reduce((x,y)=>x+y,0),0),ref=Math.floor(spent*.8);if(!spent)return;if(!skArm){skArm=true;skRender();return}S.seeds+=ref;S.skl=[];skArm=false;sv();ui();say('SKILLS RESET! +'+ref+' SEEDS');skRender()}};
 skb.onclick=()=>{skArm=false;skRender();sh('skO',1)};
 {const stgE=$('stg');if(stgE){stgE.style.maxHeight='92%';stgE.style.overflowY='auto'}}
@@ -2756,6 +2756,7 @@ const pk=document.createElement('div');pk.id='pk3';pk.className='p card ov';pk.s
 function chosen(k){if(S.stPrev==null&&k!=='x')S.stPrev=S.sk;if(k==='x'){S.sk=S.stPrev!=null?S.stPrev:S.sk;S.stDef=-1}else{S.sk=k;S.stDef=k}sv();pk.style.display='none';$('hud').style.display='flex';st='run';acc=0;runStartedAt=performance.now()}
 function pickSM(ex){st='hint';tutAct='';const bx=()=>`<button class=btn data-k=x style="flex-direction:column;margin:0;background:#556"><img src="${thumb(S.stPrev!=null?S.stPrev:S.sk,S.hat)}" style="height:7cqw;image-rendering:pixelated;margin-bottom:.8cqw"><span>3. MY OUTFIT</span></button>`;const b=(k,n)=>`<button class=btn data-k=${k} style="flex-direction:column;margin:0;background:${k==1?'#c9a24a':'#4a8a3a'}"><img src="${thumb(k,S.hat)}" style="height:7cqw;image-rendering:pixelated;margin-bottom:.8cqw"><span>${k}. ${n}</span></button>`;
  pk.innerHTML=`<div style="font-size:2cqw;color:#c4155a">${nmv()} IS DOWN</div><div style="font-size:1cqw;line-height:1.8;margin:1cqw 0">SANDY AND MOSSY TAKE OVER. WHO RUNS THIS ONE?</div><div style="display:flex;gap:2cqw;justify-content:center">${b(1,'SANDY')}${b(2,'MOSSY')}${ex?bx():''}</div>`;pk.style.display='block';pk.classList.remove('uiin');void pk.offsetWidth;pk.classList.add('uiin')}
+{const _pg=pauseG;pauseG=function(){if(pk.style.display==='block')return;return _pg.apply(this,arguments)}}
 pk.onclick=e=>{const b=e.target.closest('button');if(b)chosen(b.dataset.k==='x'?'x':+b.dataset.k)};
 addEventListener('keydown',e=>{if(pk.style.display!=='block')return;if(['Escape','p','P'].includes(e.key)){e.stopImmediatePropagation();e.preventDefault();return}if(e.key=='1'||e.key=='2'){e.stopImmediatePropagation();chosen(+e.key)}else if(e.key=='3'&&pk.querySelector('[data-k=x]')){e.stopImmediatePropagation();chosen('x')}},true);
 
@@ -2782,7 +2783,7 @@ bg(f,i){if(i!==wl){wl=i;if(i==4){w4=f;if(!mute){noise(.3,500,.8,90);tone(80,40,.
   if(shock){q.save();q.textAlign='center';bossText('!',x0+14,G-46-(f%8<4?1:0),7,'#ffd23a');q.restore();q.globalAlpha=1}});
  if(i>=4){const hop=sp==='war'?Math.round(Math.abs(Math.sin(f/5))*3):0;drawSod(q,108,G-36-hop,2,0,FB,0,{r:0})}
  if(i==4&&f-w4<14){q.globalAlpha=1-(f-w4)/14;R('#fff',0,0,256,144);q.globalAlpha=1}if(bossS)bossHud()},
-end(){S.sk=FB;S.stDef=FB;sv();$('hud').style.display='flex';st='run';acc=0}};
+end(){if(!S.fcOff){S.sk=FB;S.stDef=FB;sv()}$('hud').style.display='flex';st='run';acc=0}};
 
 // ---------- forcing characters ----------
 // First playthrough: the story character is locked for EVERY mode until the final boss falls.
@@ -2791,7 +2792,7 @@ const normal=()=>!chal&&!evA&&!prevSel&&!room();
 const inR=l=>l>=C0&&l<=LAST;
 const charFor=l=>(l>C1&&S.csBeat)?[1,2]:null;
 const phase=()=>!room()&&!S.storyDone&&S.lv>=C0;
-function want(){if(room())return null;if(normal()&&inR(sel))return charFor(sel);if(phase())return charFor(Math.max(C0,Math.min(S.lv,LAST)));return null}
+function want(){if(room()||S.fcOff)return null;if(normal()&&inR(sel))return charFor(sel);if(phase())return charFor(Math.max(C0,Math.min(S.lv,LAST)));return null}
 function restoreSk(){if(S.stPrev!=null){if(S.sk===S.stDef)S.sk=S.stPrev;S.stPrev=null;S.stDef=null;sv()}}
 function applyForce(){const f=want();if(f===null){restoreSk();return}
  if(S.stPrev==null)S.stPrev=S.sk;S.un[0]=1;if(S.csBeat){S.un[1]=1;S.un[2]=1}
@@ -2804,6 +2805,7 @@ function afterLoad(){if(!normal()||goal>=1e8)return;const f=want();
  if(inR(sel)&&sel===SM0){if(!S.csBeat){S.csBeat=1;S.un[1]=1;S.un[2]=1;sv()}dcRun(SC_BEAT);return}
  if(inR(sel)&&sel>SM0&&!S.csBeat){S.csBeat=1;S.un[1]=1;S.un[2]=1;sv();dcRun(SC_BEAT);return}
  if(f!==null&&inR(sel)&&Array.isArray(f)){pickSM();return}
+ if(S.fcOff&&inR(sel)&&sel>=SM0&&S.csBeat){pickSM(true);return}
  const s=LV[sel];if(s){if(!S.cs3[sel]){S.cs3[sel]=1;sv()}dcRun(s)}}
 {const _d=drawPlayLoad;drawPlayLoad=function(){const was=st;_d.apply(this,arguments);if(was==='playLoad'&&st==='run')afterLoad()}}
 // final boss begins: Classic returns, war-torn (cutscene the first time, a quick switch on replays)
@@ -2875,7 +2877,7 @@ const ST=window.__story||{LV:{}};
 const V={on:0,save:null};
 const back=()=>{if(!V.on)return;V.on=0;const sv0=V.save;V.save=null;lobby();if(sv0){S.loc=sv0.loc;sel=sv0.sel}try{ui()}catch(e){}};
 {const _cf=cineFinish;cineFinish=function(){if(V.on){cineOn=0;cineEndAt=-1;clearInterval(cTimer);cineEl.style.display='none';back();return}return _cf.apply(this,arguments)}}
-const play1=sc=>()=>dcRun(Object.assign({},sc,{end:back}));
+const play1=sc=>()=>dcRun(Object.assign({},sc,{end:back,_id:sc}));
 const NAMES={8:'UNEXPECTED COMPANY',22:'THE QUIET MARSH',40:'DRY HUMOR',53:'THE BORROWED SCARF',70:'VERY FLAMMABLE',88:'THE GUMDROP INCIDENT',100:'DANCE FLOOR',118:'NO SWIMMING',133:'GHOST STORIES',148:'STAY TOGETHER',163:'FRIENDLY VINES',178:'FLOATING',188:'INTO THE VOID',203:'BUTTONS AND LIGHTS',220:'BARGAIN SEEDS',238:'FLOWERS OF LIGHT',262:'THREE OF YOU',283:'THE HUM',298:'THE BRAVE SPEECH',313:'A WEEK OF SLEEP',328:'A BAD FEELING',339:'GOING FIRST',341:'TOO QUIET'};
 const E=[];
 // location intros (worlds and districts)
@@ -2937,5 +2939,101 @@ pad.addEventListener('pointerdown',e=>e.stopPropagation());
 const pk3=()=>{const e=document.getElementById('pk3');return e&&e.style.display==='block'};
 setInterval(()=>{const live=touch&&(st==='run'||(st==='hint'&&tutAct))&&!pk3();pad.classList.toggle('on',!!live)},80);
 }catch(e){console.warn('device',e)}})();
+</script>
+<script>
+/* ===== DISTRICT MUSIC, CUTSCENE MUSIC, FORCED COSTUMES SETTING, SKILL REBALANCE ===== */
+(function(){try{
+const inRm=()=>!!(window.__room&&window.__room());
+// skills were rebalanced: old purchases are refunded once
+if(!S.skv2){S.skv2=1;const OC=[[120,240,400],[120,240,400],[150,300,500],[200,400,650],[250,450,700]];let ref=0;(S.skl||[]).forEach((l,i)=>{for(let j=0;j<l;j++)ref+=((OC[i]||[])[j])||0});if(ref){S.seeds+=ref;S.skl=[];setTimeout(()=>{try{say('SKILL PRICES CHANGED: '+ref+' SEEDS REFUNDED')}catch(e){}},2500)}sv()}
+const mkA=src=>{const a=new Audio();a.loop=true;a.preload='auto';a.src=src;return a};
+const DA=mkA('audio/district.mp3');
+const TR={};const trk=n=>TR[n]||(TR[n]=mkA((typeof AB!=='undefined'&&AB[n])||('audio/'+n+'.mp3')));
+// one track per cutscene (levels where each scene plays)
+const CM={1:'lobby',16:'dressing',31:'shop',46:'dressing',61:'boss1',76:'minions',91:'portal',106:'dressing',121:'boss2',136:'lobby',151:'run',166:'portal',181:'boss2',
+211:'shop',226:'dressing',241:'run',256:'portal',271:'district',286:'district',301:'dressing',316:'boss2',331:'king',
+8:'lobby',22:'dressing',40:'shop',53:'dressing',70:'boss1',88:'minions',100:'minions',118:'dressing',133:'portal',148:'lobby',163:'dressing',178:'portal',188:'boss2',
+203:'district',220:'shop',238:'dressing',262:'portal',283:'district',298:'district',313:'dressing',328:'portal',339:'dressing',341:'portal'};
+function trackFor(sc){const ST=window.__story||{},id=(sc&&sc._id)||sc;if(id&&id===ST.SC_BEAT)return 'king';if(id&&id===ST.SC_WAR)return 'boss1';if(typeof SC_CORE!=='undefined'&&id===SC_CORE)return 'boss2';if(typeof SC_KING!=='undefined'&&id===SC_KING)return 'lobby';return CM[sel]||'lobby'}
+let cur=null,cOn=0,cEl=null;
+{const _d=dcRun;dcRun=function(sc){try{cur=trackFor(sc)}catch(e){cur='lobby'}return _d.apply(this,arguments)}}
+{const _c=cineStart;cineStart=function(){cur='portal';return _c.apply(this,arguments)}}
+(function frame(){try{
+ const dOn=(st=='run'||st=='hint')&&S.loc>=13&&S.loc<=22&&!evA&&!chal&&!bossS&&!inRm();
+ DA.muted=mute;DA.volume=S.vol;
+ if(dOn){if(!A.paused)A.pause();if(DA.paused&&!mute)DA.play().catch(()=>{})}
+ else if(!DA.paused){DA.pause();if(st!=='paused')DA.currentTime=0}
+ const sOn=st=='dcine'||st=='cine';
+ if(sOn){if(!cOn){cOn=1;cEl=trk(cur||'lobby');try{cEl.currentTime=0}catch(e){}}cEl.muted=mute;cEl.volume=S.vol;if(!A.paused)A.pause();try{L.pause()}catch(e){}if(cEl.paused&&!mute)cEl.play().catch(()=>{})}
+ else if(cOn){cOn=0;if(cEl)cEl.pause();cEl=null;if(!dOn&&(st=='run'||st=='hint')&&!mute)A.play().catch(()=>{})}
+}catch(e){}requestAnimationFrame(frame)})();
+// settings: forced costumes on/off
+{const b=document.createElement('button');b.className='btn';b.id='fcb';b.style.cssText='min-width:0;width:auto;margin:.4cqw auto;padding:.8cqw 1cqw;font-size:1cqw;background:#3a6f8a';
+ const lab=()=>{b.textContent='FORCED COSTUMES: '+(S.fcOff?'OFF':'ON')};lab();b.onclick=()=>{S.fcOff=S.fcOff?0:1;sv();lab()};$('rt').before(b)}
+}catch(e){console.warn('audio/story settings',e)}})();
+</script>
+<script>
+/* ===== PROGRESSION UNLOCKS, FULL-SCREEN FILL, DEVICE-AWARE CONTROLS ===== */
+(function(){try{
+const root=document.documentElement,dev=()=>!!(window.__device&&window.__device.touch);
+const css=document.createElement('style');css.textContent=`
+html[data-pad="r"] #tpad{left:auto;right:max(env(safe-area-inset-right,0px),1.6vw)}
+#dpb{display:none}html[data-touch="1"] #dpb{display:flex}
+#bgfill{position:fixed;left:-6%;top:-6%;width:112%;height:112%;z-index:-1;pointer-events:none;filter:blur(20px) saturate(1.25) brightness(.6)}
+.lockd{opacity:.45;filter:grayscale(.85)}
+.hlx{outline:.5cqw solid #ffd23a!important;outline-offset:.3cqw;animation:hlp .7s infinite alternate}
+@keyframes hlp{to{outline-color:#fff;translate:0 -.45cqw}}
+html.lock-mod #pmods{display:none}`;document.head.appendChild(css);
+// ---- fill the whole screen: the game's edges are blurred out behind it, so there are no black bars ----
+const bf=document.createElement('canvas');bf.id='bgfill';bf.width=48;bf.height=27;document.body.prepend(bf);const bx=bf.getContext('2d');let fc=0;
+(function f(){try{if((fc++&1)===0)bx.drawImage(q.canvas,0,0,48,27)}catch(e){}requestAnimationFrame(f)})();
+// ---- mobile d-pad side ----
+const setPad=v=>{root.dataset.pad=v;try{localStorage.sodpad=v}catch(e){}};let pv='l';try{pv=localStorage.sodpad==='r'?'r':'l'}catch(e){}setPad(pv);
+{const b=document.createElement('button');b.className='btn';b.id='dpb';b.style.cssText='min-width:0;width:auto;margin:.4cqw auto;padding:.8cqw 1cqw;font-size:1cqw;background:#3a6f8a';
+ const lab=()=>{b.textContent='D-PAD: '+(root.dataset.pad==='r'?'RIGHT':'LEFT')};lab();b.onclick=()=>{setPad(root.dataset.pad==='r'?'l':'r');lab()};$('rt').before(b)}
+// ---- control text follows the device ----
+const TM={t:[['PRESS 1 / 2 / 3 OR TAP','TAP ONE'],['TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE','TAP TO GET THROUGH THE STORY SCENE'],['SPACE/TAP TO ADVANCE, ESC TO SKIP','TAP TO ADVANCE'],['SPACE TO CONTINUE, ESC TO SKIP','TAP TO CONTINUE'],['SPACE TO CONTINUE','TAP TO CONTINUE'],['TAP OR SPACE','TAP'],['ENTER OR R = RETRY',''],['SPACE AND ARROWS STILL WORK','']],
+ d:[['PRESS 1 / 2 / 3 OR TAP','PRESS 1, 2 OR 3'],['TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE','PRESS SPACE TO GET THROUGH THE STORY SCENE'],['SPACE/TAP TO ADVANCE, ESC TO SKIP','SPACE TO ADVANCE, ESC TO SKIP'],['TAP OR SPACE','SPACE'],['TAP TWICE TO DOUBLE JUMP!','JUMP TWICE TO DOUBLE JUMP!']]};
+const fixT=n=>{const m=dev()?TM.t:TM.d;let v=n.nodeValue,o=v;if(!v)return;for(const a of m)if(v.includes(a[0]))v=v.split(a[0]).join(a[1]);if(v!==o)n.nodeValue=v};
+const sweep=r=>{const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())fixT(n)};
+new MutationObserver(ms=>{for(const m of ms){if(m.type==='characterData')fixT(m.target);else m.addedNodes.forEach(x=>{if(x.nodeType===3)fixT(x);else if(x.nodeType===1)sweep(x)})}}).observe(document.body,{childList:true,subtree:true,characterData:true});sweep(document.body);
+setInterval(()=>{const t=dev();const g=$('stg');if(g)[...g.children].forEach(e=>{if(/REMAP|REBIND/i.test(e.textContent)&&!e.querySelector('#rt'))e.style.display=t?'none':''});const fs=$('fsb');if(fs&&!root.requestFullscreen)fs.style.display='none'},1000);
+// ---- progression: features unlock after the tutorial, level 1 and World 1 ----
+const byText=t=>[...document.querySelectorAll('#lob button')].find(b=>b.textContent.trim().toUpperCase().startsWith(t));
+const GR={1:{ok:()=>!!S.tut,req:'FINISH THE TUTORIAL'},2:{ok:()=>S.lv>=2,req:'BEAT LEVEL 1'},3:{ok:()=>S.lv>=16,req:'BEAT WORLD 1 (LEVEL 15)'}};
+const FT=[
+{g:1,n:'SHOP',btn:()=>$('mud'),d:'SPEND YOUR SEEDS ON NEW OUTFITS AND HATS',tip:'OUTFITS GIVE EXTRA SEEDS WHEN YOU RUN. TAP ONE TO LOOK AT IT, THEN BUY IT WITH SEEDS.'},
+{g:1,n:'DRESSING ROOM',btn:()=>$('drb'),d:'CHANGE YOUR OUTFIT AND HAT ANY TIME',tip:'TAP AN OUTFIT TO PREVIEW IT, THEN EQUIP IT. NEW OUTFITS ARE EARNED FROM RANKS AND EVENTS TOO.'},
+{g:2,n:'MISSIONS',btn:()=>$('mib'),d:'DAILY MISSIONS FOR BONUS REWARDS',tip:'MISSIONS CHANGE EVERY DAY. FINISH THEM WHILE YOU PLAY TO EARN EXTRA SEEDS.'},
+{g:2,n:'PROFILE',btn:()=>byText('PROFILE'),d:'YOUR RANK, XP, STATS AND NAME',tip:'RUNNING EARNS XP. EVERY RANK UP GIVES REWARDS. YOU CAN CHANGE YOUR NAME HERE ANY TIME.'},
+{g:3,n:'SKILLS',btn:()=>$('skb'),d:'PERMANENT UPGRADES BOUGHT WITH SEEDS',tip:'EACH SKILL HAS 3 LEVELS. STRONGER LEVELS UNLOCK AS YOU GO FURTHER IN THE STORY.'},
+{g:3,n:'ENDLESS',btn:()=>byText('ENDLESS'),d:'RUN FOREVER THROUGH CHANGING AREAS',tip:'THERE IS NO GOAL. HOW FAR CAN YOU GO? YOU CAN PICK RUN MODIFIERS BEFORE YOU START.'},
+{g:3,n:'EVENTS',btn:()=>$('evb'),d:'LIMITED-TIME EVENTS WITH SPECIAL REWARDS',tip:'EVENT RUNS EARN EP. REACH EP MILESTONES FOR BONUS SEEDS AND TOKENS.'}];
+const EXTRA3=['RUN MODIFIERS (TURBO, MOON, IRONMAN) APPEAR WHEN YOU PRESS PLAY','PERKS: CHOOSE 1 OF 3 PERKS EVERY 750M DURING A RUN'];
+S.ft=S.ft||{};if(S.ftv!==1){S.ftv=1;for(const g in GR)if(GR[g].ok())S.ft[g]=1;sv()}
+const msg=f=>{try{say(f.n+' UNLOCKS WHEN YOU '+GR[f.g].req)}catch(e){}};
+let gd=null;
+for(const f of FT){const b=f.btn();if(!b)continue;
+ b.addEventListener('click',e=>{if(!GR[f.g].ok()){e.stopImmediatePropagation();e.preventDefault();msg(f)}},true);
+ b.addEventListener('click',()=>{if(gd&&gd.q[gd.i]===f&&GR[f.g].ok()){b.classList.remove('hlx');setTimeout(()=>tip(f),380)}})}
+const tp=document.createElement('div');tp.className='p card';tp.style.cssText='left:50%;top:3%;translate:-50% 0;width:52cqw;padding:1.4cqw 2cqw;z-index:12;display:none;text-align:center';$('w').appendChild(tp);
+function tip(f){if(!gd)return;tp.innerHTML='<div style="font-size:.85cqw;color:#e8742a">STEP '+(gd.i+1)+' OF '+gd.q.length+'</div><div style="font-size:1.5cqw;color:#7a4ae0;margin:.5cqw 0">'+f.n+'</div><div style="font-size:1cqw;line-height:1.8;color:#25415a">'+f.tip+'</div><button class=btn id=tpok style="background:#3aa335;margin:1cqw auto 0">'+(gd.i+1<gd.q.length?'GOT IT, NEXT':'GOT IT')+'</button>';tp.style.display='block';
+ $('tpok').onclick=()=>{tp.style.display='none';gd.i++;nextG()}}
+function nextG(){if(!gd)return;const f=gd.q[gd.i];if(!f){gd=null;try{say('YOU\'RE ALL SET! HAVE FUN!')}catch(e){}return}const b=f.btn();if(!b){gd.i++;return nextG()}b.classList.add('hlx')}
+const up=document.createElement('div');up.id='ftp';up.className='p card ov';up.style.cssText='width:56cqw;padding:2cqw 2.4cqw;z-index:9;text-align:center';$('w').appendChild(up);OVS.push('ftp');
+function announce(g){S.ft[g]=1;sv();const L=FT.filter(f=>f.g===g);
+ up.innerHTML='<div style="font-size:2.2cqw;color:#e8742a">NEW FEATURES UNLOCKED!</div><div style="font-size:1cqw;margin:.8cqw 0 1.2cqw;color:#3a6f8a">'+(g==1?'TUTORIAL COMPLETE':g==2?'LEVEL 1 COMPLETE':'WORLD 1 COMPLETE')+'</div>'+L.map(f=>'<div style="font-size:1.2cqw;margin:.8cqw 0"><span style="color:#7a4ae0">'+f.n+'</span><br><span style="font-size:.9cqw;color:#25415a">'+f.d+'</span></div>').join('')+(g==3?EXTRA3.map(x=>'<div style="font-size:.85cqw;line-height:1.7;margin:.5cqw 0;color:#c4155a">'+x+'</div>').join(''):'')+'<div style="display:flex;gap:1.4cqw;justify-content:center;margin-top:1.2cqw"><button class=btn id=ftgo style="margin:0;background:#3aa335">SHOW ME AROUND</button><button class=btn id=ftlt style="margin:0;background:#556">LATER</button></div>';
+ $('ftlt').onclick=()=>sh('ftp',0);$('ftgo').onclick=()=>{sh('ftp',0);gd={q:L,i:0};setTimeout(nextG,350)};sh('ftp',1)}
+setInterval(()=>{
+ const lk=g=>!GR[g].ok();
+ for(const f of FT){const b=f.btn();if(b){b.classList.toggle('lockd',lk(f.g));b.title=lk(f.g)?('LOCKED: '+GR[f.g].req):''}}
+ root.classList.toggle('lock-mod',lk(3));
+ // what comes next
+ const nx=[1,2,3].find(lk);let n=document.getElementById('nxt');if(!n){n=document.createElement('div');n.id='nxt';n.className='p';n.style.cssText='left:27%;top:11.4%;font-size:.85cqw;color:#ffd23a;text-shadow:.15cqw .15cqw 0 #000;z-index:3';$('lob').appendChild(n)}
+ n.textContent=nx?('NEXT UNLOCK: '+FT.filter(f=>f.g===nx).map(f=>f.n).join(' + ')+' - '+GR[nx].req+(nx===3?' ('+Math.min(S.lv,16)+'/16)':'')):'';
+ // announce new unlocks when the lobby is quiet
+ if(st!=='lobby')return;const r=$('rwm');if(OVS.some(o=>$(o).style.display=='block')||(r&&r.style.display==='flex')||gd&&tp.style.display==='block')return;
+ const g=[1,2,3].find(x=>GR[x].ok()&&!S.ft[x]);if(g&&S.nmSet!==false&&!(g===2&&!S.nmSet&&S.lv<=2&&0))announce(g)},900);
+}catch(e){console.warn('progression',e)}})();
 </script>
 </body></html>
