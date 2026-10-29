@@ -3135,7 +3135,7 @@ const jny=document.createElement('div');jny.id='jny';$$('lob').appendChild(jny);
 function jnyUpdate(){let h='';
  if(!U.t())h='<span class=jn>FIRST GOAL</span><br>FINISH THE TUTORIAL RUN.<br>UNLOCKS: SHOP • LEVELS • DRESSING ROOM • PROFILE';
  else if(!U.w()){const n=Math.max(0,Math.min(S.lv-1,PER));h='<span class=jn>WORLD 1: '+n+' / '+PER+' LEVELS</span><div class=jb><i style="width:'+(n/PER*100)+'%"></i></div>BEAT THE BOSS TO UNLOCK: EVENTS • MISSIONS • SKILLS • ENDLESS • MULTIPLAYER'}
- else{const lv=Math.min(S.lv,MAXL),li=locOf(lv),w=Math.floor((lv-1)/PER)+1,nm=LOC[li]?LOC[li].n:'';h='<span class=jn>NEXT: LEVEL '+lv+' • '+nm.toUpperCase()+'</span><div class=jb><i style="width:'+Math.min(100,(lv-1)/MAXL*100)+'%"></i></div>'+(owned(li)||lv<=1?'':'AREA COSTS 🌱'+(COSTL[li]!=null?COSTL[li]:'?'))}
+ else if(S.lv>MAXL)h='<span class=jn>ALL '+MAXL+' LEVELS CLEARED!</span><div class=jb><i style=width:100%></i></div>REPLAY ANY LEVEL OR TRY ENDLESS';else{const lv=Math.min(S.lv,MAXL),li=locOf(lv),w=Math.floor((lv-1)/PER)+1,nm=LOC[li]?LOC[li].n:'';h='<span class=jn>NEXT: LEVEL '+lv+' • '+nm.toUpperCase()+'</span><div class=jb><i style="width:'+Math.min(100,(lv-1)/MAXL*100)+'%"></i></div>'+(owned(li)||lv<=1?'':'AREA COSTS 🌱'+(COSTL[li]!=null?COSTL[li]:'?'))}
  if(jny._h!==h){jny._h=h;jny.innerHTML=h}
  jny.style.display=(st==='lobby'&&!tour&&!cardOn&&$$('lob').style.display!=='none'&&h&&!(U.w()&&!h))?'block':'none'}
 
