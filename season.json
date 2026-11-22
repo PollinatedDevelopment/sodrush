@@ -1,17 +1,17 @@
 {
  "v": 1,
- "id": 29922527,
- "name": "TEST SEASON",
+ "id": 29922531,
+ "name": "FINAL UPDATE",
  "ic": "🎉",
  "c": "#ff8a1a",
- "t": "LIMITED TIME! 1.5X METERS • 1.5X SEEDS",
- "m": 1.5,
- "s": 1.5,
+ "t": "CELEBRATE! METERS COUNT 3X",
+ "m": 3,
+ "s": 1,
  "bodies": [
-  0,
-  1,
-  2
+  8,
+  4,
+  9
  ],
- "start": 1795351651445,
- "end": 1795956451445
+ "start": 1795351862798,
+ "end": 1795956662798
 }
