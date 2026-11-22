@@ -1,47 +1,5 @@
 {
- "all": [
-  {
-   "name": "BAEY",
-   "best": 14053,
-   "t": 1795360358415,
-   "id": "82fbfd48-b9cc-47d8-b263-802c41794a39"
-  },
-  {
-   "name": "BAILET",
-   "best": 14053,
-   "t": 1795358578460
-  },
-  {
-   "name": "TEYY",
-   "best": 2425,
-   "t": 1795360336461,
-   "id": "bbac6359-df96-46db-8ab5-93845d1bb70e"
-  },
-  {
-   "name": "BALIEYGOON",
-   "best": 516,
-   "t": 1795357854690
-  },
-  {
-   "name": "THE OWNER",
-   "best": 516,
-   "t": 1795360329642,
-   "id": "56c91e99-f3ae-433e-87fe-5807178cc0a8"
-  }
- ],
- "weekly": [
-  {
-   "name": "BALIEYGOON",
-   "best": 516,
-   "t": 1795357854690
-  },
-  {
-   "name": "THE OWNER",
-   "best": 516,
-   "t": 1795360329642,
-   "id": "56c91e99-f3ae-433e-87fe-5807178cc0a8"
-  }
- ],
- "winners": [],
- "week": 2968
+  "all": [],
+  "weekly": [],
+  "winners": []
 }
