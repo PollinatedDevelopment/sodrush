@@ -1,5 +1,13 @@
 {
-  "all": [],
-  "weekly": [],
-  "winners": []
+ "all": [
+  {
+   "id": "82fbfd48-b9cc-47d8-b263-802c41794a39",
+   "name": "BAILEY",
+   "best": 14053,
+   "t": 1795360433491
+  }
+ ],
+ "weekly": [],
+ "winners": [],
+ "week": 2968
 }
