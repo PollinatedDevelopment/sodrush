@@ -1,0 +1,17 @@
+{
+ "v": 1,
+ "id": 29922525,
+ "name": "NEW SEASON",
+ "ic": "🎉",
+ "c": "#ff8a1a",
+ "t": "LIMITED TIME! 1.5X METERS • 1.5X SEEDS",
+ "m": 1.5,
+ "s": 1.5,
+ "bodies": [
+  0,
+  1,
+  2
+ ],
+ "start": 1795351537189,
+ "end": 1795956337189
+}
