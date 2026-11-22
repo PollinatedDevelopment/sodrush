@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
-<meta name="sodrush-version" content="2026.11.22.8">
+<meta name="sodrush-version" content="2026.11.22.13">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -296,7 +296,8 @@ function spawn(f){const r=f==null?Math.random():f,X=296+PL;let o;
  // A single obstacle per spawn; seed trails sit safely in front of the hitbox.
  if(o.c===2){/* Four low seeds only: collect them by sliding under the rope. No seeds climb up the rope. */for(let i=0;i<4;i++)sd.push({x:X-28+i*9,y:G-8,from:o.c,type:(()=>{const r=Math.random();return r<.55?2:r<.85?0:r<.97?3:1})()});}else{/* Reachable jump arc, with varied seed types for visual variety. */for(let i=0;i<5;i++){const sy=G-22-Math.sin(i/4*Math.PI)*27;sd.push({x:X-26+i*15,y:Math.max(8,sy),from:o.c,type:(()=>{const r=Math.random();return r<.55?2:r<.85?0:r<.97?3:1})()});}}
  {const D=DF(),mn=[30,46,42,32,40][o.c];let g=58-D*18+Math.random()*(42-D*16);if(Math.random()<.18+.22*D)g=30+Math.random()*12;spn=Math.max(mn,g)*sp}}
-function over(){st='over';P.pause();A.pause();const m=Math.floor(dist/10);if(!clr&&sel===S.lv&&!chal&&!evA)S.lp=Math.max(S.lp,isBossLv()?Math.min(m,goal-1):m);const nb=m>S.best;S.best=Math.max(S.best,m);S.seeds=gs;gsPaid=gs;sv();revUI();
+function setRunHUD(visible){const h=$('hud');if(!h)return;h.style.display=visible?'flex':'none';if(visible){h.style.visibility='visible';h.style.opacity='1';$('m').style.display='';$('gs').style.display='';$('pz').style.display='';$('pz').style.visibility='visible';$('pz').style.opacity='1';h.style.justifyContent='space-between'}}
+function over(){st='over';setRunHUD(false);P.pause();A.pause();const m=Math.floor(dist/10);if(!clr&&sel===S.lv&&!chal&&!evA)S.lp=Math.max(S.lp,isBossLv()?Math.min(m,goal-1):m);const nb=m>S.best;S.best=Math.max(S.best,m);S.seeds=gs;gsPaid=gs;sv();revUI();
 $('gt').innerHTML='<span class=cn data-n='+m+'>0</span> METERS<br><span class=cn data-n='+(gs-runStart+rvSpent)+'>0</span> SEEDS EARNED<br>'+rawGs+' PICKED<br>+'+Math.round(seedBonus()*100)+'% SOD • +'+Math.round(LB(S.loc)*100)+'% AREA BONUS<br>'+(nb?'<span class=nbst>NEW BEST!</span>':'BEST '+S.best);countUps();$('go').style.display='block';$('go').style.animation='failPop .45s cubic-bezier(.2,1.5,.4,1) both';setTimeout(()=>{if(st==='over')$('go').style.animation='failShake .35s ease-in-out'},460)}
 function updCore(){mf++;if(!tut){const tier=Math.floor(mf/1200);const tg=Math.min(5.2+DF()*1.4+DB(),1.6+DF()+DB()+.32*tier);if(sp<tg)sp=Math.min(tg,sp+.003)}dist+=sp*(window.__fev?10:1);off+=sp;fr++;if(inv>0)inv--;if(!tut&&!clr&&dist/10>=goal){if(isBossLv()){if(!bossS)bossStart()}else clearLv()}
 vy+=.36;py+=vy;if(py>=G-18){if(vy>3){lsq=8;noise(.1,170,.6)}py=G-18;vy=0;jc=0}if(py>=G-18&&slT==0&&fr%8==0)noise(.05,380+Math.random()*250,.6);if(slT>0&&py>=G-18&&fr%6==0)noise(.07,1100,.25);if(slT>0){if(--slT==0)cd=12}else if(cd>0)cd--;
@@ -778,7 +779,7 @@ function clearLv(){clr=1;const bl=isBossLv();let m='New level waiting...';
 // ===== Death animations (fling / bonk / tangle) =====
 let dd=null;
 function failSnd(k){if(mute)return;noise(.3,k==0?220:300,.8,60);tone(k==2?520:k==0?200:180,k==2?180:60,.2,'square',.22);[[311,300],[294,280],[277,255],[233,120]].forEach((f,i)=>setTimeout(()=>{if(!mute)tone(f[0],f[1],i==3?.8:.3,'sawtooth',.13)},260+i*300));if(k==0)setTimeout(()=>{if(!mute)tone(250,250,.16,'square',.15)},120)}
-function startDeath(o){const k=o.c==4?0:o.c==2?2:1;dd={k,n:0,x:0,y:py,vx:0,vy:0,r:0,b:0,o,parts:[],sx:1,sy:1,ty:0,coil:0};st='dying';A.pause();failSnd(k);cv.classList.remove('shk');void cv.offsetWidth;cv.classList.add('shk');
+function startDeath(o){setRunHUD(false);const k=o.c==4?0:o.c==2?2:1;dd={k,n:0,x:0,y:py,vx:0,vy:0,r:0,b:0,o,parts:[],sx:1,sy:1,ty:0,coil:0};st='dying';A.pause();failSnd(k);cv.classList.remove('shk');void cv.offsetWidth;cv.classList.add('shk');
 if(k==0){dd.vx=2.4;dd.vy=-6.6}else if(k==1){const cs=LOC[S.loc].pc;for(let i=0;i<9;i++)dd.parts.push({x:o.x+2,y:o.y+4+Math.random()*Math.max(1,o.h-6),vx:1+Math.random()*2.5,vy:-1-Math.random()*3,c:cs[i%3]})}}
 function dyStep(){const d=dd;d.n++;const n=d.n;
 for(const p of d.parts){p.vy+=.3;p.x+=p.vx;p.y+=p.vy;if(p.y>G-1){p.y=G-1;p.vy*=-.4;p.vx*=.7}}
@@ -1127,7 +1128,7 @@ else if(st=='load')drawLoad();
 else if(st=='paused'){pst=='intro'?drawIntro():drawGame()}
 else if(st=='dying'){acc+=dt;while(acc>=1&&st=='dying'){dyStep();acc--}drawGame()}else if(st=='over'||st=='hint')drawGame();else if($('mp').style.display=='block')drawMap();else drawLobby();
 if($('cu').style.display=='block')drawPv();
-}catch(err){if(!frameErrOnce){frameErrOnce=true;console.error('Sod Rush frame error; recovering',err)}if(st==='dying'||st==='over'){/* Keep a render error during the death animation from leaving the player on a blank screen. */try{st='over';P.pause();A.pause();$('hud').style.display='none';$('ld').style.display='none';$('objectiveBanner').style.display='none';$('gt').textContent=Math.floor(dist/10)+' METERS  •  '+Math.max(0,gs-runStart+rvSpent)+' SEEDS EARNED';$('go').style.display='block';$('go').style.zIndex='2147483002';$('go').style.pointerEvents='auto';$('go').style.animation='failPop .45s cubic-bezier(.2,1.5,.4,1) both';if(typeof revUI==='function')revUI()}catch(recoveryErr){console.error('Death screen recovery failed',recoveryErr);const g=document.getElementById('go');if(g){g.style.cssText+=';display:block!important;z-index:2147483002!important;pointer-events:auto!important';const h=g.querySelector('div');if(h)h.textContent='SQUASHED!';}}}if(st==='door'){st='levelLoad';ld0=performance.now();$('ld').style.display='flex';$('gear').style.display='none';$('lob').style.display='none';$('hud').style.display='none';$('go').style.display='none';$('stg').style.display='none';$('pm').style.display='none';$('cu').style.display='none';$('mp').style.display='none';ldTxt('LOADING LEVEL',2.6,'PLEASE WAIT...',1.4);$('ldbar').style.width='0%'}}finally{requestAnimationFrame(loop)}}
+}catch(err){if(!frameErrOnce){frameErrOnce=true;console.error('Sod Rush frame error; recovering',err)}if(st==='dying'||st==='over'){/* Keep a render error during the death animation from leaving the player on a blank screen. */try{st='over';setRunHUD(false);P.pause();A.pause();$('ld').style.display='none';$('objectiveBanner').style.display='none';$('gt').textContent=Math.floor(dist/10)+' METERS  •  '+Math.max(0,gs-runStart+rvSpent)+' SEEDS EARNED';$('go').style.display='block';$('go').style.zIndex='2147483002';$('go').style.pointerEvents='auto';$('go').style.animation='failPop .45s cubic-bezier(.2,1.5,.4,1) both';if(typeof revUI==='function')revUI()}catch(recoveryErr){console.error('Death screen recovery failed',recoveryErr);const g=document.getElementById('go');if(g){g.style.cssText+=';display:block!important;z-index:2147483002!important;pointer-events:auto!important';const h=g.querySelector('div');if(h)h.textContent='SQUASHED!';}}}if(st==='door'){st='levelLoad';ld0=performance.now();$('ld').style.display='flex';$('gear').style.display='none';$('lob').style.display='none';$('hud').style.display='none';$('go').style.display='none';$('stg').style.display='none';$('pm').style.display='none';$('cu').style.display='none';$('mp').style.display='none';ldTxt('LOADING LEVEL',2.6,'PLEASE WAIT...',1.4);$('ldbar').style.width='0%'}}finally{requestAnimationFrame(loop)}}
 
 
 function popGs(){const e=$('gs');e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop')}
@@ -1146,8 +1147,23 @@ function restartLevel(){ti=0;play();}
 function lobby(e){st='lobby';evA=0;if(prevSel){sel=prevSel;S.loc=prevLoc;prevSel=0}{const lb=$('lob');lb.style.opacity=1;lb.style.pointerEvents='auto';$('gear').style.visibility='visible'}P.pause();P.currentTime=0;placeGear();fadeOut(A);try{rewindRun()}catch(e){}if(e!==1)L.currentTime=0;L.muted=mute;mus();$('go').style.display='none';$('pm').style.display='none';$('ld').style.display='none';$('objectiveBanner').style.display='none';$('hud').style.display='none';$('lob').style.display='block';$('lob').classList.remove('lobIn');void $('lob').offsetWidth;$('lob').classList.add('lobIn');ui();if(needArea){needArea=0;setTimeout(openMap,700)}}
 $('play').onclick=play;$('lb').onclick=startReturnLoad;
 const rvCost=()=>Math.round((25+Math.max(1,sel)*4)*Math.pow(1.6,rvn)*(1-.1*skill(2)));
-function revUI(){const b=$('rv');if(!b)return;const c=rvCost();b.textContent='REVIVE \u2022 '+c+' SEEDS';b.style.opacity=S.seeds>=c?1:.45;b.style.display=tut?'none':'inline-block'}
-$('rv').onclick=()=>{if(st!='over'||tut)return;const c=rvCost();if(gs<c)return;gs-=c;gsf=gs;gsPaid-=c;rvSpent+=c;S.seeds=gs;rvn++;sv();dd=null;ob=ob.filter(o=>o.x>150);bossP=[];bossRevive();py=G-18;vy=0;jc=0;slT=0;cd=0;inv=90+30*skill(4);spn=Math.max(spn,45*sp);st='run';$('go').style.display='none';A.muted=mute;if(!mute&&!bossS)A.play().catch(()=>{});ui();tpMsg('<div style="font-size:2.2cqw;color:#3aa335">REVIVED!</div>',900)};
+function revivesAllowed(){
+ const noReviveChallenge=typeof chal!=='undefined'&&!!(chal&&chal.norv);
+ const ironman=typeof rs!=='undefined'&&rs&&rs.mut===2;
+ const onlineRace=typeof rnd!=='undefined'&&!!rnd;
+ const inOnlineRoom=!!(window.__room&&window.__room());
+ return !tut&&!noReviveChallenge&&!ironman&&!onlineRace&&!inOnlineRoom;
+}
+function revUI(){
+ const b=$('rv');if(!b)return;
+ if(!revivesAllowed()){b.style.display='none';b.disabled=true;return}
+ b.disabled=false;
+ const c=rvCost();
+ b.textContent='REVIVE • '+c+' SEEDS';
+ b.style.opacity=gs>=c?1:.45;
+ b.style.display='inline-block';
+}
+$('rv').onclick=()=>{if(st!='over'||!revivesAllowed())return;const c=rvCost();if(gs<c)return;gs-=c;gsf=gs;gsPaid-=c;rvSpent+=c;S.seeds=gs;rvn++;sv();dd=null;ob=ob.filter(o=>o.x>150);bossP=[];bossRevive();py=G-18;vy=0;jc=0;slT=0;cd=0;inv=90+30*skill(4);spn=Math.max(spn,45*sp);$('go').style.display='none';setRunHUD(true);st='run';A.muted=mute;if(!mute&&!bossS)A.play().catch(()=>{});ui();tpMsg('<div style="font-size:2.2cqw;color:#3aa335">REVIVED!</div>',900)};
 $('copybest').onclick=async()=>{const msg='MY BEST SCORE IN SOD RUSH IS '+S.best+', CAN YOU BEAT IT? https://pollinateddevelopment.github.io/sodrush';try{await navigator.clipboard.writeText(msg);say('BEST SCORE COPIED!')}catch(e){const ta=document.createElement('textarea');ta.value=msg;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');say('BEST SCORE COPIED!')}catch(_){say('COPY FAILED')}ta.remove()}};
 
 
@@ -1349,7 +1365,7 @@ connect(id){const cid=Math.random().toString(36).slice(2,10)+Date.now().toString
 reconnect(){if(this.destroyed||this.ws)return;this.want=this.id||this.want;this.dial()}
 dropAll(){const cs=Object.values(this.conns);this.conns={};cs.forEach(c=>{c.open=false;c.closed=true;c.emit('close')})}
 destroy(){if(this.destroyed)return;this.destroyed=true;clearInterval(this.hb);const ws=this.ws;this.ws=null;this.dropAll();try{ws&&ws.close()}catch(e){}}}
-const VER='2026.11.22.8',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
+const VER='2026.11.22.9',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
 CLN=r=>{const o={};for(const k in r){const p=r[k]||{};o[k]={n:String(p.n==null?'':p.n).slice(0,10),m:+p.m||0,a:+p.a||0,f:p.f==null?null:(+p.f||0),sk:Math.max(0,Math.min(SN.length-1,p.sk|0)),hat:Math.max(0,Math.min(HN.length-1,p.hat|0)),vote:Math.max(1,p.vote|0||1),rdy:p.rdy?1:0,mx:Math.max(1,p.mx|0||1)}}return o},
 CAP=4,NP=16,mx=()=>MAXL,esc=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
 let nm=(()=>{try{return localStorage.sodn}catch(e){}})()||'PLAYER'+(10+Math.random()*89|0);
@@ -3473,13 +3489,13 @@ const wkNow=()=>Math.floor((Date.now()/864e5+3)/7);
 // best run distance this week (resets every Monday, UTC)
 const wbGet=()=>{try{const o=JSON.parse(localStorage.sodwk||'{}');return o.w===wkNow()?(o.b|0):0}catch(e){return 0}};
 const wbPut=m=>{try{if(m>wbGet())localStorage.sodwk=JSON.stringify({w:wkNow(),b:m})}catch(e){}};
-{const _o=over;over=function(){const m=Math.floor(dist/10);const r=_o.apply(this,arguments);try{if(!inRm())wbPut(m)}catch(e){}return r}}
-const bt=document.createElement('button');bt.className='p btn';bt.id='lbb';bt.textContent='\u{1F3C6} LEADERBOARD';bt.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(bt);
+{const _o=over;over=function(){const m=Math.floor(dist/10);const r=_o.apply(this,arguments);try{if(!inRm()){wbPut(m);if(typeof send==='function')send()}}catch(e){}return r}}
+const bt=document.createElement('button');bt.className='p btn';bt.id='lbb';bt.textContent='LEADERBOARD';bt.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(bt);
 const bx=document.createElement('div');bx.id='lbd';bx.className='p card ov';bx.style.cssText='width:44cqw;padding:2cqw 2.4cqw;z-index:9;text-align:center';$('w').appendChild(bx);OVS.push('lbd');
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let data=null,tab='w';
 const row=(e,i,me)=>'<div style="display:flex;justify-content:space-between;padding:.2cqw 1cqw;'+(e.name===me?'background:#ffd23a55':'')+'"><span>'+(i<3&&tab=='w'?['\u{1F947}','\u{1F948}','\u{1F949}'][i]+' ':(i+1)+'. ')+esc(e.name)+'</span><span>'+Number(e.best).toLocaleString('en-US')+'M</span></div>';
-const draw=msg=>{const me=nmv(),l=data?(tab=='w'?data.weekly:data.all):[];
+const draw=msg=>{const me=nmv(),l=data?(tab=='w'?(Array.isArray(data.weekly)?data.weekly:[]):(Array.isArray(data.all)?data.all:[])):[];
  const tb=(k,t)=>'<button class=btn data-t='+k+' style="margin:0 .4cqw;padding:.6cqw 1cqw;font-size:.95cqw;background:'+(tab==k?'#7a4ae0':'#3a6f8a')+'">'+t+'</button>';
  bx.innerHTML='<div style="font-size:2.2cqw;color:#7a4ae0">TOP RUNNERS</div><div style="margin:1cqw 0">'+tb('w','THIS WEEK')+tb('a','ALL TIME')+'</div>'+(tab=='w'?'<div style="font-size:.8cqw;color:#e8742a;line-height:1.8">TOP 3 EACH WEEK WIN A FREE RANDOM COSTUME OR HAT<br>RESETS MONDAY</div>':'')+'<div style="font-size:1.05cqw;margin:1cqw 0;line-height:2;text-align:left;min-height:12cqw">'+(msg?'<div style="text-align:center;padding-top:4cqw">'+msg+'</div>':l.slice(0,10).map((e,i)=>row(e,i,me)).join('')||'<div style="text-align:center;padding-top:4cqw">NO SCORES YET</div>')+'</div><button class=btn id=lbx style="background:#3a6f8a">CLOSE</button>';
  $('lbx').onclick=()=>sh('lbd',0);bx.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw()})};
@@ -3493,7 +3509,7 @@ const grant=()=>{const pool=[],nc=Math.min(18,SN.length),nh=Math.min(18,HN.lengt
 const claim=()=>{if(!data||!S.nmSet)return;const me=nmv(),pid=sodPlayerId();let c=S.lbc||0,n=0;(data.winners||[]).forEach(w=>{if(w.week>c&&((w.ids||[]).includes(pid)||(w.names||[]).includes(me))){c=w.week;n++}});if(n){S.lbc=c;sv();grant()}};
 // send your best score (with your name) whenever it improves or your name changes
 let sent='';try{sent=localStorage.sodlb||''}catch(e){}
-const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,weekBest:wb,week:wkNow()})});if(r.ok){sent=k;try{localStorage.sodlb=k}catch(e){}}}catch(e){}};
+const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,allTimeBest:S.best,weekBest:wb,weeklyBest:wb,week:wkNow()})});if(r.ok){sent=k;try{localStorage.sodlb=k}catch(e){}}}catch(e){}};
 let chk=0;
 setInterval(()=>{if(st==='lobby'||st==='over')send();
  if(st==='lobby'&&S.nmSet&&on()&&!chk&&!OVS.some(o=>$(o)&&$(o).style.display==='block')){chk=1;grab().catch(()=>{setTimeout(()=>{chk=0},60000)})}},3000);
@@ -3513,7 +3529,7 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
   const _overFinal=over;
   over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
 
-  const GAME_VERSION='2026.11.22.8';
+  const GAME_VERSION='2026.11.22.9';
   let updateLocked=false,checkBusy=false,seasonBaseline=null;
   const seasonFingerprint=async()=>{
     // Include the weekly rotation and the published custom season file.
