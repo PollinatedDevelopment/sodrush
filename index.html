@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
-<meta name="sodrush-version" content="2026.11.22.16">
+<meta name="sodrush-version" content="2026.11.22.21">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -3480,40 +3480,63 @@ setInterval(()=>{try{
 })()}catch(e){console.warn('final update',e)}
 </script>
 <script>
-/* ===== LEADERBOARD (all-time + weekly, top 3 each week win a random costume or hat) ===== */
+/* ===== LEADERBOARD (all-time only) ===== */
 (function(){try{
-const LB_URL='https://sodrushlb.baileystudios2021.workers.dev'; // set to your leaderboard Worker URL (see leaderboard-worker.js)
+const LB_URL='https://sodrushlb.baileystudios2021.workers.dev';
 const on=()=>!/YOUR-WORKER/.test(LB_URL);
 const inRm=()=>!!(window.__room&&window.__room());
-const wkNow=()=>Math.floor((Date.now()/864e5+3)/7);
-// best run distance this week (resets every Monday, UTC)
-const wbGet=()=>{try{const o=JSON.parse(localStorage.sodwk||'{}');return o.w===wkNow()?(o.b|0):0}catch(e){return 0}};
-const wbPut=m=>{try{if(m>wbGet())localStorage.sodwk=JSON.stringify({w:wkNow(),b:m})}catch(e){}};
-{const _o=over;over=function(){const m=Math.floor(dist/10);const r=_o.apply(this,arguments);try{if(!inRm()){wbPut(m);if(typeof send==='function')send()}}catch(e){}return r}}
 const bt=document.createElement('button');bt.className='p btn';bt.id='lbb';bt.textContent='LEADERBOARD';bt.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(bt);
 const bx=document.createElement('div');bx.id='lbd';bx.className='p card ov';bx.style.cssText='width:44cqw;padding:2cqw 2.4cqw;z-index:9;text-align:center';$('w').appendChild(bx);OVS.push('lbd');
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let data=null,tab='w';
-const row=(e,i,me)=>'<div style="display:flex;justify-content:space-between;padding:.2cqw 1cqw;'+(e.name===me?'background:#ffd23a55':'')+'"><span>'+(i<3&&tab=='w'?['\u{1F947}','\u{1F948}','\u{1F949}'][i]+' ':(i+1)+'. ')+esc(e.name)+'</span><span>'+Number(e.best).toLocaleString('en-US')+'M</span></div>';
-const draw=msg=>{const me=nmv(),l=data?(tab=='w'?(Array.isArray(data.weekly)?data.weekly:[]):(Array.isArray(data.all)?data.all:[])):[];
- const tb=(k,t)=>'<button class=btn data-t='+k+' style="margin:0 .4cqw;padding:.6cqw 1cqw;font-size:.95cqw;background:'+(tab==k?'#7a4ae0':'#3a6f8a')+'">'+t+'</button>';
- bx.innerHTML='<div style="font-size:2.2cqw;color:#7a4ae0">TOP RUNNERS</div><div style="margin:1cqw 0">'+tb('w','THIS WEEK')+tb('a','ALL TIME')+'</div>'+(tab=='w'?'<div style="font-size:.8cqw;color:#e8742a;line-height:1.8">TOP 3 EACH WEEK WIN A FREE RANDOM COSTUME OR HAT<br>RESETS MONDAY</div>':'')+'<div style="font-size:1.05cqw;margin:1cqw 0;line-height:2;text-align:left;min-height:12cqw">'+(msg?'<div style="text-align:center;padding-top:4cqw">'+msg+'</div>':l.slice(0,10).map((e,i)=>row(e,i,me)).join('')||'<div style="text-align:center;padding-top:4cqw">NO SCORES YET</div>')+'</div><button class=btn id=lbx style="background:#3a6f8a">CLOSE</button>';
- $('lbx').onclick=()=>sh('lbd',0);bx.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=b.dataset.t;draw()})};
-const grab=async()=>{const r=await fetch(LB_URL,{cache:'no-store'});if(!r.ok)throw 0;data=await r.json();claim();return data};
-bt.onclick=async()=>{if(!on()){say('LEADERBOARD NOT SET UP YET');return}draw('LOADING...');sh('lbd',1);try{await grab();draw()}catch(e){draw('COULD NOT LOAD')}};
+const esc=t=>String(t).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+let data=null;
+const row=(e,i,me)=>'<div style="display:flex;justify-content:space-between;padding:.2cqw 1cqw;'+(e.name===me?'background:#ffd23a55':'')+'"><span>'+(i+1)+'. '+esc(e.name)+'</span><span>'+Number(e.best).toLocaleString('en-US')+'M</span></div>';
+const draw=msg=>{const me=nmv(),l=data?(Array.isArray(data.all)?data.all:[]):[];
+ bx.innerHTML='<div style="font-size:2.2cqw;color:#7a4ae0">ALL-TIME TOP RUNNERS</div><div style="font-size:1.05cqw;margin:1cqw 0;line-height:2;text-align:left;min-height:12cqw">'+(msg?'<div style="text-align:center;padding-top:4cqw">'+msg+'</div>':l.slice(0,10).map((e,i)=>row(e,i,me)).join('')||'<div style="text-align:center;padding-top:4cqw">NO SCORES YET</div>')+'</div><button class=btn id=lbx style="background:#3a6f8a">CLOSE</button>';
+ $('lbx').onclick=()=>sh('lbd',0)};
+const grab=async()=>{const r=await fetch(LB_URL,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);data=await r.json();return data};
+bt.onclick=async()=>{if(!on()){say('LEADERBOARD NOT SET UP YET');return}draw('LOADING...');sh('lbd',1);try{await grab();draw()}catch(e){draw('COULD NOT LOAD: '+String(e&&e.message||e))}};
 addEventListener('keydown',e=>{if(bx.style.display==='block'&&e.key==='Escape'){e.stopImmediatePropagation();e.preventDefault();sh('lbd',0)}},true);
-// weekly top 3 reward: one random costume or hat you do not own yet (seeds if you own them all)
-const grant=()=>{const pool=[],nc=Math.min(18,SN.length),nh=Math.min(18,HN.length);for(let i=1;i<nc;i++)if(!S.un[i])pool.push([0,i]);for(let i=1;i<nh;i++)if(!S.uh[i])pool.push([1,i]);
- if(!pool.length){S.seeds+=500;sv();try{ui()}catch(e){}say('WEEKLY TOP 3 REWARD: +500 SEEDS!');return}
- const [h,i]=pool[Math.random()*pool.length|0];if(h)S.uh[i]=1;else S.un[i]=1;sv();try{ui()}catch(e){}say('WEEKLY TOP 3 REWARD: '+(h?HN[i]+' HAT':SN[i]+' OUTFIT')+'!')};
-const claim=()=>{if(!data||!S.nmSet)return;const pid=sodPlayerId();let c=S.lbc||0,n=0;(data.winners||[]).forEach(w=>{if(w.week>c&&(w.ids||[]).includes(pid)){c=w.week;n++}});if(n){S.lbc=c;sv();for(let i=0;i<n;i++)grant()}};
-// send your best score (with your name) whenever it improves or your name changes
-let sent='';try{sent=localStorage.sodlb||''}catch(e){}
-let lbErrLast='',lbErrAt=0;
-const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,allTimeBest:S.best,weekBest:wb,weeklyBest:wb,week:wkNow()})});let j={};try{j=await r.json()}catch(e){}if(r.ok&&j.ok!==false){sent=k;try{localStorage.sodlb=k}catch(e){}lbErrLast='';}else{const why=(j.error||('HTTP '+r.status))+(j.detail?': '+j.detail:'');if(why!==lbErrLast||Date.now()-lbErrAt>30000){console.warn('Sod Rush leaderboard submit failed:',r.status,j);lbErrLast=why;lbErrAt=Date.now();say('SCORE SAVE FAILED: '+why.slice(0,65));}}}catch(e){const why='NETWORK/CORS: '+(e&&e.message||'request failed');if(why!==lbErrLast||Date.now()-lbErrAt>30000){console.warn('Sod Rush leaderboard submit failed:',e);lbErrLast=why;lbErrAt=Date.now();say('SCORE SAVE FAILED: '+why.slice(0,65));}}};
-let chk=0;
-setInterval(()=>{if(st==='lobby'||st==='over')send();
- if(st==='lobby'&&S.nmSet&&on()&&!chk&&!OVS.some(o=>$(o)&&$(o).style.display==='block')){chk=1;grab().catch(()=>{setTimeout(()=>{chk=0},60000)})}},3000);
+let sent='',busy=0,fails=0,nextTry=0,failKey='',lastGate='',lastErrToast='';
+// TEMPORARY DIAGNOSTICS: set to false to silence. Logs never include secrets (the GitHub token lives only in the Worker).
+const DBG=true,LOG=(...a)=>{if(DBG)try{console.log('[SodRush LB]',...a)}catch(_){}};
+const gate=r=>{if(r!==lastGate){lastGate=r;LOG('submit skipped ->',r)}};
+window.__sodLBStatus=()=>({state:st,nmSet:!!S.nmSet,name:nmv(),best:S.best,inRoom:inRm(),sent,busy:!!busy,fails,retryInMs:Math.max(0,nextTry-Date.now())});
+const send=async()=>{
+ try{
+  if(!on()){gate('LB_URL is a placeholder');return}
+  if(!S.nmSet){gate('name not set yet (S.nmSet falsy) - player must confirm a name first');return}
+  if(inRm()){gate('player is in an online room');return}
+  if(!(S.best>0)){gate('S.best is '+S.best+' (no recorded run yet)');return}
+  const n=nmv(),pid=sodPlayerId(),best=S.best,k=pid+'|'+n+'|'+best;
+  if(k===sent){gate('already confirmed this session for '+n+' '+best+'M');return}
+  if(busy){gate('request already in flight');return}
+  if(k!==failKey){failKey=k;fails=0;nextTry=0}
+  if(Date.now()<nextTry){gate('backing off '+Math.ceil((nextTry-Date.now())/1000)+'s after failure #'+fails);return}
+  lastGate='';busy=1;
+  LOG('POST ->',LB_URL,{id:pid.slice(0,8)+'…',name:n,best});
+  let r=null,txt='',j=null,failWhy='';
+  try{
+   r=await fetch(LB_URL,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best})});
+   txt=await r.text();
+   try{j=JSON.parse(txt)}catch(_){}
+   LOG('response',r.status,txt.slice(0,200));
+   if(!r.ok)failWhy=(j&&j.error?j.error+(j.detail?': '+j.detail:''):'HTTP '+r.status);
+   else if(!j||j.ok!==true)failWhy='unexpected response (not a Worker {ok:true} reply)';
+  }catch(e){failWhy='NETWORK/CORS: '+(e&&e.message||'request failed');LOG('fetch threw',e)}
+  busy=0;
+  if(!failWhy){
+   sent=k;fails=0;nextTry=0;failKey='';lastErrToast='';
+   LOG('confirmed by Worker',j.unchanged?'(score already stored, no commit)':'(committed to GitHub)');
+   if(j.unchanged)say('LEADERBOARD: SCORE ALREADY SAVED');else{say('LEADERBOARD: SAVE CONFIRMED');
+    grab().then(()=>{if(bx.style.display==='block')draw()}).catch(e=>LOG('board refresh failed',e&&e.message||e))}
+  }else{
+   fails++;const wait=Math.min(300000,5000*Math.pow(2,fails-1));nextTry=Date.now()+wait;
+   LOG('FAILED:',failWhy,'- retry in',Math.round(wait/1000)+'s');
+   if(lastErrToast!==k){lastErrToast=k;say('SCORE SAVE FAILED: '+failWhy.slice(0,65))}
+  }
+ }catch(e){busy=0;LOG('send() crashed',e)}
+};
+let chk=0;setInterval(()=>{if(st==='lobby'||st==='over')send();if(st==='lobby'&&S.nmSet&&on()&&!chk&&!OVS.some(o=>$(o)&&$(o).style.display==='block')){chk=1;grab().catch(()=>{setTimeout(()=>{chk=0},60000)})}},3000);
 }catch(e){console.warn('leaderboard',e)}})();
 </script>
 
@@ -3528,9 +3551,9 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
   const _clearLvFinal=clearLv;
   clearLv=function(){const special=!!evA;const result=_clearLvFinal.apply(this,arguments);if(special)stopRunMusic();return result};
   const _overFinal=over;
-  over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
+  over=function(){let special=false;try{special=!!(endOn||(window.__room&&window.__room()))}catch(_){}const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
 
-  const GAME_VERSION='2026.11.22.16';
+  const GAME_VERSION='2026.11.22.21';
   let updateLocked=false,checkBusy=false,seasonBaseline=null;
   const seasonFingerprint=async()=>{
     // Include the weekly rotation and the published custom season file.
