@@ -1,7 +1,7 @@
 {
  "v": 1,
- "id": 29922525,
- "name": "NEW SEASON",
+ "id": 29922527,
+ "name": "TEST SEASON",
  "ic": "🎉",
  "c": "#ff8a1a",
  "t": "LIMITED TIME! 1.5X METERS • 1.5X SEEDS",
@@ -12,6 +12,6 @@
   1,
   2
  ],
- "start": 1795351537189,
- "end": 1795956337189
+ "start": 1795351651445,
+ "end": 1795956451445
 }
