@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
-<meta name="sodrush-version" content="2026.11.22.3">
+<meta name="sodrush-version" content="2026.11.22.4">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -3486,13 +3486,26 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
   const _overFinal=over;
   over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
 
-  const GAME_VERSION='2026.11.22.3';
-  let updateLocked=false,checkBusy=false;
+  const GAME_VERSION='2026.11.22.4';
+  let updateLocked=false,checkBusy=false,seasonBaseline=null;
+  const seasonFingerprint=async()=>{
+    // Include the weekly rotation and the published custom season file.
+    const week=Math.floor((Date.now()/864e5+4)/7);
+    let seasonData='NO_CUSTOM_SEASON_FILE';
+    try{
+      const su=new URL('season.json',location.href);
+      su.searchParams.set('_season_check',String(Date.now()));
+      const sr=await fetch(su.href,{cache:'no-store',credentials:'same-origin'});
+      if(sr.ok)seasonData=await sr.text();
+      else if(sr.status!==404)throw new Error('season check unavailable');
+    }catch(e){throw e}
+    return week+'|'+seasonData;
+  };
   const lockUpdate=()=>{
     if(updateLocked)return;updateLocked=true;
     const veil=document.createElement('div');veil.id='sodrushUpdateLock';
     veil.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#10151c;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box;font-family:Arial,sans-serif;';
-    veil.innerHTML='<div style="max-width:620px;border:4px solid #ffd23a;background:#17263a;padding:28px;box-shadow:8px 8px 0 #000"><div style="font-size:28px;font-weight:900;color:#ffd23a;margin-bottom:18px">UPDATE REQUIRED</div><div style="font-size:18px;line-height:1.6">A newer version of Sod Rush is available.<br>You must update before playing.</div><div style="font-size:14px;color:#9db4ca;margin:18px 0">YOUR VERSION: '+GAME_VERSION+'</div><div style="font-size:17px;line-height:1.7;color:#ffd23a">PC: press CTRL + F5 to force-refresh the game.<br>Mobile: close the game, then restart your browser or device.</div><div style="font-size:13px;color:#9db4ca;margin-top:16px">The game will stay locked until the latest version loads.</div><button id="sodrushUpdateRetry" style="margin-top:20px;padding:12px 22px;background:#3aa335;color:white;border:2px solid #fff;font-weight:bold;font-size:16px;cursor:pointer">CHECK AGAIN</button></div>';
+    veil.innerHTML='<div style="max-width:620px;border:4px solid #ffd23a;background:#17263a;padding:28px;box-shadow:8px 8px 0 #000"><div style="font-size:28px;font-weight:900;color:#ffd23a;margin-bottom:18px">UPDATE REQUIRED</div><div style="font-size:18px;line-height:1.6">A newer version of Sod Rush is available.<br>You must update before playing.</div><div style="font-size:14px;color:#9db4ca;margin:18px 0">YOUR VERSION: '+GAME_VERSION+'</div><div style="font-size:17px;line-height:1.7;color:#ffd23a">PC: press CTRL + F5 to force-refresh the game.<br>Mobile: fully restart your device (power it off and back on), then reopen the game.</div><div style="font-size:13px;color:#9db4ca;margin-top:16px">The game will stay locked until the latest version loads.</div><button id="sodrushUpdateRetry" style="margin-top:20px;padding:12px 22px;background:#3aa335;color:white;border:2px solid #fff;font-weight:bold;font-size:16px;cursor:pointer">CHECK AGAIN</button></div>';
     document.body.appendChild(veil);
     veil.querySelector('#sodrushUpdateRetry').onclick=()=>location.reload();
   };
@@ -3506,8 +3519,13 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
       const html=await r.text();
       const doc=new DOMParser().parseFromString(html,'text/html');
       const latest=doc.querySelector('meta[name="sodrush-version"]')?.content?.trim();
-      if(latest&&latest!==GAME_VERSION)lockUpdate();
-    }catch(_){/* Keep offline play available when the version endpoint cannot be reached. */}
+      if(latest&&latest!==GAME_VERSION){lockUpdate();return}
+      // First successful read establishes this session's season-pass baseline.
+      // Any later published season.json change or weekly season rollover locks the old session.
+      const fingerprint=await seasonFingerprint();
+      if(seasonBaseline===null)seasonBaseline=fingerprint;
+      else if(fingerprint!==seasonBaseline)lockUpdate();
+    }catch(_){/* Keep offline play available when the version/season endpoint cannot be reached. */}
     finally{checkBusy=false}
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>checkLatest(),{once:true});else checkLatest();
