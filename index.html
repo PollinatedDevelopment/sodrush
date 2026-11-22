@@ -1,5 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
+<meta name="sodrush-version" content="2026.11.22.3">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -1140,7 +1141,7 @@ if($('cu').style.display=='block')cu();if($('mp').style.display=='block')mapUI()
 
 
 
-function play(){if(!chal&&!evA&&!owned(locOf(sel))){if(st==='lobby')openMap();else{needArea=1;startReturnLoad()}return}S.loc=evA?evLoc:locOf(sel);P.pause();P.currentTime=0;fadeOut(L);placeGear();reset();setRunTrack();tut=!S.tut;ti=0;playLoad0=performance.now();st='playLoad';$('tp').style.display='none';$('objectiveBanner').style.display='none';$('gear').style.display='none';$('lob').style.display='none';$('go').style.display='none';$('pm').style.display='none';$('ld').style.display='flex';$('ldbar').style.width='0%';$('stg').style.display='none';$('cu').style.display='none';$('mp').style.display='none';$('hud').style.display='none';A.pause();A.currentTime=0;A.muted=mute;ldTxt('GET READY!',2.5,gameTip(),1.2);}
+function play(){if(!window.__mpForce&&!chal&&!evA&&!owned(locOf(sel))){if(st==='lobby')openMap();else{needArea=1;startReturnLoad()}return}S.loc=evA?evLoc:locOf(sel);P.pause();P.currentTime=0;fadeOut(L);placeGear();reset();setRunTrack();tut=!S.tut;ti=0;playLoad0=performance.now();st='playLoad';$('tp').style.display='none';$('objectiveBanner').style.display='none';$('gear').style.display='none';$('lob').style.display='none';$('go').style.display='none';$('pm').style.display='none';$('ld').style.display='flex';$('ldbar').style.width='0%';$('stg').style.display='none';$('cu').style.display='none';$('mp').style.display='none';$('hud').style.display='none';A.pause();A.currentTime=0;A.muted=mute;ldTxt('GET READY!',2.5,gameTip(),1.2);}
 function restartLevel(){ti=0;play();}
 function lobby(e){st='lobby';evA=0;if(prevSel){sel=prevSel;S.loc=prevLoc;prevSel=0}{const lb=$('lob');lb.style.opacity=1;lb.style.pointerEvents='auto';$('gear').style.visibility='visible'}P.pause();P.currentTime=0;placeGear();fadeOut(A);try{rewindRun()}catch(e){}if(e!==1)L.currentTime=0;L.muted=mute;mus();$('go').style.display='none';$('pm').style.display='none';$('ld').style.display='none';$('objectiveBanner').style.display='none';$('hud').style.display='none';$('lob').style.display='block';$('lob').classList.remove('lobIn');void $('lob').offsetWidth;$('lob').classList.add('lobIn');ui();if(needArea){needArea=0;setTimeout(openMap,700)}}
 $('play').onclick=play;$('lb').onclick=startReturnLoad;
@@ -1322,16 +1323,16 @@ connect(id){const cid=Math.random().toString(36).slice(2,10)+Date.now().toString
 reconnect(){if(this.destroyed||this.ws)return;this.want=this.id||this.want;this.dial()}
 dropAll(){const cs=Object.values(this.conns);this.conns={};cs.forEach(c=>{c.open=false;c.closed=true;c.emit('close')})}
 destroy(){if(this.destroyed)return;this.destroyed=true;clearInterval(this.hb);const ws=this.ws;this.ws=null;this.dropAll();try{ws&&ws.close()}catch(e){}}}
-const VER='sr1',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
+const VER='2026.11.22.3',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
 CLN=r=>{const o={};for(const k in r){const p=r[k]||{};o[k]={n:String(p.n==null?'':p.n).slice(0,10),m:+p.m||0,a:+p.a||0,f:p.f==null?null:(+p.f||0),sk:Math.max(0,Math.min(SN.length-1,p.sk|0)),hat:Math.max(0,Math.min(HN.length-1,p.hat|0)),vote:Math.max(1,p.vote|0||1),rdy:p.rdy?1:0,mx:Math.max(1,p.mx|0||1)}}return o},
-CAP=4,NP=16,mx=()=>Math.min(S.lv,MAXL),esc=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
+CAP=4,NP=16,mx=()=>MAXL,esc=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
 let nm=(()=>{try{return localStorage.sodn}catch(e){}})()||'PLAYER'+(10+Math.random()*89|0);
 const st0=document.createElement('style');st0.textContent='#om,#ol{position:absolute;inset:0;z-index:9;display:none;flex-direction:column;box-sizing:border-box;padding:2cqw 3cqw;color:#fff;background:linear-gradient(#0b1230,#241048 60%,#10151c);font-size:1.05cqw;line-height:1.6}#om *,#ol *{box-sizing:border-box}.ob{margin:.4cqw;padding:.9cqw 1.3cqw;font-family:inherit;font-size:1.1cqw}.oc{background:#e8f0f4;color:#25415a;border:.3cqw solid #1b2a38;padding:.6cqw 1cqw}.oh{font-size:2.4cqw;color:#ffd23a;text-shadow:.25cqw .25cqw #000}.oi{font-family:inherit;font-size:1.1cqw;padding:.6cqw;border:.3cqw solid #1b2a38;text-transform:uppercase}';document.head.appendChild(st0);
 const B=(id,t,bg,x)=>'<button class="btn ob" id='+id+' style="background:'+bg+';'+(x||'')+'">'+t+'</button>';
 const om=document.createElement('div');om.id='om';
 om.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><div class=oh>ONLINE MULTIPLAYER</div>'+B('ox','BACK TO GAME','#555')+'</div><div style="text-align:center;margin:.6cqw 0">YOUR NAME <input class="oi" id=onm maxlength=10 value="'+esc(nm)+'" style="width:16cqw"></div><div id=os style="text-align:center;color:#7af;min-height:2cqw">PLAY WITH ANYONE ONLINE - QUICK MATCH, BROWSE ROOMS, OR USE A PRIVATE CODE</div><div style="text-align:center">'+B('oq','QUICK MATCH','#3aa335','font-size:1.6cqw;padding:1.2cqw 2.4cqw')+B('ob2','BROWSE ROOMS','#2b88b8')+B('oh1','HOST PUBLIC','#7a4ae0')+B('oh2','HOST PRIVATE','#c4155a')+'</div><div style="text-align:center;margin:.6cqw">PRIVATE CODE <input class="oi" id=oci maxlength=5 placeholder=CODE style="width:10cqw;text-align:center"> '+B('ojc','JOIN','#3aa335')+'</div><div class=oc id=orl style="flex:1;overflow:auto;margin-top:.6cqw;color:#25415a">PRESS BROWSE ROOMS TO SEE PUBLIC GAMES, OR QUICK MATCH TO JUMP STRAIGHT IN.</div>';
 const ol=document.createElement('div');ol.id='ol';
-ol.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><div><div class=oh id=olt></div><div id=ols style="color:#7af"></div></div><div id=olc style="text-align:right"></div></div><div style="display:flex;gap:2cqw;flex:1;min-height:0;margin:1cqw 0"><div id=osl style="flex:1.2;overflow:auto"></div><div style="flex:1;display:flex;flex-direction:column;gap:.8cqw;min-height:0"><div class=oc>OUTFIT<br><span id=oou></span><br>'+B('a_s0','&lt; SKIN','#3a6f8a')+B('a_s1','SKIN &gt;','#3a6f8a')+B('a_h0','&lt; HAT','#7a4ae0')+B('a_h1','HAT &gt;','#7a4ae0')+'</div><div class=oc>VOTE FOR A LEVEL<br><span id=ovl></span><br>'+B('a_v0','&lt;','#2b88b8')+B('a_v1','&gt;','#2b88b8')+'</div><div class=oc style="flex:1;display:flex;flex-direction:column;min-height:0"><div id=och style="flex:1;overflow:auto;font-size:.9cqw"></div><input class="oi" id=oci2 maxlength=60 placeholder="TYPE + ENTER TO CHAT"></div></div></div><div style="text-align:center">'+B('olv','LEAVE ROOM','#c4155a')+B('oy','READY','#3aa335','font-size:1.5cqw')+B('og','START RACE','#f2e34a','color:#3a4a5a;font-size:1.5cqw')+'</div>';
+ol.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><div><div class=oh id=olt></div><div id=ols style="color:#7af"></div></div><div id=olc style="text-align:right"></div></div><div style="display:flex;gap:2cqw;flex:1;min-height:0;margin:1cqw 0"><div id=osl style="flex:1.2;overflow:auto"></div><div style="flex:1;display:flex;flex-direction:column;gap:.8cqw;min-height:0"><div class=oc>OUTFIT<br><span id=oou></span><br>'+B('a_s0','&lt; SKIN','#3a6f8a')+B('a_s1','SKIN &gt;','#3a6f8a')+B('a_h0','&lt; HAT','#7a4ae0')+B('a_h1','HAT &gt;','#7a4ae0')+'</div><div class=oc>VOTE FOR A LEVEL<br><span id=ovl></span><br><input class=oi id=ovnum type=number min=1 max=345 value=1 style=width:6cqw;text-align:center><button class=btn ob id=ovset style=background:#3aa335>SET LEVEL</button><br>'+B('a_v0','&lt;','#2b88b8')+B('a_v1','&gt;','#2b88b8')+'</div><div class=oc style="flex:1;display:flex;flex-direction:column;min-height:0"><div id=och style="flex:1;overflow:auto;font-size:.9cqw"></div><input class="oi" id=oci2 maxlength=60 placeholder="TYPE + ENTER TO CHAT"></div></div></div><div style="text-align:center">'+B('olv','LEAVE ROOM','#c4155a')+B('oy','READY','#3aa335','font-size:1.5cqw')+B('og','START RACE','#f2e34a','color:#3a4a5a;font-size:1.5cqw')+'</div>';
 w.appendChild(om);w.appendChild(ol);
 const g=i=>w.querySelector('#'+i),stat=t=>{g('os').textContent=t;g('ols').textContent=t};
 ['onm','oci','oci2'].forEach(i=>g(i).addEventListener('keydown',e=>e.stopPropagation()));
@@ -1350,15 +1351,15 @@ const pe=e=>{for(const id in pend)if(e.message&&e.message.endsWith(' '+id))pend[
 function probe(p,id,ms){return new Promise(res=>{let d=0;const fin=v=>{if(d)return;d=1;clearTimeout(t);delete pend[id];res(v)};pend[id]=fin;const c=p.connect(id,{reliable:true}),t=setTimeout(()=>{try{c.close()}catch(e){}fin(null)},ms);c.on('open',()=>c.send({t:'probe'}));c.on('data',x=>{if(x&&x.t=='info')fin({c,info:x,id})});c.on('error',()=>fin(null));c.on('close',()=>fin(null))})}
 async function scan(){const tp=NPR();tp.on('error',pe);if(!await opened(tp,8000)){stat('CANNOT REACH THE MATCH SERVER');try{tp.destroy()}catch(e){}return null}const r=await Promise.all(Array.from({length:NP},(_,i)=>probe(tp,'sodrush-pub-'+(i+1),4000)));return{tp,r:r.map((x,i)=>x&&{...x,i:i+1})}}
 function kill(){try{for(const k in conns)conns[k].close();conn&&conn.close();peer&&peer.destroy()}catch(e){}peer=conn=null;conns={};roster={};rl='';rnd=0;rdy=0;host=0;inRoom=0;chat=[];pod.style.display=wt.style.display='none';render()}
-const mine=()=>({sk:S.sk,hat:S.hat,vote,rdy,mx:mx()});
+const mine=()=>({pid:sodPlayerId(),sk:S.sk,hat:S.hat,vote,rdy,mx:mx()});
 function sendMe(){const o=mine();if(host){Object.assign(roster.H,o);push()}else{if(roster[me])Object.assign(roster[me],o);snd(conn,{t:'u',...o});render()}}
 function nameOk(){nm=(g('onm').value||'PLAYER').trim().toUpperCase().slice(0,10)||'PLAYER';try{localStorage.sodn=nm}catch(e){}return nm}
 async function hostAs(id,label,fail){kill();host=1;me='H';stat('CREATING ROOM...');await LD();peer=NPR(id);
 peer.on('open',()=>{roster.H={n:nameOk(),m:0,a:0,f:null,...mine()};rl=label;inRoom=1;open=1;addChat('ROOM OPEN - WAITING FOR PLAYERS')});
 peer.on('connection',c=>{
 c.on('data',d=>{if(!d)return;if(d.t=='probe'){snd(c,{t:'info',v:VER,n:Object.keys(roster).length,cap:CAP,rnd,host:roster.H&&roster.H.n});return}
-if(d.t=='hi'){if(roster[c.peer])return;if(d.v!==VER){snd(c,{t:'ver'});setTimeout(()=>c.close(),300);return}if(Object.keys(roster).length>=CAP||rnd){snd(c,{t:'full'});setTimeout(()=>c.close(),300);return}conns[c.peer]=c;{const u=CLN({x:{n:d.name||'PLAYER',sk:d.sk,hat:d.hat,vote:d.vote,mx:d.mx}}).x;roster[c.peer]={...u,n:u.n.toUpperCase()||'PLAYER',m:0,a:0,f:null,rdy:0}}ls[c.peer]=performance.now()+10000;say2(roster[c.peer].n+' JOINED');push();return}
-const p=roster[c.peer];if(!p)return;if(d.t=='u'){const u=CLN({x:d}).x;Object.assign(p,{sk:u.sk,hat:u.hat,vote:u.vote,rdy:u.rdy,mx:u.mx});push()}else if(d.t=='s'){p.m=+d.m||0;p.a=+d.a||0;ls[c.peer]=performance.now()}else if(d.t=='p'){ls[c.peer]=performance.now();gp(c.peer,d);bc({t:'p',id:c.peer,d:+d.d||0,y:+d.y||0,l:+d.l||0},c.peer)}else if(d.t=='d'){p.m=+d.m||0;p.f=p.m;p.a=0;push();chk()}else if(d.t=='c')say2(p.n+': '+String(d.x).slice(0,60));else if(d.t=='e'&&['🔥','👍','😂'].includes(d.e)){bc({t:'e',e:d.e,n:p.n},c.peer);say(d.e+' '+p.n)}});
+if(d.t=='hi'){if(roster[c.peer])return;if(d.v!==VER){snd(c,{t:'ver'});setTimeout(()=>c.close(),300);return}if(Object.keys(roster).length>=CAP||rnd){snd(c,{t:'full'});setTimeout(()=>c.close(),300);return}conns[c.peer]=c;{const u=CLN({x:{n:d.name||'PLAYER',sk:d.sk,hat:d.hat,vote:d.vote,mx:d.mx}}).x;roster[c.peer]={...u,pid:String(d.pid||''),n:u.n.toUpperCase()||'PLAYER',m:0,a:0,f:null,rdy:0}}ls[c.peer]=performance.now()+10000;say2(roster[c.peer].n+' JOINED');push();return}
+const p=roster[c.peer];if(!p)return;if(d.t=='u'){const u=CLN({x:d}).x;Object.assign(p,{pid:String(d.pid||p.pid||''),sk:u.sk,hat:u.hat,vote:u.vote,rdy:u.rdy,mx:u.mx});push()}else if(d.t=='s'){p.m=+d.m||0;p.a=+d.a||0;ls[c.peer]=performance.now()}else if(d.t=='p'){ls[c.peer]=performance.now();gp(c.peer,d);bc({t:'p',id:c.peer,d:+d.d||0,y:+d.y||0,l:+d.l||0},c.peer)}else if(d.t=='d'){p.m=+d.m||0;p.f=p.m;p.a=0;push();chk()}else if(d.t=='c')say2(p.n+': '+String(d.x).slice(0,60));else if(d.t=='e'&&['🔥','👍','😂'].includes(d.e)){bc({t:'e',e:d.e,n:p.n},c.peer);say(d.e+' '+p.n)}});
 c.on('close',()=>{const p=roster[c.peer];if(!p)return;delete roster[c.peer];delete conns[c.peer];say2(p.n+' LEFT');push();chk()})});
 peer.on('error',e=>{if(e.type=='unavailable-id'){fail?fail():stat('ROOM NAME TAKEN - TRY AGAIN')}else stat('ERROR: '+e.type)})}
 function hostPub(i){if(i>NP)return stat('ALL PUBLIC ROOMS ARE BUSY - TRY LATER');hostAs('sodrush-pub-'+i,'PUBLIC ROOM #'+i,()=>hostPub(i+1))}
@@ -1377,19 +1378,20 @@ g('orl').addEventListener('click',e=>{const i=e.target.dataset&&e.target.dataset
 g('olv').onclick=()=>{kill();stat('LEFT THE ROOM')};
 const cyc=(n,c,d,own)=>{for(let i=1;i<=n;i++){const x=(c+d*i+n*2)%n;if(own[x])return x}return c};
 ol.addEventListener('click',e=>{const a=e.target.dataset&&e.target.dataset.a;if(a){if(a=='k'){const id=e.target.dataset.id;snd(conns[id],{t:'kick'});setTimeout(()=>{try{conns[id].close()}catch(x){}},200)}return}
-const id=e.target.id||'';if(id.slice(0,2)!='a_')return;const k=id.slice(2);if(k[0]=='s')S.sk=cyc(SN.length,S.sk,k[1]=='1'?1:-1,S.un);else if(k[0]=='h')S.hat=cyc(HN.length,S.hat,k[1]=='1'?1:-1,S.uh);else vote=Math.max(1,Math.min(mx(),vote+(k[1]=='1'?1:-1)));rdy=0;sv();sendMe()});
+const id=e.target.id||'';if(id.slice(0,2)!='a_')return;const k=id.slice(2);if(k[0]=='s')S.sk=cyc(SN.length,S.sk,k[1]=='1'?1:-1,S.un);else if(k[0]=='h')S.hat=cyc(HN.length,S.hat,k[1]=='1'?1:-1,S.uh);else vote=Math.max(1,Math.min(MAXL,vote+(k[1]=='1'?1:-1)));rdy=0;sv();sendMe()});
+g('ovset').onclick=()=>{const n=Math.floor(Number(g('ovnum').value));if(!Number.isFinite(n)||n<1||n>MAXL){g('ovnum').value=vote;return}vote=n;rdy=0;sv();sendMe()};g('ovnum').addEventListener('keydown',e=>{if(e.key==='Enter')g('ovset').click()});
 g('oy').onclick=()=>{rdy=rdy?0:1;sendMe()};
 g('oci2').addEventListener('keydown',e=>{if(e.key!='Enter')return;const x=e.target.value.trim();e.target.value='';if(!x||!inRoom)return;if(host)say2(roster.H.n+': '+x);else snd(conn,{t:'c',x})});
-g('og').onclick=()=>{const ps=Object.values(roster);if(!host||ps.length<2||!ps.every(p=>p.rdy))return;const lim=Math.min(...ps.map(p=>p.mx||1)),t={};ps.forEach(p=>{const v=Math.min(p.vote||1,lim);t[v]=(t[v]||0)+1});const top=Math.max(...Object.values(t)),c=Object.keys(t).filter(k=>t[k]==top),lv=+c[Math.random()*c.length|0];ps.forEach(p=>{p.rdy=0;p.m=0;p.a=1;p.f=null});rdy=0;bc({t:'r',r:roster});bc({t:'go',sel:lv});go(lv)};
+g('og').onclick=()=>{const ps=Object.values(roster);if(!host||ps.length<2||!ps.every(p=>p.rdy))return;const t={};ps.forEach(p=>{const v=Math.max(1,Math.min(MAXL,p.vote||1));t[v]=(t[v]||0)+1});const top=Math.max(...Object.values(t)),c=Object.keys(t).filter(k=>t[k]===top).map(Number),hostVote=+(roster.H&&roster.H.vote||1),lv=c.includes(hostVote)?hostVote:Math.min(...c);ps.forEach(p=>{p.rdy=0;p.m=0;p.a=1;p.f=null});rdy=0;bc({t:'r',r:roster});bc({t:'go',sel:lv});go(lv)};
 let pre=null,okGo=0;function gp(id,d){if(id==me)return;const n=performance.now(),o=gh[id];d={d:+d.d||0,y:+d.y||0,l:+d.l||0};gh[id]={d:d.d,y:d.y,l:d.l,pd:o?o.d:d.d,pt:o?o.t:n-50,t:n,sy:o?o.sy:d.y}}
-function go(s){if(st!=='lobby'||!owned(locOf(s)))return;if(pre==null)pre=sel;gh={};if(host)for(const k in roster)ls[k]=performance.now()+10000;pod.style.display=wt.style.display='none';sel=Math.max(1,Math.min(s,MAXL));rnd=1;shown=0;rdy=0;open=0;render();okGo=1;try{play();tut=false}finally{okGo=0}}
+function go(s){if(st!=='lobby')return;if(pre==null)pre=sel;gh={};if(host)for(const k in roster)ls[k]=performance.now()+10000;pod.style.display=wt.style.display='none';sel=Math.max(1,Math.min(s,MAXL));rnd=1;shown=0;rdy=0;open=0;render();okGo=1;try{window.__mpForce=true;play();tut=false}finally{window.__mpForce=false;okGo=0}}
 function render(){if(rnd&&st!='lobby')open=0;om.style.display=open&&!inRoom?'flex':'none';ol.style.display=open&&inRoom?'flex':'none';
 g('orl').innerHTML=rooms.length&&!inRoom?rooms.map(r=>'<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:.2cqw solid #aac;padding:.4cqw 0"><span>PUBLIC ROOM #'+r.i+' - HOST '+esc(r.info.host||'?')+' - '+r.info.n+'/'+r.info.cap+(r.info.rnd?' (RACING)':'')+'</span>'+(r.info.n<r.info.cap&&!r.info.rnd?'<button class="btn ob" data-j='+r.i+' style="background:#3aa335">JOIN</button>':'')+'</div>').join(''):g('orl').innerHTML;
 if(!inRoom)return;const ids=Object.keys(roster),all=ids.length>1&&ids.every(k=>roster[k].rdy);
 g('olt').textContent=rl;g('olc').innerHTML=ids.length+'/'+CAP+' PLAYERS<br>'+(rl.startsWith('PRIVATE')?'SHARE THE CODE WITH FRIENDS':'ANYONE CAN JOIN');
 g('osl').innerHTML=Array.from({length:CAP},(_,i)=>{const k=ids[i],p=roster[k];if(!p)return '<div class=oc style="margin:.4cqw 0;height:7.6cqw;opacity:.5;display:flex;align-items:center">WAITING FOR PLAYER...</div>';return '<div class=oc style="margin:.4cqw 0;height:7.6cqw;display:flex;align-items:center;gap:1.2cqw;background:'+(k==me?'#d6e6f0':'#e8f0f4')+'"><canvas data-id="'+k+'" width=42 height=69 style="width:4cqw"></canvas><div style="flex:1">'+esc(p.n)+(k=='H'?' ★HOST':'')+(k==me?' (YOU)':'')+'<br><span style="font-size:.9cqw;color:#3a6f8a">'+(SN[p.sk]||'')+' / '+(HN[p.hat]||'')+'</span></div><div>VOTE L'+p.vote+'</div><div style="color:'+(p.rdy?'#2a2':'#c4155a')+'">'+(p.rdy?'READY':'...')+'</div>'+(host&&k!='H'?'<button class="btn ob" data-a=k data-id="'+k+'" style="background:#c4155a;font-size:.8cqw">KICK</button>':'')+'</div>'}).join('');
 g('osl').querySelectorAll('canvas').forEach(cv=>{const p=roster[cv.dataset.id],x=cv.getContext('2d');x.imageSmoothingEnabled=false;try{x.drawImage(SP[p.sk][0],0,15,42,54);hat(x,p.hat,0,15,3)}catch(e){}});
-g('oou').textContent=(SN[S.sk]||'')+' / '+(HN[S.hat]||'');g('ovl').textContent='LEVEL '+vote+' - '+LOC[locOf(vote)].n;g('oy').textContent=rdy?'UNREADY':'READY';g('oy').style.background=rdy?'#888':'#3aa335';
+g('oou').textContent=(SN[S.sk]||'')+' / '+(HN[S.hat]||'');g('ovl').textContent='LEVEL '+vote+' - '+LOC[locOf(vote)].n+' ('+(Object.values(roster).filter(p=>p.vote===vote).length)+' VOTE'+(Object.values(roster).filter(p=>p.vote===vote).length===1?'':'S')+')';g('ovnum').value=vote;g('ovnum').max=MAXL;g('oy').textContent=rdy?'UNREADY':'READY';g('oy').style.background=rdy?'#888':'#3aa335';
 const gb=g('og');gb.style.display=host?'inline-block':'none';gb.style.opacity=all?1:.45;
 const ch=g('och');ch.innerHTML=chat.map(esc).join('<br>');ch.scrollTop=ch.scrollHeight}
 function chk(){if(!rnd||shown)return;const ps=Object.values(roster);if(!ps.length||!ps.every(p=>p.f!=null))return;shown=1;rnd=0;const r=ps.slice().sort((a,b)=>b.f-a.f),won=roster[me]&&roster[me].f==r[0].f;say((won?'YOU WIN! ':'RACE OVER ')+r.map((p,i)=>(i+1)+'. '+p.n+' '+p.f+'M').join(' | '));showPod(r,won);render()}
@@ -3096,6 +3098,7 @@ window.__story={LV,SC_BEAT,SC_WAR};
 <script>
 /* ===== PLAYER NAME ===== */
 function nmv(){if(!S.nmSet)return 'SOD';let n=S.pname;if(!n){try{n=localStorage.sodn}catch(e){}}return n||'SOD'}
+function sodPlayerId(){try{let id=localStorage.sodpid;if(!id){id=(crypto&&crypto.randomUUID)?crypto.randomUUID():'sod-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);localStorage.sodpid=id}return id}catch(e){return 'sod-session-'+String(S.pname||'player').replace(/[^a-z0-9]/gi,'').toLowerCase()}}
 (function(){try{
 const inRm=()=>!!(window.__room&&window.__room());
 const applyNm=()=>{[PT.sod,PT.classic,PT.war].forEach(a=>{if(a)a[0]=nmv()})};
@@ -3460,13 +3463,57 @@ addEventListener('keydown',e=>{if(bx.style.display==='block'&&e.key==='Escape'){
 const grant=()=>{const pool=[],nc=Math.min(18,SN.length),nh=Math.min(18,HN.length);for(let i=1;i<nc;i++)if(!S.un[i])pool.push([0,i]);for(let i=1;i<nh;i++)if(!S.uh[i])pool.push([1,i]);
  if(!pool.length){S.seeds+=500;sv();try{ui()}catch(e){}say('WEEKLY TOP 3 REWARD: +500 SEEDS!');return}
  const [h,i]=pool[Math.random()*pool.length|0];if(h)S.uh[i]=1;else S.un[i]=1;sv();try{ui()}catch(e){}say('WEEKLY TOP 3 REWARD: '+(h?HN[i]+' HAT':SN[i]+' OUTFIT')+'!')};
-const claim=()=>{if(!data||!S.nmSet)return;const me=nmv();let c=S.lbc||0,n=0;(data.winners||[]).forEach(w=>{if(w.week>c&&w.names.includes(me)){c=w.week;n++}});if(n){S.lbc=c;sv();grant()}};
+const claim=()=>{if(!data||!S.nmSet)return;const me=nmv(),pid=sodPlayerId();let c=S.lbc||0,n=0;(data.winners||[]).forEach(w=>{if(w.week>c&&((w.ids||[]).includes(pid)||(w.names||[]).includes(me))){c=w.week;n++}});if(n){S.lbc=c;sv();grant()}};
 // send your best score (with your name) whenever it improves or your name changes
 let sent='';try{sent=localStorage.sodlb||''}catch(e){}
-const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,best:S.best,weekBest:wb,week:wkNow()})});if(r.ok){sent=k;try{localStorage.sodlb=k}catch(e){}}}catch(e){}};
+const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,weekBest:wb,week:wkNow()})});if(r.ok){sent=k;try{localStorage.sodlb=k}catch(e){}}}catch(e){}};
 let chk=0;
 setInterval(()=>{if(st==='lobby'||st==='over')send();
  if(st==='lobby'&&S.nmSet&&on()&&!chk&&!OVS.some(o=>$(o)&&$(o).style.display==='block')){chk=1;grab().catch(()=>{setTimeout(()=>{chk=0},60000)})}},3000);
 }catch(e){console.warn('leaderboard',e)}})();
 </script>
+
+<script>
+(()=>{
+  // A completed special run must stop its soundtrack, not leave it paused mid-track.
+  const stopTrack=e=>{if(!e)return;try{clearInterval(e._fade);e._fade=0;e.pause();e.currentTime=0;if(e._base!==undefined)e.volume=e._base}catch(_){}};
+  const stopRunMusic=()=>{
+    [window.__EA,window.__CM,window.minionsAudio].forEach(stopTrack);
+    try{[A,RA,PA,DA,BM1,BM2,KM].forEach(stopTrack)}catch(_){}
+  };
+  const _clearLvFinal=clearLv;
+  clearLv=function(){const special=!!evA;const result=_clearLvFinal.apply(this,arguments);if(special)stopRunMusic();return result};
+  const _overFinal=over;
+  over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
+
+  const GAME_VERSION='2026.11.22.3';
+  let updateLocked=false,checkBusy=false;
+  const lockUpdate=()=>{
+    if(updateLocked)return;updateLocked=true;
+    const veil=document.createElement('div');veil.id='sodrushUpdateLock';
+    veil.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#10151c;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box;font-family:Arial,sans-serif;';
+    veil.innerHTML='<div style="max-width:620px;border:4px solid #ffd23a;background:#17263a;padding:28px;box-shadow:8px 8px 0 #000"><div style="font-size:28px;font-weight:900;color:#ffd23a;margin-bottom:18px">UPDATE REQUIRED</div><div style="font-size:18px;line-height:1.6">A newer version of Sod Rush is available.<br>You must update before playing.</div><div style="font-size:14px;color:#9db4ca;margin:18px 0">YOUR VERSION: '+GAME_VERSION+'</div><div style="font-size:17px;line-height:1.7;color:#ffd23a">PC: press CTRL + F5 to force-refresh the game.<br>Mobile: close the game, then restart your browser or device.</div><div style="font-size:13px;color:#9db4ca;margin-top:16px">The game will stay locked until the latest version loads.</div><button id="sodrushUpdateRetry" style="margin-top:20px;padding:12px 22px;background:#3aa335;color:white;border:2px solid #fff;font-weight:bold;font-size:16px;cursor:pointer">CHECK AGAIN</button></div>';
+    document.body.appendChild(veil);
+    veil.querySelector('#sodrushUpdateRetry').onclick=()=>location.reload();
+  };
+  const checkLatest=async()=>{
+    if(checkBusy||updateLocked||!navigator.onLine)return;
+    checkBusy=true;
+    try{
+      const u=new URL(location.href);u.searchParams.set('_sodrush_version_check',String(Date.now()));
+      const r=await fetch(u.href,{cache:'no-store',credentials:'same-origin'});
+      if(!r.ok)throw new Error('version check unavailable');
+      const html=await r.text();
+      const doc=new DOMParser().parseFromString(html,'text/html');
+      const latest=doc.querySelector('meta[name="sodrush-version"]')?.content?.trim();
+      if(latest&&latest!==GAME_VERSION)lockUpdate();
+    }catch(_){/* Keep offline play available when the version endpoint cannot be reached. */}
+    finally{checkBusy=false}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>checkLatest(),{once:true});else checkLatest();
+  setInterval(checkLatest,60000);
+  addEventListener('online',checkLatest);
+})();
+</script>
+
 </body></html>
