@@ -4,9 +4,20 @@
    "name": "BAILEY",
    "best": 14053,
    "t": 1795356388644
+  },
+  {
+   "name": "BALIEYGOON",
+   "best": 516,
+   "t": 1795357854690
   }
  ],
- "weekly": [],
+ "weekly": [
+  {
+   "name": "BALIEYGOON",
+   "best": 516,
+   "t": 1795357854690
+  }
+ ],
  "winners": [],
  "week": 2968
 }
