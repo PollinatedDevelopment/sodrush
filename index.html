@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
-<meta name="sodrush-version" content="2026.11.22.14">
+<meta name="sodrush-version" content="2026.11.22.15">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -3509,7 +3509,8 @@ const grant=()=>{const pool=[],nc=Math.min(18,SN.length),nh=Math.min(18,HN.lengt
 const claim=()=>{if(!data||!S.nmSet)return;const me=nmv(),pid=sodPlayerId();let c=S.lbc||0,n=0;(data.winners||[]).forEach(w=>{if(w.week>c&&((w.ids||[]).includes(pid)||(w.names||[]).includes(me))){c=w.week;n++}});if(n){S.lbc=c;sv();grant()}};
 // send your best score (with your name) whenever it improves or your name changes
 let sent='';try{sent=localStorage.sodlb||''}catch(e){}
-const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,allTimeBest:S.best,weekBest:wb,weeklyBest:wb,week:wkNow()})});if(r.ok){sent=k;try{localStorage.sodlb=k}catch(e){}}}catch(e){}};
+let lbErrLast='',lbErrAt=0;
+const send=async()=>{if(!on()||!S.nmSet||inRm())return;const n=nmv(),pid=sodPlayerId(),wb=wbGet();if(!(S.best>0||wb>0))return;const k=pid+'|'+n+'|'+S.best+'|'+wb+'|'+wkNow();if(k===sent)return;try{const r=await fetch(LB_URL,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pid,name:n,best:S.best,allTimeBest:S.best,weekBest:wb,weeklyBest:wb,week:wkNow()})});let j={};try{j=await r.json()}catch(e){}if(r.ok&&j.ok!==false){sent=k;try{localStorage.sodlb=k}catch(e){}lbErrLast='';}else{const why=(j.error||('HTTP '+r.status))+(j.detail?': '+j.detail:'');if(why!==lbErrLast||Date.now()-lbErrAt>30000){console.warn('Sod Rush leaderboard submit failed:',r.status,j);lbErrLast=why;lbErrAt=Date.now();say('SCORE SAVE FAILED: '+why.slice(0,65));}}}catch(e){const why='NETWORK/CORS: '+(e&&e.message||'request failed');if(why!==lbErrLast||Date.now()-lbErrAt>30000){console.warn('Sod Rush leaderboard submit failed:',e);lbErrLast=why;lbErrAt=Date.now();say('SCORE SAVE FAILED: '+why.slice(0,65));}}};
 let chk=0;
 setInterval(()=>{if(st==='lobby'||st==='over')send();
  if(st==='lobby'&&S.nmSet&&on()&&!chk&&!OVS.some(o=>$(o)&&$(o).style.display==='block')){chk=1;grab().catch(()=>{setTimeout(()=>{chk=0},60000)})}},3000);
@@ -3529,7 +3530,7 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
   const _overFinal=over;
   over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
 
-  const GAME_VERSION='2026.11.22.14';
+  const GAME_VERSION='2026.11.22.15';
   let updateLocked=false,checkBusy=false,seasonBaseline=null;
   const seasonFingerprint=async()=>{
     // Include the weekly rotation and the published custom season file.
