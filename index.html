@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset=utf-8><title>Sod Rush</title>
 <meta name=description content="Sod Rush - a pixel-art endless runner with online multiplayer races.">
-<meta name="sodrush-version" content="2026.11.22.7">
+<meta name="sodrush-version" content="2026.11.22.8">
 <meta property=og:title content="Sod Rush"><meta property=og:description content="Race players around the world in this pixel-art runner!"><meta name=theme-color content="#10151c">
 <link rel=icon href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%B1%3C/text%3E%3C/svg%3E">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -1249,19 +1249,45 @@ $('pz').onclick=pauseG;$('rs').onclick=resumeG;$('pq').onclick=lobby;document.ad
 
 ['pointerdown','keydown'].forEach(e=>addEventListener(e,()=>mus()));
 const kh=s=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
-let kq=[],kz=[];
+let adminCodeBuffer='';
+let adminUnlocked=false;
+function openAdminPanel(){
+ if(!adminUnlocked)return;
+ let panel=document.getElementById('sodAdminPanel');
+ if(!panel){
+  panel=document.createElement('div');panel.id='sodAdminPanel';
+  panel.className='p card ov';
+  panel.style.cssText='z-index:99999;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,88vw);max-height:80vh;overflow:auto;padding:18px;background:#171923;border:3px solid #ffd23a;text-align:center';
+  panel.innerHTML='<div style="font-size:20px;color:#ffd23a;margin-bottom:8px">DEVELOPER PANEL</div><div style="font-size:10px;margin-bottom:14px;color:#aaa">SOD RUSH • ADMIN ACCESS</div><button id="adminFever" class="btn" style="display:block;width:100%;margin:7px 0;background:#b52b9b">ACTIVATE FEVER</button><button id="adminSeeds" class="btn" style="display:block;width:100%;margin:7px 0;background:#398d45">GIVE 1,000 SEEDS</button><button id="adminClose" class="btn" style="display:block;width:100%;margin:12px 0 0;background:#555">CLOSE</button>';
+  document.body.appendChild(panel);
+  panel.querySelector('#adminFever').onclick=()=>{if(window.__fevStart)window.__fevStart();else say('FEVER IS NOT AVAILABLE RIGHT NOW')};
+  panel.querySelector('#adminSeeds').onclick=()=>{gs+=1000;gsf=gs;S.seeds=gs;gsPaid=gs;sv();popGs();say('1,000 SEEDS ADDED')};
+  panel.querySelector('#adminClose').onclick=()=>panel.style.display='none';
+ }
+ panel.style.display='block';
+}
 addEventListener('keydown',e=>{
- if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||st!='lobby')return;
- const n=performance.now();
- if(kz.length&&n-kz[kz.length-1]>3000){kq=[];kz=[]}
- kq.push(e.code);kz.push(n);
- if(kq.length>10){kq.shift();kz.shift()}
- if(kq.length<10)return;
- if(kh('sr·'+kq.join('|'))!=='250zwn53jjm')return;
- kq=[];kz=[];
- S.lv=MAXL+1;S.ul=Array(NL).fill(1);S.un=Array(SN.length).fill(1);S.uh=Array(HN.length).fill(1);
- S.seeds=Math.max(S.seeds,999999);S.hp=0;S.un[0]=1;S.uh[0]=1;
- sel=MAXL;S.loc=locOf(sel);sv();ui();say('SECRET FOUND! ALL LEVELS + COSMETICS UNLOCKED');uiSnd('play');
+ if(e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
+ const target=e.target;
+ if(target&&(/INPUT|TEXTAREA|SELECT/.test(target.tagName)||target.isContentEditable))return;
+ if(e.key==='Enter'){
+  if(adminCodeBuffer==='sodbailey'){
+   adminUnlocked=true;adminCodeBuffer='';
+   S.lv=MAXL+1;S.ul=Array(NL).fill(1);S.un=Array(SN.length).fill(1);S.uh=Array(HN.length).fill(1);
+   S.seeds=Math.max(S.seeds,999999);S.hp=0;S.un[0]=1;S.uh[0]=1;
+   sel=MAXL;S.loc=locOf(sel);sv();ui();
+   say('SECRET FOUND! ALL CONTENT + DEVELOPER PANEL UNLOCKED');
+   uiSnd('play');openAdminPanel();
+  }else adminCodeBuffer='';
+  return;
+ }
+ if(e.key==='F2'){
+  if(adminUnlocked){const p=document.getElementById('sodAdminPanel');if(p&&p.style.display==='block')p.style.display='none';else openAdminPanel()}
+  return;
+ }
+ if(e.key.length===1&&/[a-z]/i.test(e.key)){
+  adminCodeBuffer=(adminCodeBuffer+e.key.toLowerCase()).slice(-9);
+ }else if(e.key!=='Shift')adminCodeBuffer='';
 });
 addEventListener('keydown',e=>{const k=e.key;if([' ','ArrowUp','ArrowDown'].includes(k))e.preventDefault();if(e.repeat)return;
 const kl=k.length==1?k.toLowerCase():k;if(k==' '||k=='ArrowUp'||kl==(S.kj||'w'))jump();if(k=='ArrowDown'||kl==(S.ks||'s'))slide();if(k=='Escape'&&st=='lobby'&&OVS.some(o=>$(o).style.display=='block')){OVS.forEach(o=>{if($(o).style.display=='block')sh(o,0)});return}if(k=='Escape'||k=='p'||k=='P')st=='paused'?resumeG():pauseG();if(k=='Enter'&&st=='over'&&$('stg').style.display!='block'&&$('mp').style.display!='block'&&$('cu').style.display!='block'){e.preventDefault();restartLevel();return}if(k=='Enter'&&st=='lobby'&&$('stg').style.display!='block'&&$('mp').style.display!='block'&&$('cu').style.display!='block')play()});
@@ -1323,7 +1349,7 @@ connect(id){const cid=Math.random().toString(36).slice(2,10)+Date.now().toString
 reconnect(){if(this.destroyed||this.ws)return;this.want=this.id||this.want;this.dial()}
 dropAll(){const cs=Object.values(this.conns);this.conns={};cs.forEach(c=>{c.open=false;c.closed=true;c.emit('close')})}
 destroy(){if(this.destroyed)return;this.destroyed=true;clearInterval(this.hb);const ws=this.ws;this.ws=null;this.dropAll();try{ws&&ws.close()}catch(e){}}}
-const VER='2026.11.22.7',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
+const VER='2026.11.22.8',ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'turn:eu-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'},{urls:'turn:us-0.turn.peerjs.com:3478',username:'peerjs',credential:'peerjsp'}],NPR=id=>{const p=new RPeer(id);p.on('disconnected',()=>setTimeout(()=>{try{if(!p.destroyed)p.reconnect()}catch(e){}},1500));return p},
 CLN=r=>{const o={};for(const k in r){const p=r[k]||{};o[k]={n:String(p.n==null?'':p.n).slice(0,10),m:+p.m||0,a:+p.a||0,f:p.f==null?null:(+p.f||0),sk:Math.max(0,Math.min(SN.length-1,p.sk|0)),hat:Math.max(0,Math.min(HN.length-1,p.hat|0)),vote:Math.max(1,p.vote|0||1),rdy:p.rdy?1:0,mx:Math.max(1,p.mx|0||1)}}return o},
 CAP=4,NP=16,mx=()=>MAXL,esc=s=>String(s).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';');
 let nm=(()=>{try{return localStorage.sodn}catch(e){}})()||'PLAYER'+(10+Math.random()*89|0);
@@ -3487,7 +3513,7 @@ setInterval(()=>{if(st==='lobby'||st==='over')send();
   const _overFinal=over;
   over=function(){const special=!!(rnd||endOn);const result=_overFinal.apply(this,arguments);if(special)stopRunMusic();return result};
 
-  const GAME_VERSION='2026.11.22.7';
+  const GAME_VERSION='2026.11.22.8';
   let updateLocked=false,checkBusy=false,seasonBaseline=null;
   const seasonFingerprint=async()=>{
     // Include the weekly rotation and the published custom season file.
