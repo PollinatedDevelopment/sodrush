@@ -3254,17 +3254,17 @@ S.ug=S.ug||{};
 if(S.ug.v!==1){if(S.lv>1||S.best>0||S.seeds>40){S.ug.t=1;S.ug.w=1;S.ug.ts=1;S.ug.ws=1}S.ug.v=1;sv()}
 const U={t:()=>!!S.ug.t,w:()=>!!S.ug.w};
 const FEAT={
- t:{name:'TUTORIAL COMPLETE!',sub:'YOU UNLOCKED FOUR NEW LOBBY FEATURES',items:[
+ t:{name:'TUTORIAL COMPLETE!',sub:'YOU UNLOCKED FIVE NEW LOBBY FEATURES',items:[
   {k:'mud',ic:'🛍',n:'SHOP',d:'SPEND SEEDS ON NEW OUTFITS AND HATS.',tip:'PICK AN ITEM, THEN BUY IT. SEEDS COME FROM EVERY RUN.',wait:'shop'},
   {k:'drb',ic:'👗',n:'DRESSING ROOM',d:'WEAR ANY OUTFIT OR HAT YOU OWN.',tip:'TAP AN OUTFIT OR HAT, THEN SELECT. SOME LOOKS BOOST YOUR SEED BONUS.',wait:'cu'},
   {k:'mapb',ic:'🗺',n:'LEVELS',d:'REPLAY CLEARED LEVELS AND OPEN NEW AREAS.',tip:'NEW AREAS COST SEEDS. FINISH WORLD 1 TO KEEP GOING.',wait:'mp'},
-  {k:'pb',ic:'👤',n:'PROFILE',d:'YOUR NAME, RANK AND STATS.',tip:'RANK UP BY RUNNING. YOUR NAME SHOWS ONLINE.',wait:'prf'}]},
- w:{name:'WORLD 1 CLEARED!',sub:'THE BOSS IS DOWN. FIVE MORE FEATURES ARE OPEN',items:[
+  {k:'pb',ic:'👤',n:'PROFILE',d:'YOUR NAME, RANK AND STATS.',tip:'RANK UP BY RUNNING. YOUR NAME SHOWS ONLINE.',wait:'prf'},
+  {k:'ob',ic:'🌐',n:'MULTIPLAYER',d:'RACE OTHER PLAYERS ONLINE.',tip:null}]},
+ w:{name:'WORLD 1 CLEARED!',sub:'THE BOSS IS DOWN. FOUR MORE FEATURES ARE OPEN',items:[
   {k:'evb',ic:'📅',n:'EVENTS',d:'LIMITED-TIME CHALLENGES WITH SPECIAL REWARDS.',tip:'EACH EVENT HAS GOALS. CLEAR THEM FOR EVENT POINTS.',wait:'evm'},
   {k:'mib',ic:'🎯',n:'MISSIONS',d:'DAILY GOALS AND PORTAL CHALLENGES.',tip:'FINISH MISSIONS FOR SEEDS AND TOKENS.',wait:'mi'},
   {k:'skb',ic:'⚡',n:'SKILLS',d:'PERMANENT UPGRADES. HIGHER LEVELS NEED STORY PROGRESS.',tip:'SKILLS COST A LOT. FULL MAX COMES IN THE LAST DISTRICT.',wait:'skO'},
-  {k:'eb',ic:'♾',n:'ENDLESS',d:'RUN FOREVER AND CHASE A HIGH SCORE.',tip:null},
-  {k:'ob',ic:'🌐',n:'MULTIPLAYER',d:'RACE OTHER PLAYERS ONLINE.',tip:null}]}};
+  {k:'eb',ic:'♾',n:'ENDLESS',d:'RUN FOREVER AND CHASE A HIGH SCORE.',tip:null}]}};
 const btnFor=k=>{const byId=$$(k);if(byId)return byId;const T={eb:'ENDLESS',pb:'PROFILE',ob:'MULTIPLAYER'}[k];return [...document.querySelectorAll('#lob button')].find(b=>b.textContent.replace(/\s+/g,' ').trim().toUpperCase().startsWith(T))||null};
 const tierOf=k=>FEAT.t.items.some(i=>i.k===k)?'t':'w';
 const lockMsg=t=>t==='t'?'LOCKED: FINISH THE TUTORIAL FIRST':'LOCKED: BEAT THE WORLD 1 BOSS (LEVEL '+PER+')';
@@ -3277,8 +3277,8 @@ function applyLocks(){{const evc=$$('evc');if(evc){const lk=!U.w();evc.classList
 // journey tracker in the lobby
 const jny=document.createElement('div');jny.id='jny';$$('lob').appendChild(jny);
 function jnyUpdate(){let h='';
- if(!U.t())h='<span class=jn>FIRST GOAL</span><br>FINISH THE TUTORIAL RUN.<br>UNLOCKS: SHOP • LEVELS • DRESSING ROOM • PROFILE';
- else if(!U.w()){const n=Math.max(0,Math.min(S.lv-1,PER));h='<span class=jn>WORLD 1: '+n+' / '+PER+' LEVELS</span><div class=jb><i style="width:'+(n/PER*100)+'%"></i></div>BEAT THE BOSS TO UNLOCK: EVENTS • MISSIONS • SKILLS • ENDLESS • MULTIPLAYER'}
+ if(!U.t())h='<span class=jn>FIRST GOAL</span><br>FINISH THE TUTORIAL RUN.<br>UNLOCKS: SHOP • LEVELS • DRESSING ROOM • PROFILE • MULTIPLAYER';
+ else if(!U.w()){const n=Math.max(0,Math.min(S.lv-1,PER));h='<span class=jn>WORLD 1: '+n+' / '+PER+' LEVELS</span><div class=jb><i style="width:'+(n/PER*100)+'%"></i></div>BEAT THE BOSS TO UNLOCK: EVENTS • MISSIONS • SKILLS • ENDLESS'}
  else if(S.lv>MAXL)h='<span class=jn>ALL '+MAXL+' LEVELS CLEARED!</span><div class=jb><i style=width:100%></i></div>REPLAY ANY LEVEL OR TRY ENDLESS';else{const lv=Math.min(S.lv,MAXL),li=locOf(lv),w=Math.floor((lv-1)/PER)+1,nm=LOC[li]?LOC[li].n:'';h='<span class=jn>NEXT: LEVEL '+lv+' • '+nm.toUpperCase()+'</span><div class=jb><i style="width:'+Math.min(100,(lv-1)/MAXL*100)+'%"></i></div>'+(owned(li)||lv<=1?'':'AREA COSTS 🌱'+(COSTL[li]!=null?COSTL[li]:'?'))}
  if(jny._h!==h){jny._h=h;jny.innerHTML=h}
  jny.style.display=(st==='lobby'&&!tour&&!cardOn&&$$('lob').style.display!=='none'&&h&&!(U.w()&&!h))?'block':'none'}
