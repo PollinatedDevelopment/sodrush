@@ -172,8 +172,8 @@ html #evm.card{background:transparent!important;-webkit-backdrop-filter:none!imp
 
 <div id=cu class="p card ov" style="left:0;top:0;width:100%;height:100%;padding:0;overflow:hidden;--tf:translate(0,0);border:none;box-shadow:none;background:linear-gradient(#0b1230,#241048 55%,#10151c)">
 <div style="position:absolute;left:2cqw;right:2cqw;top:1.6cqw;height:5cqw;display:flex;align-items:center;justify-content:space-between">
- <div style="display:flex;align-items:center;gap:1.4cqw"><button class=btn id=cx style="margin:0;background:#556;padding:.9cqw 1.4cqw;font-size:1.1cqw">&lt; BACK</button><div style="white-space:nowrap;font-size:2cqw;color:#ffd23a;text-shadow:.25cqw .25cqw #000">DRESSING ROOM</div></div>
- <div style="display:flex;align-items:center;gap:1cqw"><div id=cs style="white-space:nowrap;font-size:1cqw;color:#e8742a"></div><button class=btn id=t0 style="margin:0;padding:.8cqw 1.2cqw;font-size:1cqw">OUTFITS</button><button class=btn id=t1 style="margin:0;padding:.8cqw 1.2cqw;font-size:1cqw">HATS</button></div>
+ <div style="display:flex;align-items:center;gap:1.4cqw"><button class=btn id=cx style="margin:0;background:#556;padding:.9cqw 1.4cqw;font-size:1.1cqw">&lt; BACK</button><div style="white-space:nowrap;margin-right:1.4cqw;font-size:2cqw;color:#ffd23a;text-shadow:.25cqw .25cqw #000">DRESSING ROOM</div></div>
+ <div style="display:flex;align-items:center;gap:1cqw"><div id=cs style="white-space:nowrap;margin-left:1cqw;font-size:1cqw;color:#e8742a"></div><button class=btn id=t0 style="margin:0;padding:.8cqw 1.2cqw;font-size:1cqw">OUTFITS</button><button class=btn id=t1 style="margin:0;padding:.8cqw 1.2cqw;font-size:1cqw">HATS</button></div>
 </div>
 <div style="position:absolute;left:50%;top:7.2cqw;transform:translateX(-50%)">
  <canvas id=pv width=160 height=120 style="height:30cqw;width:auto;aspect-ratio:4/3;image-rendering:pixelated;display:block;border:.3cqw solid var(--edge)"></canvas>
@@ -205,7 +205,7 @@ html #evm.card{background:transparent!important;-webkit-backdrop-filter:none!imp
 <div id=objectiveBanner></div><div id=fbt></div><div id=ld class=p style="display:none;position:absolute;inset:0;width:100%;height:100%;z-index:1000000;background:transparent;text-align:center;pointer-events:all;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;text-shadow:.3cqw .3cqw #000"><div style="color:#ffd23a;font-size:2.6cqw">SOD RUSH</div><div id=ldt style="color:#ffd23a;margin-top:2cqw"></div><div id=lds style="margin-top:1cqw"></div><div style="position:absolute;left:26%;bottom:5%;top:auto;margin:0;box-sizing:border-box;width:48%;height:1.2cqw;border:.25cqw solid #ffd23a;padding:.2cqw;background:#0008"><div id=ldbar style="height:100%;width:0;background:#ffd23a"></div></div></div>
 </div></div>
 <script>
-const AB={district:'audio/district.mp3',run:'audio/run.mp3',lobby:'audio/lobby.mp3',shop:'audio/shop.mp3',boss1:'audio/boss1.mp3',boss2:'audio/boss2.mp3',minions:'audio/minions.mp3',portal:'audio/portal.mp3',dressing:'audio/dressing.mp3',king:'audio/king.mp3'};
+const AB={district:'audio/district.mp3',run:'audio/run.mp3',lobby:'audio/lobby.mp3',shop:'audio/shop.mp3',boss1:'audio/boss1.mp3',boss2:'audio/boss2.mp3',minions:'audio/minions.mp3',portal:'audio/portal.mp3',dressing:'audio/dressing.mp3',king:'audio/king.mp3',anniversary:'audio/anniversary.mp3',fever:'audio/fever.mp3'};
 let evA=0,evLoc=0,evIdx=0,chal=null,fromPortal=0,prevSel=0,prevLoc=0,runTrack='';
 let loadFrac=0,loadDone=0,loadMissing=[];
 function setRunTrack(){const want=chal?'portal':((evA?evLoc:S.loc)>=13?'district':'run');if(runTrack!==want){runTrack=want;const n=chal?PA:(want==='district'?DA:RA);if(n!==A){A.pause();A=n;try{A.currentTime=0}catch(e){}}A.volume=S.vol}}
@@ -1618,7 +1618,7 @@ function drawShp(){const c=spv.getContext('2d');c.imageSmoothingEnabled=false;co
  c.fillStyle='#8a6a2a';c.beginPath();c.ellipse(32,52,20,3,0,0,7);c.fill();c.fillStyle='#caa24a';c.beginPath();c.ellipse(32,50,20,4,0,0,7);c.fill();
  const o={sx:1,sy:1,tx:0,ty:0,r:0};idleAnim(o,sk);drawSod(c,18,12,2,(t%220)<7?1:0,sk,ht,o)}
 // radio: pick a game track and watch your outfit vibe to it
-const RD=new Audio(),STN=[['LOBBY','lobby'],['RUN','run'],['SHOP','shop'],['DRESSING ROOM','dressing'],['BOSS 1','boss1'],['PORTAL','portal'],['MINIONS','minions'],['BOSS 2','boss2'],['DISTRICT','district'],['KING','king']];RD.loop=true;RD.preload='auto';
+const RD=new Audio(),STN=[['LOBBY','lobby'],['RUN','run'],['SHOP','shop'],['DRESSING ROOM','dressing'],['BOSS 1','boss1'],['PORTAL','portal'],['MINIONS','minions'],['BOSS 2','boss2'],['DISTRICT','district'],['KING','king'],['ANNIVERSARY','anniversary'],['FEVER','fever']];RD.loop=true;RD.preload='auto';
 let rI=0,rOn=0,an=null,fd=null;
 const rd=document.createElement('div');rd.innerHTML='<div id=rdo class="p card ov" style="width:42cqw;padding:2cqw;text-align:center;box-sizing:border-box"><div style="font-size:2.2cqw;color:#7a4ae0;margin-bottom:1cqw">RADIO</div><canvas id=radc class=cv width=96 height=54 style="box-sizing:border-box;margin:0 auto"></canvas><div style="display:flex;align-items:center;justify-content:center;gap:.8cqw;margin:1cqw 0;width:100%;box-sizing:border-box"><button class=btn id=rpv style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw;flex:0 0 auto;min-width:0;width:auto">&lt;</button><div id=rst style="flex:1;min-width:0;text-align:center;font-size:1.3cqw"></div><button class=btn id=rnx style="margin:0;padding:.7cqw 1.1cqw;font-size:1.1cqw;flex:0 0 auto;min-width:0;width:auto">&gt;</button></div><button class=btn id=rpl style="background:#7a4ae0">PLAY RADIO</button><button class=btn id=rbk style="background:#556">BACK</button></div>';
 $('w').appendChild(rd.firstChild);OVS.push('rdo');
@@ -2157,7 +2157,7 @@ const MU_T=[120,100,180,150,130],MU_P=[900,700,1200,1000,800];X2.mw=X2.mw||[];X2
 const newRs=()=>({cb:0,lt:0,pm:1,mag:0,f:1,pl:[],pk:750,st:500,sg:0,mut:-1});
 let rs=newRs(),endOn=0,endAsk=0,tacc=0,cdOn=0,cdT=0;
 const cmul=()=>1+Math.min(10,Math.floor(rs.cb/5))*.1;
-const mult=()=>cmul()*rs.pm*(1+(rs.mut>=0?MU[rs.mut][2]:0));
+const mult=()=>cmul()*rs.pm*(1+(rs.mut>=0?MU[rs.mut][2]:0))*(window.__fev?2:1);
 const ban=mk('left:50%;top:18%;transform:translateX(-50%);font-size:1.8cqw;color:#ffd23a;text-shadow:.25cqw .25cqw #000;display:none;z-index:6;pointer-events:none;white-space:nowrap');let bt=0;
 function flash(s,c){ban.textContent=s;ban.style.color=c||'#ffd23a';ban.style.display='block';ban.classList.remove('tpop');void ban.offsetWidth;ban.classList.add('tpop');clearTimeout(bt);bt=setTimeout(()=>ban.style.display='none',1800)}
 function storm(){for(let i=0;i<20;i++)sd.push({x:262+Math.random()*150,y:-Math.random()*140,vy:1.4+Math.random()*1.6,rain:1,from:0,type:i%7==6?1:3});flash('SEED STORM!','#7aff9a');tone(520,1040,.25,'triangle',.1)}
@@ -2204,7 +2204,7 @@ upd=function(){
  if(mf-rs.lt>130)rs.cb=0;
  const d=gsf-g0;if(d>0){const m=mult();if(m>1){gsf+=d*(m-1);gs=Math.floor(gsf)}}
  if(st!=='run')return;
- const mgl=Math.max(rs.mag||0,rs.mut==4?2:0);if(mgl){const r=50+20*(mgl-1),r2=r*r;for(const s of sd){if(s.g)continue;const dx=46-s.x,dy=py+8-s.y;if(dx*dx+dy*dy<r2){s.x+=dx*.22;s.y+=dy*.22}}}
+ const mgl=Math.max(rs.mag||0,rs.mut==4?2:0,window.__fev?2:0);if(mgl){const r=50+20*(mgl-1),r2=r*r;for(const s of sd){if(s.g)continue;const dx=46-s.x,dy=py+8-s.y;if(dx*dx+dy*dy<r2){s.x+=dx*.22;s.y+=dy*.22}}}
  if(!bossS&&mf>=rs.st){rs.st=mf+900;storm()}
  if(endOn){const sg=Math.floor(dist/4000);if(sg!==rs.sg){rs.sg=sg;const l=[...Array(NL).keys()].filter(i=>owned(i)&&i!==S.loc);if(sg>0&&l.length){S.loc=l[Math.random()*l.length|0];flash('ENTERING '+LOC[S.loc].n,'#7ee8ff')}}}
  if(!chal&&!evA&&!bossS&&dist/10>=rs.pk)draft();
@@ -2606,13 +2606,23 @@ const TT=[0,2,1,1,2,0,1,1,1,0,0];
 const TN=[['NEON TABBY','COSMIC CALICO','SHADOW PANTHER'],['CHROME BOT','RUST-O-MATIC','CIRCUIT SPRITE'],['SPORE LORD','TOADSTOOL TOM','GLOW CAP'],['GREEN ZORP','MOON MARTIAN','STAR DRIFTER'],['IRON GUARD','GOLDEN PALADIN','FROST KNIGHT'],['POND PRINCE','TREE HOPPER','TOXIC TOAD'],['IMP INFERNO','LAVA FIEND','VOID IMP'],['STAR WIZARD','STORM MAGE','ROSE SORCERER'],['SHEET SPOOK','MIST WRAITH','CANDY GHOST'],["JACK O'LANTERN",'GHOST GOURD','CANDY CORN']];
 const HUE=[28,205,8,125,215,95,355,262,185,24];
 const hx=(h,s,l)=>{h=((h%360)+360)%360;s/=100;l/=100;const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return '#'+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join('')};
-const pal=(h,L)=>({d:hx(h,48,L),D:hx(h,48,L-16),a:hx(h+40,70,L-4),c:hx(h+180,55,L+6),e:hx(h+95,90,66),b:hx(h+205,52,L-14),B:hx(h+205,52,L-26)});
+const pal=(h,L,s=48)=>({d:hx(h,s,L),D:hx(h,s,L-16),a:hx(h+40,Math.min(100,s+22),L-4),c:hx(h+180,s+7,L+6),e:hx(h+95,90,66),b:hx(h+205,s+4,L-14),B:hx(h+205,s+4,L-26)});
 const grid=t=>[...HD[t].map(mir),...(TT[t]==0?BODY.slice(11):TOR[TT[t]].map(mir))];
 /*SPR-END*/
 const P0=SN.length,FREE=P0+30;
 window.SPASS={P0,FREE};
 for(let t=0;t<10;t++)for(let v=0;v<3;v++){const p=pal(HUE[t]+[0,140,-95][v],[56,50,38][v]);SN.push(TN[t][v]);COST.push(0);SEED_BONUS.push(.7);{const ix=SN.length-1;PAL[ix]=p;SP[ix]=LEG.map(l=>mkSprite([...grid(t),...l],p))}}
 {const p={d:'#b5763a',D:'#8a5224',a:'#ff7a1a',c:'#444',b:'#2f6bd1',B:'#1d4496'};SN.push('SEASON SCOUT');COST.push(0);SEED_BONUS.push(.5);const ix=SN.length-1;PAL[ix]=p;SP[ix]=LEG.map(l=>mkSprite([...grid(10),...l],p))}
+const TN2=[['SNOW LEOPARD','SIAMESE SPARK','LAVA LYNX'],['GOLD DROID','ICE MECH','NEON BOT'],['FLY AGARIC','MOSS CAP','FROST SHROOM'],['PINK GLORP','DEEP DWELLER','SOLAR ZORP'],['ROYAL GUARD','ONYX KNIGHT','EMBER KNIGHT'],['TREE FROG','POISON DART','SWAMP KING'],['ICE IMP','SHADOW IMP','CANDY IMP'],['SUN WIZARD','NIGHT MAGE','MINT SORCERER'],['GOLD GHOST','SHY SPOOK','ICE WRAITH'],['SPICE GOURD','MOON PUMPKIN','BLUE GOURD']];
+const P1=FREE+1;
+for(let t=0;t<10;t++)for(let v=0;v<3;v++){const p=pal(HUE[t]+[60,200,-40][v],[62,46,30][v]);SN.push(TN2[t][v]);COST.push(0);SEED_BONUS.push(.75);{const ix=SN.length-1;PAL[ix]=p;SP[ix]=LEG.map(l=>mkSprite([...grid(t),...l],p))}}
+const TN3=[['TIGER BLAZE','NEON LYNX','CHERRY PANTHER'],['LASER BOT','TURBO DROID','PIXEL MECH'],['RAVE SHROOM','BERRY CAP','TOXIC FUNGUS'],['PLASMA ZORP','COMET KID','GAMMA GREEN'],['CRIMSON KNIGHT','SOLAR PALADIN','COBALT GUARD'],['NEON TREEFROG','LIME LEAPER','MAGMA TOAD'],['FIRE IMP','TOXIC IMP','BLAZE FIEND'],['FLARE WIZARD','AURORA MAGE','RUBY SORCERER'],['NEON SPOOK','LASER GHOST','FLARE WRAITH'],['BLAZE GOURD','ACID PUMPKIN','PLASMA GOURD']];
+const TN4=[['ASH TABBY','DUSTY CALICO','SMOKE PANTHER'],['RUSTY BOT','CLAY DROID','FOG MECH'],['MOSSY CAP','PALE SHROOM','CLAY FUNGUS'],['SLATE ZORP','DUST MARTIAN','MIST DRIFTER'],['STONE KNIGHT','PEWTER PALADIN','FOG GUARD'],['MARSH FROG','CLAY TOAD','MUD HOPPER'],['ASH IMP','SOOT FIEND','DUSK IMP'],['FOG WIZARD','DUSK MAGE','SAGE SORCERER'],['ASH GHOST','FOG SPOOK','DUST WRAITH'],['HARVEST GOURD','DUSTY PUMPKIN','SAGE GOURD']];
+const TN5=[['SUNNY TABBY','MINT CALICO','CLOUD PANTHER'],['CANDY BOT','SKY DROID','BUBBLE MECH'],['SUGAR SHROOM','PEACH CAP','LILAC FUNGUS'],['BUBBLE ZORP','CLOUD MARTIAN','PASTEL DRIFTER'],['IVORY KNIGHT','SKY PALADIN','ROSE GUARD'],['MINT FROG','PEACH TOAD','SKY HOPPER'],['CANDY FIEND','SUGAR IMP','CLOUD IMP'],['DAWN WIZARD','CLOUD MAGE','LILAC SORCERER'],['MINT GHOST','PEACH SPOOK','SKY WRAITH'],['SUGAR GOURD','PEACH PUMPKIN','LILAC GOURD']];
+const XTN=[TN3,TN4,TN5],XH=[[30,105,235],[-15,160,290],[85,225,-70]],XL=[[58,44,34],[52,60,42],[66,50,40]],XS=[78,28,62],XB=[.8,.85,.9];
+for(let b=0;b<3;b++)for(let t=0;t<10;t++)for(let v=0;v<3;v++){const p=pal(HUE[t]+XH[b][v],XL[b][v],XS[b]);SN.push(XTN[b][t][v]);COST.push(0);SEED_BONUS.push(XB[b]);{const ix=SN.length-1;PAL[ix]=p;SP[ix]=LEG.map(l=>mkSprite([...grid(t),...l],p))}}
+const VAULT=[...Array.from({length:30},(_,k)=>P0+k),...Array.from({length:120},(_,k)=>P1+k)];
+window.SPASS.P1=P1;
 for(let k=0;k<SN.length;k++)if(!SP[k]){SP[k]=SP[0];PAL[k]=PAL[k]||PAL[0]}
 while(S.un.length<SN.length)S.un.push(0);
 
@@ -2622,11 +2632,23 @@ const THEMES=[
  {n:'JELLY JUNGLE',ic:'\u{1F98E}',c:'#3ac060',t:'WILD MIX! 1.25X METERS \u2022 1.5X SEEDS',m:1.25,s:1.5},
  {n:'CLOCKWORK CITY',ic:'\u2699\uFE0F',c:'#e0a030',t:'FULL STEAM! METERS COUNT 1.75X',m:1.75,s:.75},
  {n:'SUNKEN ARCADE',ic:'\u{1F419}',c:'#2aa0b8',t:'DEEP DIVE! 1.25X METERS \u2022 1.25X SEEDS',m:1.25,s:1.25},
- {n:'CANDY CIRCUIT',ic:'\u{1F36C}',c:'#e0509a',t:'SUGAR RUSH! METERS COUNT 2X',m:2,s:.5}];
+ {n:'CANDY CIRCUIT',ic:'\u{1F36C}',c:'#e0509a',t:'SUGAR RUSH! METERS COUNT 2X',m:2,s:.5},
+ {n:'HAUNTED HIGHWAY',ic:'\u{1F383}',c:'#ff8a1a',t:'SPOOKY SPRINT! 1.5X METERS \u2022 1.25X SEEDS',m:1.5,s:1.25},
+ {n:'GOLDEN HARVEST',ic:'\u{1F33E}',c:'#e8c030',t:'BIG HARVEST! SEEDS COUNT 2.5X',m:.75,s:2.5},
+ {n:'VOLCANO VALLEY',ic:'\u{1F30B}',c:'#f05a3a',t:'HOT FOOT! METERS COUNT 1.75X',m:1.75,s:1},
+ {n:'CRYSTAL CAVERN',ic:'\u{1F48E}',c:'#7ae0e8',t:'GEM RUSH! 1.25X METERS \u2022 1.75X SEEDS',m:1.25,s:1.75},
+ {n:'STORM SURGE',ic:'\u26A1',c:'#f0e040',t:'LIGHTNING DASH! METERS COUNT 2X',m:2,s:.75},
+ {n:'MOSSY MEADOW',ic:'\u{1F33F}',c:'#7ad060',t:'LUSH FIELDS! SEEDS COUNT 1.5X',m:1,s:1.5},
+ {n:'ROCKET RALLY',ic:'\u{1F3C1}',c:'#f04a4a',t:'PIT STOP! 1.25X METERS \u2022 2X SEEDS',m:1.25,s:2},
+ {n:'DESERT DASH',ic:'\u{1F335}',c:'#e0b070',t:'DUSTY TRAIL! 1.75X METERS \u2022 1.25X SEEDS',m:1.75,s:1.25},
+ {n:'MIDNIGHT MARKET',ic:'\u{1F319}',c:'#6a5ae0',t:'NIGHT SHOPPING! SEEDS COUNT 2X',m:1,s:2},
+ {n:'PIXEL PARTY',ic:'\u{1F389}',c:'#ff6ad0',t:'PARTY TIME! 1.5X METERS \u2022 1.5X SEEDS',m:1.5,s:1.5}];
 const PRICE=4000,XPT=120,wk=()=>Math.floor((Date.now()/864e5+4)/7);
 const rnd=s=>()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
 // the season theme and the 3 rotation costumes (always 3 different bodies) are picked at random from the week number, so everyone sees the same ones
-function season(w){const r=rnd(w*7919+13),th=THEMES[Math.floor(r()*THEMES.length)],ts=[0,1,2,3,4,5,6,7,8,9];for(let i=9;i>0;i--){const j=Math.floor(r()*(i+1));[ts[i],ts[j]]=[ts[j],ts[i]]}return{th,rot:ts.slice(0,3).map(t=>P0+t*3+Math.floor(r()*3))}}
+// theme for week w = previous week's theme + a random step of 1..N-1, so the same season can never run two weeks in a row (same result for everyone)
+const _thC=[0];function themeIdx(w){w=Math.max(0,w|0);for(let k=_thC.length;k<=w;k++)_thC[k]=(_thC[k-1]+1+Math.floor(rnd(k*104729+7)()*(THEMES.length-1)))%THEMES.length;return _thC[w]}
+function season(w){const r=rnd(w*7919+13),th=(r(),THEMES[themeIdx(w)]),ts=[0,1,2,3,4,5,6,7,8,9];for(let i=9;i>0;i--){const j=Math.floor(r()*(i+1));[ts[i],ts[j]]=[ts[j],ts[i]]}return{th,rot:ts.slice(0,3).map(t=>{const v=Math.floor(r()*15);if(v<3)return P0+t*3+v;const q=v-3;return P1+Math.floor(q/3)*30+t*3+q%3})}}
 const blank=()=>({w:wk(),xp:0,fc:{},pc:{},pend:0,pt:0});
 S.sp=S.sp||blank();
 const sync=()=>{if(S.sp.w!==wk())S.sp=blank()};
@@ -2639,32 +2661,35 @@ setInterval(()=>{try{grant();payout()}catch(e){}},1000);
 // pass XP comes from meters + seeds of every run (only the new part if you revive and die again)
 const px={m:0,s:0};
 const _rs=reset;reset=function(){px.m=0;px.s=0;return _rs.apply(this,arguments)};
-const _ov=over;over=function(){_ov.apply(this,arguments);try{if(window.__room&&window.__room())return;sync();const m=Math.floor(dist/10),se=Math.max(0,gs-runStart+rvSpent),th=season(wk()).th,a=Math.round(Math.max(0,m-px.m)/8*th.m+Math.max(0,se-px.s)/4*th.s);px.m=m;px.s=se;if(a>0){S.sp.xp=Math.min(S.sp.xp+a,30*XPT);sv();setTimeout(()=>{try{say('SEASON PASS +'+a+' XP')}catch(e){}},1400)}}catch(e){}};
+const _ov=over;over=function(){_ov.apply(this,arguments);try{if(window.__room&&window.__room())return;sync();const m=Math.floor(dist/10),se=Math.max(0,gs-runStart+rvSpent),th=season(wk()).th,a=Math.round(Math.max(0,m-px.m)/8*th.m+Math.max(0,se-px.s)/4*th.s);px.m=m;px.s=se;if(a>0){const T0=tier();S.sp.xp=Math.min(S.sp.xp+a,30*XPT);const T1=tier();sv();setTimeout(()=>{try{say('SEASON PASS +'+a+' XP'+(T1>T0?' - TIER '+T1+'!':''))}catch(e){}},1400)}}catch(e){}};
 
 // ---- screen ----
-const sty=document.createElement('style');sty.textContent='html #spo.card{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}#spoM::-webkit-scrollbar,#spoT::-webkit-scrollbar{height:.7cqw;width:.7cqw}#spoM::-webkit-scrollbar-thumb,#spoT::-webkit-scrollbar-thumb{background:#ffffff44}';document.head.appendChild(sty);
+const sty=document.createElement('style');sty.textContent='html #spo.card{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}#spoM::-webkit-scrollbar,#spoT::-webkit-scrollbar{height:.7cqw;width:.7cqw}#spoM::-webkit-scrollbar-thumb,#spoT::-webkit-scrollbar-thumb{background:#ffffff44}';sty.textContent+='#spb.glass{background:linear-gradient(115deg,rgba(255,255,255,.28) 0 16%,transparent 16% 24%,rgba(255,255,255,.12) 24% 30%,transparent 30%),linear-gradient(135deg,rgba(122,74,224,.62),rgba(196,21,90,.55))!important;box-shadow:0 0 1.6cqw rgba(196,21,90,.45),0 -.3cqw 0 0 rgba(8,16,36,.9),0 .3cqw 0 0 rgba(8,16,36,.9),-.3cqw 0 0 0 rgba(8,16,36,.9),.3cqw 0 0 0 rgba(8,16,36,.9),inset .3cqw .3cqw 0 rgba(255,255,255,.6)!important}';document.head.appendChild(sty);
 const spo=document.createElement('div');spo.id='spo';spo.className='p card ov';
 spo.style.cssText='left:0;top:0;width:100%;height:100%;padding:0;overflow:hidden;--tf:translate(0,0);border:none;box-shadow:none;background:transparent';
 spo.innerHTML='<div style="position:absolute;left:2cqw;right:2cqw;top:1.6cqw;height:5cqw;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:1.4cqw"><button class=btn id=spoB style="margin:0;background:#556;padding:.9cqw 1.4cqw;font-size:1.1cqw">&lt; BACK</button><div style="font-size:2cqw;color:#fff;text-shadow:.25cqw .25cqw #000">SEASON PASS</div></div><div id=spoS style="font-size:1cqw;color:#ffd23a"></div></div><div id=spoM style="position:absolute;left:3cqw;right:3cqw;top:8cqw;bottom:1.5cqw;overflow-y:auto;overflow-x:hidden;padding-right:.5cqw"></div>';
 {const bg=document.createElement('div');bg.id='spoBg';bg.style.cssText='position:absolute;top:0;bottom:0;left:calc(-1*var(--ex));right:calc(-1*var(--ex));z-index:5;display:none;pointer-events:none;background:linear-gradient(#0b1230,#241048 55%,#10151c)';$('w').appendChild(bg);$('w').appendChild(spo);new MutationObserver(()=>{bg.style.display=spo.style.display==='block'?'block':'none'}).observe(spo,{attributes:true,attributeFilter:['style']})}
 const cv=(i,w)=>'<canvas data-i="'+i+'" width=14 height=18 style="width:'+w+'cqw;height:'+(w*18/14)+'cqw;image-rendering:pixelated;display:block"></canvas>';
 const cell='margin-top:.4cqw;padding:.6cqw .2cqw;min-height:6cqw;font-size:.85cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;';
+const spLeft=()=>{const l=((wk()+1)*7-4)*864e5-Date.now(),e=$('spoS');if(!e)return;if(l<=0){e.textContent='NEW SEASON STARTING...';return}const d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);e.textContent='NEW SEASON IN '+(d?d+'D ':'')+(d||h?h+'H ':'')+m+'M'};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&spo.style.display==='block'){e.preventDefault();e.stopImmediatePropagation();sh('spo',0)}},true);
+setInterval(()=>{if(!document.hidden&&spo.style.display==='block'){const w=wk();if(spo._w!==undefined&&spo._w!==w)spRender();spo._w=w;spLeft()}},15000);
 function spRender(first){grant();const sn=season(wk()),th=sn.th,T=tier(),x=S.sp.xp-T*XPT,own=i=>!!S.un[i];
- const left=((wk()+1)*7-4)*864e5-Date.now();$('spoS').textContent='NEW SEASON IN '+Math.floor(left/864e5)+'D '+Math.floor(left%864e5/36e5)+'H';
+ const left=((wk()+1)*7-4)*864e5-Date.now();spLeft();
  let H='<div style="display:flex;gap:1.4cqw;align-items:stretch;margin-bottom:1.2cqw">'
  +'<div style="flex:1.3;padding:1.2cqw;border:.25cqw solid '+th.c+';background:#ffffff10"><div style="font-size:.9cqw;color:#9ab">THIS WEEK\'S SEASON</div><div style="font-size:2.1cqw;color:'+th.c+';margin:.4cqw 0">'+th.ic+' '+th.n+'</div><div style="font-size:.95cqw;color:#fff">'+th.t+'</div></div>'
- +'<div style="flex:1.2;padding:1.2cqw;background:#ffffff10;border:.25cqw solid #fff3"><div style="font-size:1.1cqw;color:#ffd23a">TIER '+T+' / 30</div><div style="height:1.6cqw;border:.2cqw solid #fff;margin:.6cqw 0;background:#0008"><i style="display:block;height:100%;width:'+(T>=30?100:x/XPT*100)+'%;background:'+th.c+'"></i></div><div style="font-size:.85cqw;color:#9ab;line-height:1.5">'+(T>=30?'TRACK COMPLETE!':x+' / '+XPT+' XP TO TIER '+(T+1))+'<br>XP = METERS + SEEDS FROM RUNS</div></div>'
- +'<div style="flex:1;padding:1.2cqw;background:#ffffff10;border:.25cqw solid #ffd23a;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">'+(S.pp?'<div style="font-size:1.4cqw;color:#ffd23a">PREMIUM &#10003;</div><div style="font-size:.85cqw;color:#9ab;margin-top:.5cqw">30 EXCLUSIVE COSTUMES</div>':'<button class=btn id=spoBuy style="margin:0;background:#c4155a;font-size:1.1cqw;padding:1cqw 1.4cqw">GET PREMIUM<br>'+PRICE+' &#127793;</button>')+'</div></div>'
+ +'<div style="flex:1.2;padding:1.2cqw;background:#ffffff10;border:.25cqw solid #fff3"><div style="font-size:1.1cqw;color:#ffd23a">TIER '+T+' / 30</div><div style="height:1.6cqw;border:.2cqw solid #fff;margin:.6cqw 0;background:#0008"><i style="display:block;height:100%;width:'+(T>=30?100:x/XPT*100)+'%;background:'+th.c+'"></i></div><div style="font-size:.85cqw;color:#9ab;line-height:1.5">'+(T>=30?'TRACK COMPLETE!':x+' / '+XPT+' XP TO TIER '+(T+1)+'<br>NEXT: +'+fS(T+1)+' SEEDS'+((T+1)%10==0?' + TOKEN':'')+(S.pp?' \u2022 PREMIUM +'+pS(T+1):''))+'<br>XP = METERS + SEEDS FROM RUNS</div></div>'
+ +'<div style="flex:1;padding:1.2cqw;background:#ffffff10;border:.25cqw solid #ffd23a;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">'+(S.pp?'<div style="font-size:1.4cqw;color:#ffd23a">PREMIUM &#10003;</div><div style="font-size:.85cqw;color:#9ab;margin-top:.5cqw">'+VAULT.length+' EXCLUSIVE COSTUMES</div>':'<button class=btn id=spoBuy style="margin:0;background:#c4155a;font-size:1.1cqw;padding:1cqw 1.4cqw">GET PREMIUM<br>'+PRICE+' &#127793;</button>')+'</div></div>'
  +'<div style="font-size:1.1cqw;color:#fff;margin:.6cqw 0">REWARD TRACK</div><div id=spoT style="display:flex;gap:.7cqw;overflow-x:auto;padding-bottom:.8cqw"><div style="flex:0 0 5cqw;font-size:.85cqw"><div style="height:1.4cqw"></div><div style="'+cell+'color:#9ab">FREE</div><div style="'+cell+'color:#ffd23a">PREMIUM</div></div>';
  for(let t=1;t<=30;t++){const got=t<=T,slot=t%10==0?t/10-1:-1,rc=slot>=0?sn.rot[slot]:-1;
   let fr='+'+fS(t)+' &#127793;'+(t%10==0?'<br>+1 TOKEN':''),pr=(S.pp?'':'&#128274; ')+'+'+pS(t)+' &#127793;'+(t%5==0?'<br>+1 TOKEN':'');
   if(t==30)fr=cv(FREE,2.6)+'<span style="font-size:.7cqw">SEASON SCOUT</span>';
   if(rc>=0)pr=cv(rc,2.6)+'<span style="font-size:.7cqw">'+SN[rc]+'</span>'+(own(rc)?'<b style="color:#7adb55">OWNED</b>':(S.pp&&got?'<button class=btn data-pick='+slot+' style="margin:.3cqw 0 0;padding:.4cqw .8cqw;font-size:.8cqw;background:#3aa335">PICK</button>':(S.pp?'':'&#128274;')));
   H+='<div style="flex:0 0 9cqw;text-align:center"><div style="font-size:.9cqw;height:1.4cqw;color:'+(got?th.c:'#9ab')+'">TIER '+t+'</div><div style="'+cell+'background:'+(got?'#2a6a3a':'#ffffff10')+';color:#fff">'+fr+'</div><div style="'+cell+'background:'+(S.pp&&got?'#7a5a10':(S.pp?'#ffffff10':'#00000066'))+';color:#ffd23a">'+pr+'</div></div>'}
- H+='</div><div style="font-size:1.1cqw;color:#fff;margin:1cqw 0 .6cqw">THIS WEEK\'S ROTATION \u2022 3 OF 30 PREMIUM COSTUMES <span style="color:#9ab;font-size:.85cqw">(PICK THEM AT TIERS 10 / 20 / 30)</span></div><div style="display:flex;gap:1.2cqw">'
+ H+='</div><div style="font-size:1.1cqw;color:#fff;margin:1cqw 0 .6cqw">THIS WEEK\'S ROTATION \u2022 3 OF '+VAULT.length+' PREMIUM COSTUMES <span style="color:#9ab;font-size:.85cqw">(PICK THEM AT TIERS 10 / 20 / 30)</span></div><div style="display:flex;gap:1.2cqw">'
   +sn.rot.map((i,k)=>'<div style="flex:1;display:flex;align-items:center;gap:1cqw;padding:.8cqw;background:#ffffff10;border:.2cqw solid '+(own(i)?'#7adb55':'#ffd23a')+'">'+cv(i,4)+'<div><div style="font-size:1.1cqw;color:#fff">'+SN[i]+'</div><div style="font-size:.8cqw;color:#9ab;margin-top:.3cqw">'+(own(i)?'OWNED':'TIER '+(k+1)*10+(S.pp?'':' \u2022 PREMIUM'))+'</div></div></div>').join('')+'</div>';
- let ow=0;for(let i=P0;i<P0+30;i++)if(own(i))ow++;
- H+='<div style="font-size:1.1cqw;color:#fff;margin:1.2cqw 0 .6cqw">PREMIUM VAULT \u2022 '+ow+' / 30 COLLECTED</div><div style="display:grid;grid-template-columns:repeat(15,1fr);gap:.6cqw;justify-items:center">'+Array.from({length:30},(_,k)=>'<div style="opacity:'+(own(P0+k)?1:.35)+'">'+cv(P0+k,2.6)+'</div>').join('')+'</div>';
+ let ow=0;VAULT.forEach(i=>{if(own(i))ow++});
+ H+='<div style="font-size:1.1cqw;color:#fff;margin:1.2cqw 0 .6cqw">PREMIUM VAULT \u2022 '+ow+' / '+VAULT.length+' COLLECTED</div><div style="display:grid;grid-template-columns:repeat(15,1fr);gap:.6cqw;justify-items:center">'+VAULT.map(i=>'<div style=\"opacity:'+(own(i)?1:.35)+'\">'+cv(i,2.6)+'</div>').join('')+'</div>';
  $('spoM').innerHTML=H;
  $('spoM').querySelectorAll('canvas[data-i]').forEach(c=>{const g=c.getContext('2d');g.imageSmoothingEnabled=false;const im=SP[+c.dataset.i]&&SP[+c.dataset.i][0];if(im)g.drawImage(im,0,0)});
  if(first){$('spoM').scrollTop=0;const tt=$('spoT'),a=tt.children[Math.max(1,T-1)];if(tt&&a)tt.scrollLeft=a.offsetLeft-tt.children[0].offsetLeft}}
@@ -2672,13 +2697,14 @@ spo.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
  if(b.id==='spoB'){sh('spo',0);return}
  if(b.id==='spoBuy'){if(S.seeds<PRICE){say('NEED '+PRICE+' SEEDS FOR PREMIUM');return}S.seeds-=PRICE;S.pp=1;grant();sv();try{ui()}catch(_){}say('PREMIUM UNLOCKED!');spRender();return}
  if(b.dataset.pick!=null){const k=+b.dataset.pick,i=season(wk()).rot[k];if(S.pp&&tier()>=(k+1)*10&&!S.un[i]){S.un[i]=1;sv();say('NEW OUTFIT: '+SN[i]);spRender()}}});
-const spb=document.createElement('button');spb.className='p btn';spb.id='spb';spb.innerHTML='SEASON PASS<br><span style="font-size:.8cqw;opacity:.85">'+season(wk()).th.ic+' '+season(wk()).th.n+'</span>';
-spb.style.cssText='right:2%;top:44%;width:17%;background:linear-gradient(135deg,#7a4ae0,#c4155a);padding:1.1cqw .6cqw;font-size:1.2cqw;z-index:3';$('lob').appendChild(spb);spb.onclick=()=>{spRender(1);sh('spo',1)};
+const spb=document.createElement('button');spb.className='p btn';spb.id='spb';
+const spbLab=()=>{try{if(document.hidden)return;sync();const sn=season(wk()),T=tier();let rdy=0;if(S.pp)sn.rot.forEach((i,k)=>{if(T>=(k+1)*10&&!S.un[i])rdy=1});spb.innerHTML='SEASON PASS<br><span style="font-size:.8cqw;opacity:.9;white-space:nowrap">'+sn.th.ic+' '+sn.th.n+'</span><br><span style="font-size:.75cqw;opacity:.85">TIER '+T+' / 30</span>'+(rdy?'<br><span class=nbst style="font-size:.75cqw">PICK READY!</span>':'')}catch(e){}};spbLab();setInterval(spbLab,4000);
+spb.classList.add('glass');spb.style.cssText='right:2%;top:44%;width:17%;padding:.9cqw .4cqw;font-size:1.2cqw;z-index:3;overflow:hidden';$('lob').appendChild(spb);spb.onclick=()=>{spRender(1);sh('spo',1)};
 
 // ---- dressing room: season costumes ----
-const isP=i=>i>=P0&&i<=FREE;
+const isP=i=>i>=P0&&i<=P1+119;
 const _tb=tabItems;tabItems=function(tab){const o=_tb.apply(this,arguments);if(tab!==0)return o;
- const ids=[...new Set([FREE,...season(wk()).rot,...Array.from({length:30},(_,k)=>P0+k).filter(i=>S.un[i])])];
+ const ids=[...new Set([FREE,...season(wk()).rot,...VAULT.filter(i=>S.un[i])])];
  return [...o,{hd:'SEASON PASS \u2022 THIS WEEK + OWNED',col:'#ffd23a'},...ids.map(i=>({h:0,i}))]};
 const _rb=rarity;rarity=function(i,h){return(!h&&isP(i))?['SEASON','#ffd23a']:_rb.apply(this,arguments)};
 const how=i=>i===FREE?'FREE TRACK \u2022 REACH TIER 30':'PREMIUM \u2022 PICK IT IN THE SEASON PASS';
@@ -2693,7 +2719,7 @@ const _sb=shopUI;shopUI=function(){_sb.apply(this,arguments);try{if(!shpIsH&&isP
 const hud2=mk('left:2%;top:9.5%;font-size:1cqw;color:#fff;text-shadow:.2cqw .2cqw #000;display:none;z-index:4;pointer-events:none;line-height:1.7');
 hud2.id='hud2';hud2.classList.add('glass');hud2.style.padding='.7cqw 1.1cqw';
 (function f(){try{cdTick();evMus();const on=(st=='run'||st=='hint')&&!inRm()&&!tut;hud2.style.display=on?'block':'none';
- if(on){const cm=cmul(),m=mult();hud2.innerHTML=(rs.cb>=3?'<span style="color:#ffd23a">COMBO '+rs.cb+' (x'+cm.toFixed(1)+')</span><br>':'')+'SEEDS x'+m.toFixed(1)+(endOn?'<br>ENDLESS':'')+(rs.mut>=0?'<br>'+MU[rs.mut][0]:'')+(rs.pl.length?'<br><span style="color:#c58bff">'+rs.pl.join(' • ')+'</span>':'')+(S.best>0&&Math.floor(dist/10)<S.best?'<br><span style="color:#9ad">BEST IN '+(S.best-Math.floor(dist/10))+'M</span>':'')}
+ if(on){const cm=cmul(),m=mult();hud2.innerHTML=(rs.cb>=3?'<span style="color:#ffd23a">COMBO '+rs.cb+' (x'+cm.toFixed(1)+')</span><br>':'')+'SEEDS x'+m.toFixed(1)+(endOn?'<br>ENDLESS':'')+(rs.mut>=0?'<br>'+MU[rs.mut][0]:'')+(rs.pl.length?'<br><span style="color:#c58bff">'+rs.pl.join(' • ')+'</span>':'')+(S.best>0&&Math.floor(dist/10)<S.best?'<br><span style="color:#9ad">BEST IN '+(S.best-Math.floor(dist/10)).toLocaleString('en-US')+'M</span>':'')}
  w.classList.toggle('endless',!!endOn&&on)}catch(e){}requestAnimationFrame(f)})();
 
 // ===== quality of life =====
@@ -2797,7 +2823,11 @@ html,body{background:radial-gradient(ellipse at 50% 35%,#1d2a38,#070a0f 75%)!imp
 input[type=range]{accent-color:#f2b43a}
 .nofx .glass,.nofx .card:not(#cu),.nofx #toast,.nofx #mpm{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 .noshake .shk{animation:none!important}
+
+.perf .glass,.perf .card:not(#cu),.perf #toast,.perf #mpm{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}.perf .nbst{animation:none!important}
 `;document.head.appendChild(stFx);
+// effects-off look for the season pass button lives in its own sheet: stFx is disabled entirely when effects are off
+const stNo=document.createElement('style');stNo.textContent='.nofx #spb.glass{border:.3cqw solid #ff8a1a!important;background:#fff!important;color:#1b2a38!important;box-shadow:.4cqw .4cqw 0 #0008!important;text-shadow:none!important}.nofx #spb .nbst{color:#c4155a!important}';document.head.appendChild(stNo);
 if(/Chrome\//.test(navigator.userAgent)){document.documentElement.classList.add('lgr');document.body.insertAdjacentHTML('beforeend','<svg width=0 height=0 style="position:absolute"><filter id=lgf x=0 y=0 width=100% height=100% color-interpolation-filters=sRGB><feTurbulence type=fractalNoise baseFrequency=".008 .014" numOctaves=2 seed=7 result=n /><feGaussianBlur in=n stdDeviation=3 result=nb /><feDisplacementMap in=SourceGraphic in2=nb scale=14 xChannelSelector=R yChannelSelector=G /></filter></svg>')}
 const rgb=c=>{c=c.replace('#','');if(c.length==3)c=[...c].map(x=>x+x).join('');const n=parseInt(c,16);return[n>>16,(n>>8)&255,n&255]};
 const rgba=(c,a)=>{const[r,g,b]=rgb(c);return'rgba('+r+','+g+','+b+','+a+')'};
@@ -2850,13 +2880,16 @@ let jb=-99;
 {const _j=jump;jump=function(){const c=jc;const r=_j.apply(this,arguments);if(st=='run'&&jc===c&&!rm_())jb=mf;return r}}
 {const _u=upd;upd=function(){_u.apply(this,arguments);if(st!=='run'){jb=-99;return}if(jb>=0&&mf-jb<=6&&jc===0&&py>=G-18&&!tut&&!rm_()){jb=-99;jump()}}}
 // update log
-const UV='2026.10.27',UVL='2026.11.22',LOGS=[{"h":"THE LAST CONTENT UPDATE","l":["THIS IS THE FINAL CONTENT UPDATE FOR SOD RUSH. BUG FIXES MAY STILL COME, BUT THERE WILL BE NO MORE NEW CONTENT. THANKS FOR PLAYING!"]},{"h":"SEASON PASS","l":["NEW SEASON PASS BUTTON IN THE LOBBY: A NEW SEASON STARTS EVERY WEEK WITH ITS OWN THEME AND XP BONUS (METERS OR SEEDS COUNT EXTRA)","30 TIERS TO CLIMB: EARN XP FROM THE METERS AND SEEDS YOU COLLECT IN RUNS, AND CLAIM SEEDS AND TOKENS AS YOU GO","FREE TRACK REWARD AT TIER 30: THE SEASON SCOUT OUTFIT, A TRAFFIC CONE ON LEGS","GET PREMIUM FOR 4000 SEEDS TO UNLOCK THE PREMIUM TRACK: BIGGER SEED PAYOUTS, EXTRA TOKENS AND A NEW COSTUME","30 NEW PREMIUM COSTUMES, ALL WITH THEIR OWN BODY: CATS, ROBOTS, MUSHROOMS, ALIENS, KNIGHTS, FROGS, IMPS, WIZARDS, GHOSTS AND PUMPKINS","3 COSTUMES ROTATE IN EACH WEEK: PICK THEM AT TIERS 10, 20 AND 30 (EVERYONE SEES THE SAME THREE)","THE PREMIUM VAULT SHOWS EVERY COSTUME YOU HAVE COLLECTED","THIS WEEK'S COSTUMES AND YOUR OWNED SEASON COSTUMES NOW SHOW AT THE BOTTOM OF THE OUTFITS TAB IN THE DRESSING ROOM","FIX: SEASON COSTUMES NO LONGER CRASH THE GAME WITH 'DRAWIMAGE' ERRORS WHEN PREVIEWED OR WORN","FIX: THE SEASON PASS BUTTON ON A LOCKED COSTUME IN THE DRESSING ROOM AND SHOP NOW OPENS THE SEASON PASS","FIX: A STRAY QUOTE IN THIS UPDATE LOG THAT MERGED TWO LINES INTO ONE"]},{"h":"PROFILE","l":["YOU CAN NOW EDIT YOUR NAME ANY TIME ON YOUR PROFILE","NEW CUTSCENE VIEWER IN SETTINGS: REPLAY ANY CUTSCENE YOU HAVE ALREADY SEEN"]},{"h":"UNIQUE OUTFITS + FINAL BOSS","l":["EVERY OUTFIT NOW HAS ITS OWN DESIGN, NOT JUST A NEW COLOR: MASKS, SCARVES, GOGGLES, HORNS, WINGS, PATTERNS AND MORE (CLASSIC, SANDY AND MOSSY STAY THE SAME)","ALL EVENT OUTFITS ARE UNIQUE TOO","NEW OUTFIT: FINAL BOSS. CLASSIC SOD, WAR-TORN AND READY FOR THE LAST BATTLE: SINGED HAIR, TORN HEADBAND, STERN BROWS, STEEL ARMOR AND A BANDOLIER","FINAL BOSS UNLOCKS WHEN YOU CLEAR LEVEL 334","THE FIRST TIME YOU PLAY LEVEL 345 THE FINAL BOSS OUTFIT IS PUT ON YOU (YOU CAN SWITCH AFTER)"]},{"h":"DISTRICTS TAB AND WORLD MAPS","l":["NEW DISTRICTS TAB ON THE LEVEL SELECT: DISTRICTS I-X NOW LIVE IN THEIR OWN TAB, UNLOCKED WHEN THE FORBIDDEN CORE IS DEFEATED","THE WORLDS TAB HOLDS WORLDS 1-13, AND THE ARROWS STAY INSIDE EACH TAB","AFTER THE FORBIDDEN CORE CUTSCENE YOU GO STRAIGHT TO DISTRICT I, AND THE CORE TELLS YOU ABOUT THE NEW TAB","THE 'THANKS FOR PLAYING' SCREEN IS GONE FROM THE FORBIDDEN CORE ENDING","DISTRICT MAPS HAVE A NEON CITY LOOK: SKYLINE, MOON, GLOWING PADS AND NEON LEVEL NUMBERS","EVERY WORLD MAP NOW LOOKS LIKE ITS WORLD: FARM, MARSH, CANYON, TUNDRA, EMBERWORKS, CANDY COVE, NEON METROPOLIS, LAGOON, HOLLOW, CLOUDS, JUNGLE, MOON BASE AND THE FORBIDDEN DIMENSION","WORLD MAP PIPES, PADS AND LEVEL BOXES USE EACH WORLD'S COLORS","DR MULCH'S FARM CUTSCENE NOW PLAYS BEFORE THE TUTORIAL","FIX: CUTSCENES NO LONGER CRASH WITH 'CANNOT READ PROPERTIES OF UNDEFINED' AT THE LAST LINE","FIX: THE KING TRACK CAN NOW BE PICKED ON THE RADIO"]},{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME","DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
+const UV='2026.10.27',UVL='2026.11.25',LOGS=[{"h":"THE LAST CONTENT UPDATE","l":["THIS IS THE FINAL CONTENT UPDATE FOR SOD RUSH. BUG FIXES MAY STILL COME, BUT THERE WILL BE NO MORE NEW CONTENT. THANKS FOR PLAYING!","10 NEW SEASON THEMES (16 IN TOTAL) AND 90 MORE PREMIUM SEASON COSTUMES (150 IN THE VAULT). A SEASON NEVER REPEATS TWO WEEKS IN A ROW","RADIO: THE ANNIVERSARY AND FEVER TRACKS ARE NOW ON THE RADIO (HEAR THEM IN THE GAME TO UNLOCK)","STORY COSTUMES ARE ALWAYS FORCED ON YOUR FIRST PLAYTHROUGH. THE FORCED COSTUMES SETTING ONLY APPLIES TO REPLAYS","FIX: WITH EFFECTS OFF THE SEASON PASS BUTTON NOW HAS A WHITE FILL AND ORANGE OUTLINE LIKE THE EVENT CARD","QOL: THE SEASON PASS BUTTON IN THE LOBBY NOW SHOWS YOUR TIER (X/30)","QOL: A 'PICK READY!' BADGE APPEARS ON THE SEASON PASS BUTTON WHEN YOU CAN CLAIM A PREMIUM COSTUME","THE GAME WILL KEEP WORKING COMPLETELY. EVENTS AND THE SEASON PASS RUN FROM THE HTML EMBEDDED IN THE GAME ON GITHUB, SO THEY KEEP ROTATING WITH NO SERVER NEEDED","NEW: FEVER MODE! EVERY 100M OF A RUN HAS A 1% CHANCE TO START IT. FOR 55 SECONDS YOU GET X2 SEEDS, A MAGNET, A NEON GLOW AND ITS OWN TRACK","30 MORE SEASON PASS COSTUMES: THE PREMIUM VAULT NOW HAS 60 (THE SAME 10 BODIES WITH 3 NEW COLOR SETS EACH). THE WEEKLY ROTATION PICKS FROM ALL 60","THE 10TH ANNIVERSARY LOBBY TRACK PLAYS IN THE EVENTS AND SEASON PASS MENUS","DRESSING ROOM: THE OUTFITS, HATS AND EVENTS BUTTONS ARE NOW ICONS, WITH A NEW EVENTS ICON","QOL: ESC CLOSES THE DRESSING ROOM, SHOP AND EVENTS MENUS","QOL: THE SEASON PASS XP MESSAGE AFTER A RUN TELLS YOU WHEN YOU REACH A NEW TIER","FIX: WITH EFFECTS OFF THE SEASON PASS BUTTON NOW MATCHES THE CLASSIC UI","THE SEASON PASS BUTTON NOW HAS THE LIQUID GLASS LOOK AND FITS ITS TEXT","QOL: THE SEASON PASS SCREEN SHOWS YOUR NEXT REWARD AND CLOSES WITH ESC","PERFORMANCE: SLOW TABS AUTOMATICALLY SWITCH TO A LITE MODE WITHOUT THE BLUR EFFECTS (YOUR SETTINGS ARE NOT CHANGED), AND BACKGROUND TABS DO LESS WORK","FIX: THE DRESSING ROOM TITLE AND OWNED COUNTER NO LONGER TOUCH","QOL: THE NEW SEASON COUNTDOWN NOW SHOWS MINUTES AND KEEPS TICKING WHILE THE SEASON PASS IS OPEN, AND REFRESHES ITSELF WHEN A NEW SEASON STARTS"]},{"h":"SEASON PASS","l":["NEW SEASON PASS BUTTON IN THE LOBBY: A NEW SEASON STARTS EVERY WEEK WITH ITS OWN THEME AND XP BONUS (METERS OR SEEDS COUNT EXTRA)","30 TIERS TO CLIMB: EARN XP FROM THE METERS AND SEEDS YOU COLLECT IN RUNS, AND CLAIM SEEDS AND TOKENS AS YOU GO","FREE TRACK REWARD AT TIER 30: THE SEASON SCOUT OUTFIT, A TRAFFIC CONE ON LEGS","GET PREMIUM FOR 4000 SEEDS TO UNLOCK THE PREMIUM TRACK: BIGGER SEED PAYOUTS, EXTRA TOKENS AND A NEW COSTUME","30 NEW PREMIUM COSTUMES, ALL WITH THEIR OWN BODY: CATS, ROBOTS, MUSHROOMS, ALIENS, KNIGHTS, FROGS, IMPS, WIZARDS, GHOSTS AND PUMPKINS","3 COSTUMES ROTATE IN EACH WEEK: PICK THEM AT TIERS 10, 20 AND 30 (EVERYONE SEES THE SAME THREE)","THE PREMIUM VAULT SHOWS EVERY COSTUME YOU HAVE COLLECTED","THIS WEEK'S COSTUMES AND YOUR OWNED SEASON COSTUMES NOW SHOW AT THE BOTTOM OF THE OUTFITS TAB IN THE DRESSING ROOM","FIX: SEASON COSTUMES NO LONGER CRASH THE GAME WITH 'DRAWIMAGE' ERRORS WHEN PREVIEWED OR WORN","FIX: THE SEASON PASS BUTTON ON A LOCKED COSTUME IN THE DRESSING ROOM AND SHOP NOW OPENS THE SEASON PASS","FIX: A STRAY QUOTE IN THIS UPDATE LOG THAT MERGED TWO LINES INTO ONE"]},{"h":"PROFILE","l":["YOU CAN NOW EDIT YOUR NAME ANY TIME ON YOUR PROFILE","NEW CUTSCENE VIEWER IN SETTINGS: REPLAY ANY CUTSCENE YOU HAVE ALREADY SEEN"]},{"h":"UNIQUE OUTFITS + FINAL BOSS","l":["EVERY OUTFIT NOW HAS ITS OWN DESIGN, NOT JUST A NEW COLOR: MASKS, SCARVES, GOGGLES, HORNS, WINGS, PATTERNS AND MORE (CLASSIC, SANDY AND MOSSY STAY THE SAME)","ALL EVENT OUTFITS ARE UNIQUE TOO","NEW OUTFIT: FINAL BOSS. CLASSIC SOD, WAR-TORN AND READY FOR THE LAST BATTLE: SINGED HAIR, TORN HEADBAND, STERN BROWS, STEEL ARMOR AND A BANDOLIER","FINAL BOSS UNLOCKS WHEN YOU CLEAR LEVEL 334","THE FIRST TIME YOU PLAY LEVEL 345 THE FINAL BOSS OUTFIT IS PUT ON YOU (YOU CAN SWITCH AFTER)"]},{"h":"DISTRICTS TAB AND WORLD MAPS","l":["NEW DISTRICTS TAB ON THE LEVEL SELECT: DISTRICTS I-X NOW LIVE IN THEIR OWN TAB, UNLOCKED WHEN THE FORBIDDEN CORE IS DEFEATED","THE WORLDS TAB HOLDS WORLDS 1-13, AND THE ARROWS STAY INSIDE EACH TAB","AFTER THE FORBIDDEN CORE CUTSCENE YOU GO STRAIGHT TO DISTRICT I, AND THE CORE TELLS YOU ABOUT THE NEW TAB","THE 'THANKS FOR PLAYING' SCREEN IS GONE FROM THE FORBIDDEN CORE ENDING","DISTRICT MAPS HAVE A NEON CITY LOOK: SKYLINE, MOON, GLOWING PADS AND NEON LEVEL NUMBERS","EVERY WORLD MAP NOW LOOKS LIKE ITS WORLD: FARM, MARSH, CANYON, TUNDRA, EMBERWORKS, CANDY COVE, NEON METROPOLIS, LAGOON, HOLLOW, CLOUDS, JUNGLE, MOON BASE AND THE FORBIDDEN DIMENSION","WORLD MAP PIPES, PADS AND LEVEL BOXES USE EACH WORLD'S COLORS","DR MULCH'S FARM CUTSCENE NOW PLAYS BEFORE THE TUTORIAL","FIX: CUTSCENES NO LONGER CRASH WITH 'CANNOT READ PROPERTIES OF UNDEFINED' AT THE LAST LINE","FIX: THE KING TRACK CAN NOW BE PICKED ON THE RADIO"]},{"h":"MORE STORY, MORE FUN!","l":["NEW CINEMATIC ENDING FOR THE FORBIDDEN CORE: THE SOD TALKS TO THE CORE, AND A NEW THREAT APPEARS","NEW CINEMATIC WHEN THE NEON KING IS DEFEATED: THE KING AND THE SOD SPEAK ONE LAST TIME","EVERY WORLD NOW OPENS WITH A CUTSCENE ON ITS FIRST LEVEL","FIX: RESTART RUN IN THE PAUSE MENU WORKS AGAIN (ALSO FIXES JUMP BUFFERING AND AUTO PAUSE)","EVERY DISTRICT RUNS FASTER THAN THE LAST","THE FIRST LEVEL OF EACH DISTRICT HAS A CUTSCENE (SPACE/TAP TO ADVANCE, ESC TO SKIP)","NEW LOOK AND NEW OBSTACLES FOR DISTRICTS II-X","DISTRICT X IS THE FINAL DISTRICT: THE NEON KING HAS 40 HP, 3 PHASES AND HIS OWN THEME","DISTRICT I-IX BOSSES HAVE 2X TO 3X HEALTH","DISTRICTS I-IX BOSSES USE THE BOSS 1 TRACK","NEON ARCADE IS NOW DISTRICT I, WITH NINE MORE DISTRICTS (II TO X) LEADING TO THE NEON TOWER","EACH DISTRICT HAS ITS OWN LOOK: CHROME MARKET, HOLO GARDENS, CIRCUIT DOCKS, GLITCH QUARTER, SYNTH CANAL, LASER PLAZA, VAPOR HEIGHTS, DATA SLUMS, NEON TOWER","DISTRICT BOSSES ARE THE EARLIER BOSSES, AS MINIONS OF THE NEON KING","THE NEON KING NOW WAITS AT THE TOP, IN DISTRICT X (LEVEL 345)","FIX: THE BOSS-DEFEATED MESSAGE NO LONGER STAYS ON SCREEN WHEN THE PERK MENU APPEARS","A CINEMATIC PLAYS EVERY TIME LEVEL 196 LOADS, INCLUDING RETRIES (ESC OR SKIP ENDS IT)","YOUR SOD FIGHTS THE FORBIDDEN CORE, THE CORE SHATTERS, AND THE NEON ARCADE FADES IN","THE CORE TELLS YOU ABOUT LIFE AFTER THE FORBIDDEN, AND THE NEON KING RISES ON SCREEN WHEN HE IS MENTIONED","NEON ARCADE GETS ANTENNA LIGHTS AND A HAZE BAND ACROSS THE SKYLINE","NEON ARCADE GETS A FULL SYNTHWAVE LOOK: SUN, NEON TOWERS, GRID FLOOR AND SPARKS","NEW STORY SCENE BEFORE LEVEL 196: THE CORE TALKS ABOUT LIFE AFTER THE FORBIDDEN DIMENSION (SPACE TO CONTINUE, ESC TO SKIP)","THE NEON KING IS REDESIGNED: CROWN, CAPE, SPROUT EMBLEM, AND A VISOR THAT TURNS RED WHEN HE IS HURT","TAP OR PRESS SPACE TO GET THROUGH THE STORY SCENE","NEW BONUS AREA: NEON ARCADE, UNLOCKED AFTER THE ENDING (LEVELS 196-210)","OPEN IT FOR 15,000 SEEDS ON THE LEVELS MAP","NEW BOSS: THE NEON KING AT LEVEL 210","NEON ARCADE PAYS THE HIGHEST AREA SEED BONUS SO FAR","NEW SOD SKILLS PANEL (SKILLS BUTTON OR K): LEGS, KEEN EYES, THRIFTY SOD, LUCKY SOD, SECOND WIND","SKILLS ARE PERMANENT, 3 LEVELS EACH, BOUGHT WITH SEEDS","RESET SKILLS REFUNDS 80% OF SEEDS SPENT (CLICK TWICE TO CONFIRM)","NEW RUN MODIFIERS: SPRINT (SPEED RAMPS UP) AND MAGNET (SEEDS FLY TO YOU)","SEEDS PICKED UP DURING A RUN NOW COUNT TOWARD REVIVES, AND REVIVE COSTS COME OUT OF THE RUN COUNTER","SETTINGS: REDUCED MOTION, AUTO PAUSE (PAUSES A RUN WHEN THE WINDOW LOSES FOCUS), BIG TEXT, COLORBLIND SEEDS","JUMP AND SLIDE KEYS CAN BE REMAPPED IN SETTINGS (SPACE AND ARROWS STILL WORK)","SETTINGS PANEL SCROLLS ON SMALL SCREENS","LOBBY NAV LABELS WRAP INSTEAD OF BEING CUT OFF","RANKING UP IS HARDER: NEW XP CURVE, MOSTLY FROM METERS RUN","RANK COSTUMES HAVE UNIQUE SHAPES: HORNS, EARS, CAPES, ARMOR, VISORS, FANGS","NEW LIGHTING, PARTICLES AND LIQUID GLASS UI","SETTINGS > EFFECTS: OFF = THE CLASSIC UI AND LOOK (TURN THE NEW EFFECTS OFF ANYTIME)","FLAT NAV BUTTONS WITH 16-BIT BEVELS","JUMP BUFFERING: A JUMP PRESSED JUST BEFORE LANDING STILL COUNTS","RESTART RUN BUTTON IN THE PAUSE MENU","SETTINGS: EFFECTS, SHAKE, FULLSCREEN. AUDIO CHOICE IS REMEMBERED","HOTKEYS: S SHOP, L LEVELS, D DRESSING ROOM, V EVENTS, N MISSIONS, U UPDATE LOG, E ENDLESS, O PROFILE, R RETRY","PAUSE SCREEN SHOWS LIVE RUN STATS, HUD SHOWS DISTANCE TO YOUR BEST"]},
 {"h":"EARLIER: PERKS, EVENTS AND PROFILE","l":["MID-RUN PERKS EVERY 750M, WITH A 3 SECOND COUNTDOWN AFTER PAUSE OR PICKING","CALM PERK STAYS SLOWER, MAGNET STACKS","SEED COMBOS AND SEED STORMS","MODIFIERS: TURBO, MOON, IRONMAN","ENDLESS MODE WITH CHANGING AREAS","PROFILE: RANK, XP, STATS, TOP RUNS, ACHIEVEMENTS","RANK-UP REWARDS (SEEDS, TOKENS, HAT PICKS) AND A RANK-UP CELEBRATION","EVENT RUNS USE THE MINIONS TRACK, PLUS EP MILESTONE REWARDS","PORTAL MUSIC LOADS RELIABLY","LIVE EVENT CARD IN THE LOBBY"]}];
 const up=document.createElement('div');up.id='upl';up.className='p card ov';up.style.cssText='width:64cqw;max-height:92%;overflow-y:auto;padding:1.6cqw 2cqw;text-align:left';$('w').appendChild(up);OVS.push('upl');
 const upb=document.createElement('button');upb.className='p btn';upb.id='upb';upb.style.cssText='left:1.5%;top:59%;width:21%;box-sizing:border-box;background:#7a4ae0;padding:1.2cqw .6cqw;font-size:1.2cqw;z-index:4';$('lob').appendChild(upb);
 const seen=()=>{try{return localStorage.sodupv===UVL}catch(e){return 1}};
 const upLab=()=>{upb.innerHTML='UPDATES'+(seen()?'':' <span class=nbst>NEW</span>')};upLab();
 upb.onclick=()=>{up.innerHTML='<div style="font-size:2cqw;color:#7a4ae0;text-align:center;margin-bottom:1cqw">UPDATE LOG</div>'+LOGS.map(g=>'<div style="font-size:1.2cqw;color:#c4155a;margin:1.2cqw 0 .6cqw">'+g.h+'</div>'+g.l.map(x=>'<div style="font-size:.95cqw;line-height:1.7;margin:.3cqw 0">• '+x+'</div>').join('')).join('')+'<button class=btn id=upx style="background:#556;margin-top:1.4cqw">CLOSE</button>';$('upx').onclick=()=>sh('upl',0);try{localStorage.sodupv=UVL}catch(e){}upLab();sh('upl',1)};
+
+// auto lite mode: if the tab runs slowly in the first seconds, drop the costly blur effects (does not change saved settings)
+{let n=0,t0=0,done=0;const R=document.documentElement;const f=ts=>{if(done)return;if(document.hidden){t0=0;n=0;requestAnimationFrame(f);return}if(!t0)t0=ts;n++;if(ts-t0>6000){done=1;const fps=n/((ts-t0)/1000);if(fps<42&&!R.classList.contains('nofx')){R.classList.add('perf');R.classList.remove('lgr');try{say('LITE MODE ON FOR SMOOTHER PLAY')}catch(e){}}return}requestAnimationFrame(f)};setTimeout(()=>requestAnimationFrame(f),4000)}
 // first boot of this update: tell players they can turn the new effects off
 {const fn=document.createElement('div');fn.id='fxn';fn.className='p card ov';fn.style.cssText='width:46cqw;padding:2cqw 2.4cqw;text-align:center;z-index:8';$('w').appendChild(fn);OVS.push('fxn');
  fn.innerHTML='<div style="font-size:2.2cqw;color:#7a4ae0">NEW LOOK!</div><div style="font-size:1.1cqw;line-height:1.8;margin:1.2cqw 0">THIS UPDATE ADDS NEW LIGHTING, PARTICLES AND A LIQUID GLASS UI.<br><br>NOT FEELING IT, OR WANT BETTER PERFORMANCE?<br><span style="color:#c4155a">YOU CAN TURN THE NEW EFFECTS OFF ANYTIME IN SETTINGS &gt; EFFECTS.</span><br>OFF BRINGS BACK THE CLASSIC UI.</div><div style="display:flex;gap:1.2cqw;justify-content:center"><button class=btn id=fnk style="margin:0;background:#3aa335">KEEP NEW LOOK</button><button class=btn id=fno style="margin:0;background:#e8742a">TURN OFF NOW</button></div>';
@@ -2923,7 +2956,7 @@ $('rt').before(vrow);
 (function(){try{
 const room=()=>!!(window.__room&&window.__room());
 const mine=()=>S.stPrev!=null?S.stPrev:S.sk; // your own outfit
-const C0=340,C1=342,SM0=343,LAST=MAXL; // Classic is forced 340-342, Sandy/Mossy are forced 343-345
+const C0=340,C1=342,SM0=343,LAST=MAXL;function fcOff(l){return !!S.fcOff&&(!!S.storyDone||S.lv>MAXL||l<S.lv)} // Classic is forced 340-342, Sandy/Mossy are forced 343-345
 S.cs3=S.cs3||{};S.lk=S.lk||{};if(S.lv>MAXL)S.storyDone=1;
 PT.classic=['SOD','#e0a458',()=>thumb(mine(),S.hat)];PT.sandy=['SANDY','#f2d27a',()=>thumb(1,0)];PT.mossy=['MOSSY','#7ad06a',()=>thumb(2,0)];PT.war=['SOD','#ff5a4a',()=>thumb(FB,0)];
 const KM={C:'classic',S:'sandy',M:'mossy',W:'war',K:'king'};
@@ -2978,7 +3011,7 @@ bg(f,i){if(i!==bl){bl=i;if(i==4)e4=f;if(i==5)e5=f;if((i==2||i==3)&&!mute){noise(
  const sp=spk(),hop=k=>sp===k?Math.round(Math.abs(Math.sin(f/5))*3):0;
  if(i>=4){const p=Math.min(1,(f-e4)/24);drawSod(q,Math.round(-24+p*72),G-36-hop('sandy'),2,0,1,0,{r:0})}
  if(i>=5){const p=Math.min(1,(f-e5)/24);drawSod(q,Math.round(-24+p*44),G-36-hop('mossy'),2,0,2,0,{r:0})}},
-end(){pickSM(!!S.fcOff)}};
+end(){pickSM(fcOff(sel))}};
 
 // ---------- the war-torn comeback at the final boss ----------
 let wl=-1,w4=0;
@@ -2990,14 +3023,14 @@ bg(f,i){if(i!==wl){wl=i;if(i==4){w4=f;if(!mute){noise(.3,500,.8,90);tone(80,40,.
   if(shock){q.save();q.textAlign='center';bossText('!',x0+14,G-46-(f%8<4?1:0),7,'#ffd23a');q.restore();q.globalAlpha=1}});
  if(i>=4){const hop=sp==='war'?Math.round(Math.abs(Math.sin(f/5))*3):0;drawSod(q,108,G-36-hop,2,0,FB,0,{r:0})}
  if(i==4&&f-w4<14){q.globalAlpha=1-(f-w4)/14;R('#fff',-PL,0,VW,144);q.globalAlpha=1}if(bossS)bossHud()},
-end(){if(!S.fcOff){S.sk=FB;S.stDef=FB;sv()}$('hud').style.display='flex';st='run';acc=0}};
+end(){if(!fcOff(sel)){S.sk=FB;S.stDef=FB;sv()}$('hud').style.display='flex';st='run';acc=0}};
 
 // ---------- forcing characters ----------
 // First playthrough: the story character is locked for EVERY mode until the final boss falls.
 // After that (replays): the story outfit is only forced when you start a story level (340-345); endless etc. are free.
 const normal=()=>!chal&&!evA&&!prevSel&&!room();
 const inR=l=>l>=C0&&l<=LAST;
-const charFor=l=>(l>C1&&S.csBeat&&!S.fcOff)?[1,2]:null;
+const charFor=l=>(l>C1&&S.csBeat&&!fcOff(l))?[1,2]:null;
 const phase=()=>!room()&&!S.storyDone&&S.lv>=C0;
 function want(){if(room())return null;if(normal()&&inR(sel))return charFor(sel);if(phase())return charFor(Math.max(C0,Math.min(S.lv,LAST)));return null}
 function restoreSk(){if(S.stPrev!=null){if(S.sk===S.stDef)S.sk=S.stPrev;S.stPrev=null;S.stDef=null;sv()}}
@@ -3009,7 +3042,7 @@ function applyForce(){const f=want();if(f===null){restoreSk();return}
 {const _lb=lobby;lobby=function(){const r=_lb.apply(this,arguments);try{if(want()===null)restoreSk()}catch(e){}return r}}
 // after the GET READY screen: story scenes / picker
 function afterLoad(){if(!normal()||goal>=1e8)return;const f=want();
- if(S.fcOff&&inR(sel)&&sel>=SM0&&S.csBeat&&!LV[sel]){pickSM(true);return}
+ if(fcOff(sel)&&inR(sel)&&sel>=SM0&&S.csBeat&&!LV[sel]){pickSM(true);return}
  if(inR(sel)&&sel===SM0){if(!S.csBeat){S.csBeat=1;S.un[1]=1;S.un[2]=1;sv()}dcRun(SC_BEAT);return}
  if(inR(sel)&&sel>SM0&&!S.csBeat){S.csBeat=1;S.un[1]=1;S.un[2]=1;sv();dcRun(SC_BEAT);return}
  if(f!==null&&inR(sel)&&Array.isArray(f)){pickSM();return}
@@ -3202,7 +3235,7 @@ if(rt){
  const ctlT=note('TOUCH: TAP THE SCREEN OR ▲ TO JUMP (TWICE = DOUBLE JUMP) • SWIPE DOWN OR ▼ TO SLIDE','touch');
  const dpRow=mkRow('touch');mkBtn(dpRow,()=>{S.dpSide=S.dpSide==='r'?'l':'r';applySide();padPreview()},()=>'D-PAD: '+(S.dpSide==='r'?'RIGHT':'LEFT'),'#7a4ae0');
  const dpNote=note('MOVES THE ▲ JUMP / ▼ SLIDE PAD TO THE OTHER SIDE OF THE SCREEN','touch');
- const fcRow=mkRow();mkBtn(fcRow,()=>{S.fcOff=S.fcOff?0:1},()=>'FORCED COSTUMES: '+(S.fcOff?'OFF':'ON'),'#c4155a');
+ const fcRow=mkRow();const fcRp=()=>!!S.storyDone||S.lv>MAXL||S.lv>340;mkBtn(fcRow,()=>{if(!fcRp()){try{say('STORY COSTUMES ARE LOCKED ON FOR YOUR FIRST PLAYTHROUGH')}catch(e){}return}S.fcOff=S.fcOff?0:1},()=>'FORCED COSTUMES: '+(fcRp()?(S.fcOff?'OFF':'ON'):'ON (LOCKED)'),'#c4155a');
  const fcNote=note('ON: THE STORY PUTS SANDY / MOSSY ON YOU AT LEVELS 343-345, THEN THE FINAL BOSS OUTFIT.<br>OFF: YOU PICK YOUR OWN SOD AND KEEP IT');
  const gdRow=mkRow();mkBtn(gdRow,()=>{startGuide(true)},()=>'REPLAY FEATURE GUIDE','#e8742a');
  [ctlK,ctlT,dpRow,dpNote,fcRow,fcNote,gdRow].forEach(e=>rt.before(e));
@@ -3329,5 +3362,43 @@ try{(function(){
  run();setInterval(run,400);
 })()}catch(e){console.warn('wide lobby',e)}
 
+// ---- FINAL CONTENT UPDATE: fever mode, anniversary menu music, icon tabs, esc ----
+try{(function(){
+const css=document.createElement('style');css.textContent='@keyframes fvg{0%{box-shadow:inset 0 0 5cqw rgba(255,58,176,.75)}33%{box-shadow:inset 0 0 5cqw rgba(255,210,58,.75)}66%{box-shadow:inset 0 0 5cqw rgba(58,255,234,.75)}100%{box-shadow:inset 0 0 5cqw rgba(255,58,176,.75)}}@keyframes fvt{50%{scale:1.08}}';document.head.appendChild(css);
+const mkI=(rows,pal)=>{const c=document.createElement('canvas');c.width=10;c.height=rows.length;const g=c.getContext('2d');rows.forEach((r,y)=>[...r].forEach((h,x)=>{if(h!=='.'&&pal[h]){g.fillStyle=pal[h];g.fillRect(x,y,1,1)}}));return c.toDataURL()};
+const IM={t0:mkI(['.oo....oo.','oRRooooRRo','oRRrrrrRRo','.oRrrrrRo.','..orrrro..','..orrrro..','..orrrro..','..orrrro..','..oooooo..','..........'],{o:'#1b2a38',R:'#ff8ab0',r:'#c4155a'}),
+ t1:mkI(['....oo....','...oPPo...','...oPwo...','..oPpPPo..','..oPPpPo..','.oPPPPPPo.','.oyyyyyyo.','oPPPPPPPPo','oppppppppo','.oooooooo.'],{o:'#1b2a38',P:'#d0a8ff',w:'#fff',p:'#7a4ae0',y:'#ffd23a'}),
+ t2:mkI(['....oo....','...oyyo...','...oyyo...','ooooyyoooo','oyyyyyyyyo','.oyyyyyyo.','..oyyyyo..','..oyyyyo..','.oyyooyyo.','.ooo..ooo.'],{o:'#1b2a38',y:'#ffd23a'})};
+const TT={t0:'OUTFITS',t1:'HATS',t2:'EVENTS'};
+for(const id in IM){const b=document.getElementById(id);if(!b)continue;b.innerHTML='<img src="'+IM[id]+'" alt="'+TT[id]+'" style="height:1.9cqw;width:1.9cqw;image-rendering:pixelated;display:block;margin:0 auto;pointer-events:none">';b.title=TT[id];b.setAttribute('aria-label',TT[id]);b.style.minWidth='4cqw'}
+const DRE=window.__DRE;const AN=new Audio();AN.loop=true;AN.preload='auto';AN.src='audio/anniversary.mp3';window.__AN=AN;AN.addEventListener('playing',()=>{if(window.__hear)window.__hear('anniversary')});let anOn=0;
+const vis=id=>{const e=document.getElementById(id);return !!e&&e.style.display==='block'};
+setInterval(()=>{const on=vis('evm')||vis('spo');
+ if(on!==!!anOn){anOn=on?1:0;if(on){if(!window.radOn){AN._base=S.vol;fadeOut(L);fadeOut(DRE);fadeIn(AN)}}else{fadeOut(AN);if(vis('cu'))setTimeout(()=>{if(!window.radOn&&vis('cu')){DRE._base=S.vol;fadeIn(DRE)}},350);else if(st=='lobby')setTimeout(mus,350)}}
+ if(on&&!window.radOn){if(!L.paused&&!L._fade)fadeOut(L);if(!DRE.paused&&!DRE._fade)fadeOut(DRE)}
+ AN.muted=mute},150);
+addEventListener('keydown',e=>{if(e.key!=='Escape'||st!=='lobby')return;
+ if(vis('evm')){e.preventDefault();sh('evm',0)}else if(vis('cu')&&document.getElementById('cx')){e.preventDefault();document.getElementById('cx').click()}else if(vis('shop')&&document.getElementById('shpBack')){e.preventDefault();document.getElementById('shpBack').click()}});
+// FEVER MODE: 1% chance every 100 m, lasts 55 s of running: seeds x2 + magnet + its own track
+const FV=new Audio();FV.loop=true;FV.preload='auto';FV.src='audio/fever.mp3';window.__FV=FV;FV.addEventListener('playing',()=>{if(window.__hear)window.__hear('fever')});
+const bn=document.createElement('div');bn.className='p';bn.style.cssText='left:50%;top:12%;transform:translateX(-50%);font-size:1.7cqw;color:#ffd23a;text-shadow:.2cqw .2cqw #000,0 0 1.2cqw #ff3ab0;display:none;pointer-events:none;z-index:6;white-space:nowrap;text-align:center';document.getElementById('w').appendChild(bn);
+const ov=document.createElement('div');ov.className='p';ov.style.cssText='left:0;top:0;width:100%;height:100%;pointer-events:none;display:none;z-index:4;animation:fvg 2.4s linear infinite';document.getElementById('w').appendChild(ov);
+let tk=0,lastH=0,fvA=0;const TICKS=550;
+const live=()=>st==='run'||st==='hint'||st==='paused';
+function end(){if(!window.__fev)return;window.__fev=0;tk=0;bn.style.display=ov.style.display='none';FV.pause();try{FV.currentTime=0}catch(e){}if(fvA&&st==='run'&&!mute){try{A.play().catch(()=>{})}catch(e){}}fvA=0}
+function start(){window.__fev=1;tk=TICKS;try{say('FEVER MODE! SEEDS X2 + MAGNET FOR 55 SECONDS')}catch(e){}ov.style.display='block'}
+window.__fevStart=start;
+setInterval(()=>{try{
+ if(!live()){if(window.__fev)end();lastH=0;return}
+ const h=Math.floor(dist/1000);if(h<lastH)lastH=h;
+ if(st==='run'&&!tut&&!window.__fev&&!(window.__room&&window.__room())){while(lastH<h){lastH++;if(Math.random()<.01){start();break}}}
+ if(!window.__fev)return;
+ if(st==='run'){tk--;if(tk<=0){end();return}
+  FV.volume=S.vol;FV.muted=mute;if(!mute&&FV.paused)FV.play().catch(()=>{});
+  if(!A.paused){A.pause();fvA=1}
+  bn.style.display='block';bn.innerHTML='FEVER MODE!  X2 SEEDS + MAGNET<br><span style="font-size:1cqw">'+Math.ceil(tk/10)+'S LEFT</span>'}
+ else if(st==='paused'){FV.pause()}
+}catch(e){}},100);
+})()}catch(e){console.warn('final update',e)}
 </script>
 </body></html>
